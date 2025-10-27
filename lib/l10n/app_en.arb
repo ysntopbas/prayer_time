@@ -1,0 +1,25 @@
+{
+    "@@locale": "en",
+    "homePageTitle": "Home Page",
+    "@homePageTitle": {
+        "description": "The title of the home page"
+    },
+    
+    "settingsPageTitle": "Settings",
+    "@settingsPageTitle": {
+        "description": "The title of the settings page"
+    },
+    "welcomeMessage": "Welcome to the Prayer Time App!",
+    "@welcomeMessage": {},
+    "drawerTitle": "Prayer Time ",
+    "@drawerTitle": {},
+    "drawerHomePageTile": "Home Page",
+    "@drawerHomePageTile": {
+        "description": "Drawer item for home page"
+    },
+    "drawerSettingsPageTile": "Settings",
+    "@drawerSettingsPageTile": {
+        "description": "Drawer item for settings page"
+    }
+    
+}

@@ -1,0 +1,9 @@
+{
+    "@@locale": "tr",
+    "homePageTitle": "Ana Sayfa",
+    "settingsPageTitle": "Ayarlar",
+    "welcomeMessage": "Namaz Vakti Uygulamasına Hoş Geldiniz!",
+    "drawerTitle": "Namaz Vakti ",
+    "drawerHomePageTile": "Ana Sayfa",
+    "drawerSettingsPageTile": "Ayarlar"
+}

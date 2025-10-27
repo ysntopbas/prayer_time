@@ -1,0 +1,3 @@
+arb-dir: lib/l10n # Çevirilerin bulunduğu klasör
+template-arb-file: app_en.arb # Ana dil dosyası
+output-localization-file: app_localizations.dart # Üretilecek olan sınıfın adı
