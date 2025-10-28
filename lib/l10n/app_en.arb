@@ -1,25 +1,43 @@
 {
-    "@@locale": "en",
-    "homePageTitle": "Home Page",
-    "@homePageTitle": {
-        "description": "The title of the home page"
-    },
-    
-    "settingsPageTitle": "Settings",
-    "@settingsPageTitle": {
-        "description": "The title of the settings page"
-    },
-    "welcomeMessage": "Welcome to the Prayer Time App!",
-    "@welcomeMessage": {},
-    "drawerTitle": "Prayer Time ",
-    "@drawerTitle": {},
-    "drawerHomePageTile": "Home Page",
-    "@drawerHomePageTile": {
-        "description": "Drawer item for home page"
-    },
-    "drawerSettingsPageTile": "Settings",
-    "@drawerSettingsPageTile": {
-        "description": "Drawer item for settings page"
-    }
-    
+  "@@locale": "en",
+  "@calendarPageTitle": {
+    "description": "The title of the calendar page"
+  },
+  "@drawerCalendarPageTile": {
+    "description": "Drawer item for calendar page"
+  },
+  "@drawerHomePageTile": {
+    "description": "Drawer item for home page"
+  },
+  "@drawerSettingsPageTile": {
+    "description": "Drawer item for settings page"
+  },
+  "@homePageTitle": {
+    "description": "The title of the home page"
+  },
+  "@settingsPageTitle": {
+    "description": "The title of the settings page"
+  },
+  "calendarPageTitle": "Calendar Page",
+  "darkMode": "Dark Theme",
+  "@darkMode": {},
+  "drawerCalendarPageTile": "Calendar",
+  "drawerHomePageTile": "Home Page",
+  "drawerSettingsPageTile": "Settings",
+  "drawerTitle": "Prayer Time ",
+  "@drawerTitle": {},
+  "english": "English",
+  "@english": {},
+  "homePageTitle": "Home Page",
+  "language": "Language",
+  "@language": {},
+  "languageSelect": "Select Language",
+  "@languageSelect": {},
+  "lightMode": "Light Theme",
+  "@lightMode": {},
+  "settingsPageTitle": "Settings",
+  "turkish": "Turkish",
+  "@turkish": {},
+  "welcomeMessage": "Welcome to the Prayer Time App!",
+  "@welcomeMessage": {}
 }

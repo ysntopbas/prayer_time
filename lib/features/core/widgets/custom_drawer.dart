@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:prayer_time/features/calendar/presentation/screens/calendar_screen.dart';
+import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
+import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -21,12 +24,32 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: Text(l10n.drawerHomePageTile),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text(l10n.drawerSettingsPageTile),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.calendar_today),
+            title: Text(l10n.drawerCalendarPageTile),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CalendarScreen()),
+              );
+            },
           ),
         ],
       ),

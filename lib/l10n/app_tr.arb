@@ -1,9 +1,17 @@
 {
-    "@@locale": "tr",
-    "homePageTitle": "Ana Sayfa",
-    "settingsPageTitle": "Ayarlar",
-    "welcomeMessage": "Namaz Vakti Uygulamasına Hoş Geldiniz!",
-    "drawerTitle": "Namaz Vakti ",
-    "drawerHomePageTile": "Ana Sayfa",
-    "drawerSettingsPageTile": "Ayarlar"
+  "@@locale": "tr",
+  "calendarPageTitle": "Takvim Sayfası",
+  "darkMode": "Karanlık Tema",
+  "drawerCalendarPageTile": "Takvim",
+  "drawerHomePageTile": "Ana Sayfa",
+  "drawerSettingsPageTile": "Ayarlar",
+  "drawerTitle": "Namaz Vakti ",
+  "english": "İngilizce",
+  "homePageTitle": "Ana Sayfa",
+  "language": "Dil",
+  "languageSelect": "Dil Seçiniz",
+  "lightMode": "Aydınlık Tema",
+  "settingsPageTitle": "Ayarlar",
+  "turkish": "Türkçe",
+  "welcomeMessage": "Namaz Vakti Uygulamasına Hoş Geldiniz!"
 }

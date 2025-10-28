@@ -98,29 +98,23 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
-  /// The title of the home page
+  /// The title of the calendar page
   ///
   /// In en, this message translates to:
-  /// **'Home Page'**
-  String get homePageTitle;
+  /// **'Calendar Page'**
+  String get calendarPageTitle;
 
-  /// The title of the settings page
+  /// No description provided for @darkMode.
   ///
   /// In en, this message translates to:
-  /// **'Settings'**
-  String get settingsPageTitle;
+  /// **'Dark Theme'**
+  String get darkMode;
 
-  /// No description provided for @welcomeMessage.
+  /// Drawer item for calendar page
   ///
   /// In en, this message translates to:
-  /// **'Welcome to the Prayer Time App!'**
-  String get welcomeMessage;
-
-  /// No description provided for @drawerTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Prayer Time '**
-  String get drawerTitle;
+  /// **'Calendar'**
+  String get drawerCalendarPageTile;
 
   /// Drawer item for home page
   ///
@@ -133,6 +127,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get drawerSettingsPageTile;
+
+  /// No description provided for @drawerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Time '**
+  String get drawerTitle;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// The title of the home page
+  ///
+  /// In en, this message translates to:
+  /// **'Home Page'**
+  String get homePageTitle;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @languageSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get languageSelect;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Light Theme'**
+  String get lightMode;
+
+  /// The title of the settings page
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsPageTitle;
+
+  /// No description provided for @turkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get turkish;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the Prayer Time App!'**
+  String get welcomeMessage;
 }
 
 class _AppLocalizationsDelegate
