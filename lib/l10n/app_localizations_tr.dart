@@ -9,10 +9,16 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get asr => 'İkindi';
+
+  @override
   String get calendarPageTitle => 'Takvim Sayfası';
 
   @override
   String get darkMode => 'Karanlık Tema';
+
+  @override
+  String get dhuhr => 'Öğle';
 
   @override
   String get drawerCalendarPageTile => 'Takvim';
@@ -30,7 +36,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get english => 'İngilizce';
 
   @override
+  String get fajr => 'Sabah';
+
+  @override
   String get homePageTitle => 'Ana Sayfa';
+
+  @override
+  String get imsak => 'İmsak';
+
+  @override
+  String get isha => 'Yatsı';
 
   @override
   String get language => 'Dil';
@@ -42,7 +57,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get lightMode => 'Aydınlık Tema';
 
   @override
+  String get maghrib => 'Akşam';
+
+  @override
   String get settingsPageTitle => 'Ayarlar';
+
+  @override
+  String get sunrise => 'Güneş';
+
+  @override
+  String get sunset => 'Gün Batımı';
 
   @override
   String get turkish => 'Türkçe';

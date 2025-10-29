@@ -9,10 +9,16 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get asr => 'Asr';
+
+  @override
   String get calendarPageTitle => 'Calendar Page';
 
   @override
   String get darkMode => 'Dark Theme';
+
+  @override
+  String get dhuhr => 'Dhuhr';
 
   @override
   String get drawerCalendarPageTile => 'Calendar';
@@ -30,7 +36,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
+  String get fajr => 'Fajr';
+
+  @override
   String get homePageTitle => 'Home Page';
+
+  @override
+  String get imsak => 'Imsak';
+
+  @override
+  String get isha => 'Isha';
 
   @override
   String get language => 'Language';
@@ -42,7 +57,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lightMode => 'Light Theme';
 
   @override
+  String get maghrib => 'Maghrib';
+
+  @override
   String get settingsPageTitle => 'Settings';
+
+  @override
+  String get sunrise => 'Sunrise';
+
+  @override
+  String get sunset => 'Sunset';
 
   @override
   String get turkish => 'Turkish';

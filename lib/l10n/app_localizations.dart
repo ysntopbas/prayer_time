@@ -98,6 +98,12 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
+  /// No description provided for @asr.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr'**
+  String get asr;
+
   /// The title of the calendar page
   ///
   /// In en, this message translates to:
@@ -109,6 +115,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Theme'**
   String get darkMode;
+
+  /// No description provided for @dhuhr.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhuhr'**
+  String get dhuhr;
 
   /// Drawer item for calendar page
   ///
@@ -140,11 +152,29 @@ abstract class AppLocalizations {
   /// **'English'**
   String get english;
 
+  /// No description provided for @fajr.
+  ///
+  /// In en, this message translates to:
+  /// **'Fajr'**
+  String get fajr;
+
   /// The title of the home page
   ///
   /// In en, this message translates to:
   /// **'Home Page'**
   String get homePageTitle;
+
+  /// No description provided for @imsak.
+  ///
+  /// In en, this message translates to:
+  /// **'Imsak'**
+  String get imsak;
+
+  /// No description provided for @isha.
+  ///
+  /// In en, this message translates to:
+  /// **'Isha'**
+  String get isha;
 
   /// No description provided for @language.
   ///
@@ -164,11 +194,29 @@ abstract class AppLocalizations {
   /// **'Light Theme'**
   String get lightMode;
 
+  /// No description provided for @maghrib.
+  ///
+  /// In en, this message translates to:
+  /// **'Maghrib'**
+  String get maghrib;
+
   /// The title of the settings page
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsPageTitle;
+
+  /// No description provided for @sunrise.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunrise'**
+  String get sunrise;
+
+  /// No description provided for @sunset.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunset'**
+  String get sunset;
 
   /// No description provided for @turkish.
   ///

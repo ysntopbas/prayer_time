@@ -11,6 +11,7 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+istek sayfası.text
 
 # IntelliJ related
 *.iml
