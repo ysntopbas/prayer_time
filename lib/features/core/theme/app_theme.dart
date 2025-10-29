@@ -38,7 +38,7 @@ class AppTheme {
     colorScheme: const ColorScheme.light(
       primary: _lightPrimaryColor,
       onPrimary: _lightOnPrimaryColor,
-      background: _lightBackgroundColor,
+      surface: _lightBackgroundColor,
     ),
 
     // Metin stillerini (renkleriyle birlikte) ayarla
@@ -77,7 +77,7 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: _darkPrimaryColor,
       onPrimary: _darkOnPrimaryColor,
-      background: _darkBackgroundColor,
+      surface: _darkBackgroundColor,
     ),
 
     // Metin stillerini (renkleriyle birlikte) ayarla

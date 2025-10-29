@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/features/core/routing/app_router.dart';
+import 'package:prayer_time/features/core/services/storage_services.dart';
 import 'package:prayer_time/features/core/theme/app_theme.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+  runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences sharedPreferences;
+
+  const MyApp({super.key, required this.sharedPreferences});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => SettingsCubit())],
+      providers: [
+        BlocProvider(
+          create: (_) => SettingsCubit(StorageServices(sharedPreferences)),
+        ),
+      ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return MaterialApp.router(
