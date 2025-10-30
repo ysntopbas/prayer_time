@@ -1,11 +1,11 @@
 
 {    
   "@@locale": "en",
-  "@calendarPageTitle": {
-    "description": "The title of the calendar page"
+  "@monthlyPrayerTimePageTitle": {
+    "description": "The title of the monthlyPrayerTime page"
   },
-  "@drawerCalendarPageTile": {
-    "description": "Drawer item for calendar page"
+  "@drawermonthlyPrayerTimePageTile": {
+    "description": "Drawer item for monthlyPrayerTime page"
   },
   "@drawerHomePageTile": {
     "description": "Drawer item for home page"
@@ -20,10 +20,10 @@
     "description": "The title of the settings page"
   },
   "asr": "Asr",
-  "calendarPageTitle": "Calendar Page",
+  "monthlyPrayerTimePageTitle": "monthlyPrayerTime Page",
   "darkMode": "Dark Theme",
   "dhuhr": "Dhuhr",
-  "drawerCalendarPageTile": "Calendar",
+  "drawermonthlyPrayerTimePageTile": "monthlyPrayerTime",
   "drawerHomePageTile": "Home Page",
   "drawerSettingsPageTile": "Settings",
   "drawerTitle": "Prayer Time ",

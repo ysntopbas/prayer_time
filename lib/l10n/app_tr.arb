@@ -1,10 +1,10 @@
 {
   "@@locale": "tr",
   "asr": "İkindi",
-  "calendarPageTitle": "Takvim Sayfası",
+  "monthlyPrayerTimePageTitle": "Takvim Sayfası",
   "darkMode": "Karanlık Tema",
   "dhuhr": "Öğle",
-  "drawerCalendarPageTile": "Takvim",
+  "drawermonthlyPrayerTimePageTile": "Takvim",
   "drawerHomePageTile": "Ana Sayfa",
   "drawerSettingsPageTile": "Ayarlar",
   "drawerTitle": "Namaz Vakti ",

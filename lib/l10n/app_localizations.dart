@@ -104,11 +104,11 @@ abstract class AppLocalizations {
   /// **'Asr'**
   String get asr;
 
-  /// The title of the calendar page
+  /// The title of the monthlyPrayerTime page
   ///
   /// In en, this message translates to:
-  /// **'Calendar Page'**
-  String get calendarPageTitle;
+  /// **'monthlyPrayerTime Page'**
+  String get monthlyPrayerTimePageTitle;
 
   /// No description provided for @darkMode.
   ///
@@ -122,11 +122,11 @@ abstract class AppLocalizations {
   /// **'Dhuhr'**
   String get dhuhr;
 
-  /// Drawer item for calendar page
+  /// Drawer item for monthlyPrayerTime page
   ///
   /// In en, this message translates to:
-  /// **'Calendar'**
-  String get drawerCalendarPageTile;
+  /// **'monthlyPrayerTime'**
+  String get drawermonthlyPrayerTimePageTile;
 
   /// Drawer item for home page
   ///

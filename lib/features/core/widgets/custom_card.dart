@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:prayer_time/features/calendar/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class TimeCard extends StatelessWidget {
   final List<String> prayName;
   final Timings timings;
-  final String cityName;
+  final String? cityName;
   const TimeCard({
     super.key,
     required this.prayName,
     required this.timings,
-    required this.cityName,
+    this.cityName,
   });
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/features/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/core/widgets/custom_drawer.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
+import 'package:prayer_time/features/home/presentation/widgets/prayer_countdown_card.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_time_card.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
@@ -17,7 +18,6 @@ class HomeScreen extends StatelessWidget {
       drawer: const CustomDrawer(),
       body: Column(
         children: [
-          Placeholder(),
           Expanded(
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
@@ -35,9 +35,11 @@ class HomeScreen extends StatelessWidget {
                 } else if (state is HomeLoaded) {
                   final prayerTimings = state.prayerTimings;
                   final cityName = state.cityName ?? 'Kayseri';
+                  final nextTimings = state.nextTimings;
                   return Center(
                     child: Column(
                       children: [
+                        PrayerCountdownCard(nextTimings: nextTimings),
                         PrayerTimeHomeCard(
                           timings: prayerTimings,
                           cityName: cityName,

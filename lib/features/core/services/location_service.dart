@@ -41,7 +41,6 @@ class LocationService {
           accuracy: LocationAccuracy.high,
         ),
       );
-      log(bedii.toString());
       return bedii;
     } catch (e) {
       throw Exception('Konum alınamadı: $e');

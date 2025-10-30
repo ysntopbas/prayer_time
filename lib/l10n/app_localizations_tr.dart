@@ -12,7 +12,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get asr => 'İkindi';
 
   @override
-  String get calendarPageTitle => 'Takvim Sayfası';
+  String get monthlyPrayerTimePageTitle => 'Takvim Sayfası';
 
   @override
   String get darkMode => 'Karanlık Tema';
@@ -21,7 +21,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get dhuhr => 'Öğle';
 
   @override
-  String get drawerCalendarPageTile => 'Takvim';
+  String get drawermonthlyPrayerTimePageTile => 'Takvim';
 
   @override
   String get drawerHomePageTile => 'Ana Sayfa';

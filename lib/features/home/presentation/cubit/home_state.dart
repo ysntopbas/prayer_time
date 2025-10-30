@@ -12,10 +12,15 @@ final class HomeInitial extends HomeState {}
 final class HomeLoading extends HomeState {}
 
 final class HomeLoaded extends HomeState {
+  final Timings nextTimings;
   final Timings prayerTimings;
   final String? cityName;
 
-  const HomeLoaded({required this.prayerTimings, this.cityName});
+  const HomeLoaded({
+    required this.prayerTimings,
+    this.cityName,
+    required this.nextTimings,
+  });
 
   @override
   List<Object> get props => [prayerTimings, cityName ?? ''];

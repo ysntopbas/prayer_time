@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/calendar/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/features/home/data/repository/home_repository.dart';
 
 part 'home_state.dart';
@@ -14,8 +14,15 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final HomeRepository homeRepository = HomeRepository();
       final prayerTimes = await homeRepository.getPrayerTimes();
+      final nextPrayerTimes = await homeRepository.getNextPrayerTimes();
       final cityName = homeRepository.cityName;
-      emit(HomeLoaded(prayerTimings: prayerTimes, cityName: cityName));
+      emit(
+        HomeLoaded(
+          prayerTimings: prayerTimes,
+          cityName: cityName,
+          nextTimings: nextPrayerTimes,
+        ),
+      );
     } catch (e) {
       emit(HomeError(message: e.toString()));
     }

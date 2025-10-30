@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get asr => 'Asr';
 
   @override
-  String get calendarPageTitle => 'Calendar Page';
+  String get monthlyPrayerTimePageTitle => 'monthlyPrayerTime Page';
 
   @override
   String get darkMode => 'Dark Theme';
@@ -21,7 +21,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dhuhr => 'Dhuhr';
 
   @override
-  String get drawerCalendarPageTile => 'Calendar';
+  String get drawermonthlyPrayerTimePageTile => 'monthlyPrayerTime';
 
   @override
   String get drawerHomePageTile => 'Home Page';
