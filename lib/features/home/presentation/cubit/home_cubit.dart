@@ -12,8 +12,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeLoading());
 
     try {
-      final prayerTimes = await HomeRepository().getPrayerTimes();
-      emit(HomeLoaded(prayerTimings: prayerTimes));
+      final HomeRepository homeRepository = HomeRepository();
+      final prayerTimes = await homeRepository.getPrayerTimes();
+      final cityName = homeRepository.cityName;
+      emit(HomeLoaded(prayerTimings: prayerTimes, cityName: cityName));
     } catch (e) {
       emit(HomeError(message: e.toString()));
     }

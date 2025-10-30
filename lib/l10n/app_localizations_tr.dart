@@ -60,6 +60,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get maghrib => 'Akşam';
 
   @override
+  String get prayTimes => 'Namaz Vakitleri';
+
+  @override
   String get settingsPageTitle => 'Ayarlar';
 
   @override

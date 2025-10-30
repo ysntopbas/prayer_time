@@ -1,4 +1,5 @@
-{
+
+{    
   "@@locale": "en",
   "@calendarPageTitle": {
     "description": "The title of the calendar page"
@@ -35,6 +36,7 @@
   "languageSelect": "Select Language",
   "lightMode": "Light Theme",
   "maghrib": "Maghrib",
+  "prayTimes": "Pray Times",
   "settingsPageTitle": "Settings",
   "sunrise": "Sunrise",
   "sunset": "Sunset",

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class DioClient {
-  static final Dio dio = Dio(
+  static Dio dio = Dio(
     BaseOptions(
       baseUrl: 'https://api.aladhan.com/v1',
       connectTimeout: Duration(seconds: 10),

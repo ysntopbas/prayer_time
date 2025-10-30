@@ -1,17 +1,31 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:prayer_time/features/calendar/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/features/core/services/dio_client.dart';
+import 'package:prayer_time/features/core/services/location_service.dart';
 
 class HomeRepository {
+  String? cityName;
   final Dio _dio = DioClient.dio;
+  final LocationService _locationService = LocationService();
 
   Future<Timings> getPrayerTimes() async {
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
+    // Kullanıcının konumunu al
+    Map<String, String>? locationData;
+    try {
+      locationData = await _locationService.getCurrentCity();
+      cityName = locationData?['city'];
+      log('Kullanıcının konumu alındı: $locationData');
+    } catch (e) {
+      // Konum alınamazsa varsayılan Kayseri kullan
+      log('Konum alınamadı, varsayılan konum kullanılacak: $e');
+    }
     final Map<String, dynamic> queryParameters = {
-      'city': 'Kayseri',
-      'country': 'TR',
+      'city': locationData?['city'] ?? 'Kayseri',
+      'country': locationData?['country'] ?? 'TR',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',

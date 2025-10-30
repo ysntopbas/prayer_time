@@ -29,6 +29,10 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Uygulamanın size özel içerik sunması için konumunuza ihtiyaç duyulmaktadır.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Uygulamanın arka planda size özel içerik sunması için konumunuza ihtiyaç duyulmaktadır.</string>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

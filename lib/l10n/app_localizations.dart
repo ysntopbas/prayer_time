@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Maghrib'**
   String get maghrib;
 
+  /// No description provided for @prayTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Pray Times'**
+  String get prayTimes;
+
   /// The title of the settings page
   ///
   /// In en, this message translates to:

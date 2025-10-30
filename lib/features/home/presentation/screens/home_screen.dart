@@ -34,9 +34,15 @@ class HomeScreen extends StatelessWidget {
                   return Center(child: Text(state.message));
                 } else if (state is HomeLoaded) {
                   final prayerTimings = state.prayerTimings;
+                  final cityName = state.cityName ?? 'Kayseri';
                   return Center(
                     child: Column(
-                      children: [PrayerTimeCard(timings: prayerTimings)],
+                      children: [
+                        PrayerTimeHomeCard(
+                          timings: prayerTimings,
+                          cityName: cityName,
+                        ),
+                      ],
                     ),
                   );
                 }

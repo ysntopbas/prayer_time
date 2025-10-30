@@ -13,11 +13,12 @@ final class HomeLoading extends HomeState {}
 
 final class HomeLoaded extends HomeState {
   final Timings prayerTimings;
+  final String? cityName;
 
-  const HomeLoaded({required this.prayerTimings});
+  const HomeLoaded({required this.prayerTimings, this.cityName});
 
   @override
-  List<Object> get props => [prayerTimings];
+  List<Object> get props => [prayerTimings, cityName ?? ''];
 }
 
 final class HomeError extends HomeState {

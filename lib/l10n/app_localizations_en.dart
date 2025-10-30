@@ -60,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maghrib => 'Maghrib';
 
   @override
+  String get prayTimes => 'Pray Times';
+
+  @override
   String get settingsPageTitle => 'Settings';
 
   @override
