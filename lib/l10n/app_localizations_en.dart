@@ -12,16 +12,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get asr => 'Asr';
 
   @override
-  String get monthlyPrayerTimePageTitle => 'monthlyPrayerTime Page';
-
-  @override
   String get darkMode => 'Dark Theme';
 
   @override
-  String get dhuhr => 'Dhuhr';
+  String get date => 'Date';
 
   @override
-  String get drawermonthlyPrayerTimePageTile => 'monthlyPrayerTime';
+  String get dhuhr => 'Dhuhr';
 
   @override
   String get drawerHomePageTile => 'Home Page';
@@ -31,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get drawerTitle => 'Prayer Time ';
+
+  @override
+  String get drawermonthlyPrayerTimePageTile => 'Monthly Prayers Calendar';
 
   @override
   String get english => 'English';
@@ -58,6 +58,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maghrib => 'Maghrib';
+
+  @override
+  String get monthlyPrayerTimePageTitle => 'Calendar Page';
+
+  @override
+  String get prayTimeNotAvailable => 'No prayer times available';
 
   @override
   String get prayTimes => 'Pray Times';

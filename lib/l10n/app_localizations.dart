@@ -104,29 +104,23 @@ abstract class AppLocalizations {
   /// **'Asr'**
   String get asr;
 
-  /// The title of the monthlyPrayerTime page
-  ///
-  /// In en, this message translates to:
-  /// **'monthlyPrayerTime Page'**
-  String get monthlyPrayerTimePageTitle;
-
   /// No description provided for @darkMode.
   ///
   /// In en, this message translates to:
   /// **'Dark Theme'**
   String get darkMode;
 
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
   /// No description provided for @dhuhr.
   ///
   /// In en, this message translates to:
   /// **'Dhuhr'**
   String get dhuhr;
-
-  /// Drawer item for monthlyPrayerTime page
-  ///
-  /// In en, this message translates to:
-  /// **'monthlyPrayerTime'**
-  String get drawermonthlyPrayerTimePageTile;
 
   /// Drawer item for home page
   ///
@@ -145,6 +139,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Prayer Time '**
   String get drawerTitle;
+
+  /// Drawer item for monthlyPrayerTime page
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Prayers Calendar'**
+  String get drawermonthlyPrayerTimePageTile;
 
   /// No description provided for @english.
   ///
@@ -199,6 +199,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Maghrib'**
   String get maghrib;
+
+  /// The title of the monthlyPrayerTime page
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar Page'**
+  String get monthlyPrayerTimePageTitle;
+
+  /// No description provided for @prayTimeNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No prayer times available'**
+  String get prayTimeNotAvailable;
 
   /// No description provided for @prayTimes.
   ///

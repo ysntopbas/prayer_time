@@ -4,6 +4,7 @@ import 'package:prayer_time/features/core/routing/app_router.dart';
 import 'package:prayer_time/features/core/services/storage_services.dart';
 import 'package:prayer_time/features/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
+import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           create: (_) => SettingsCubit(StorageServices(sharedPreferences)),
         ),
         BlocProvider(create: (_) => HomeCubit()),
+        BlocProvider(create: (_) => MonthlyCubit()),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {

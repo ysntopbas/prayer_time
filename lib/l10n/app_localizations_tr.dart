@@ -12,16 +12,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get asr => 'İkindi';
 
   @override
-  String get monthlyPrayerTimePageTitle => 'Takvim Sayfası';
-
-  @override
   String get darkMode => 'Karanlık Tema';
 
   @override
-  String get dhuhr => 'Öğle';
+  String get date => 'Tarih';
 
   @override
-  String get drawermonthlyPrayerTimePageTile => 'Takvim';
+  String get dhuhr => 'Öğle';
 
   @override
   String get drawerHomePageTile => 'Ana Sayfa';
@@ -31,6 +28,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get drawerTitle => 'Namaz Vakti ';
+
+  @override
+  String get drawermonthlyPrayerTimePageTile => 'Aylık Namaz Takvimi';
 
   @override
   String get english => 'İngilizce';
@@ -58,6 +58,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get maghrib => 'Akşam';
+
+  @override
+  String get monthlyPrayerTimePageTitle => 'Takvim Sayfası';
+
+  @override
+  String get prayTimeNotAvailable => 'Namaz vakitlerine erişilemedi';
 
   @override
   String get prayTimes => 'Namaz Vakitleri';

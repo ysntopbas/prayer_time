@@ -78,7 +78,7 @@ class HomeRepository {
         throw Exception('API\'den namaz vakitleri (timings) alınamadı.');
       }
     } on DioException catch (e) {
-      throw Exception('Dio hatası: ${e.message}');
+      throw Exception('HOME REPO Dio hatası: ${e.message}');
     } catch (e) {
       throw Exception('Bir hata oluştu: $e');
     }

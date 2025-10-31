@@ -145,18 +145,18 @@ class Hijri {
   });
 
   Hijri.fromJson(Map<String, dynamic> json) {
-    hijridate = json['hijridate'];
-    hijriformat = json['hijriformat'];
-    hijriday = json['hijriday'];
-    hijriweekday = json['hijriweekday'] != null
-        ? Hijriweekday.fromJson(json['hijriweekday'])
+    hijridate = json['date'];
+    hijriformat = json['format'];
+    hijriday = json['day'];
+    hijriweekday = json['weekday'] != null
+        ? Hijriweekday.fromJson(json['weekday'])
         : null;
-    hijrimonth = json['hijrimonth'] != null
-        ? Hijrimonth.fromJson(json['hijrimonth'])
+    hijrimonth = json['month'] != null
+        ? Hijrimonth.fromJson(json['month'])
         : null;
-    hijriyear = json['hijriyear'];
-    hijridesignation = json['hijridesignation'] != null
-        ? Hijridesignation.fromJson(json['hijridesignation'])
+    hijriyear = json['year'];
+    hijridesignation = json['designation'] != null
+        ? Hijridesignation.fromJson(json['designation'])
         : null;
     if (json['holidays'] != null) {
       holidays = <String>[];
@@ -227,10 +227,10 @@ class Hijrimonth {
   Hijrimonth({this.hijrinumber, this.hijrien, this.hijriar, this.hijridays});
 
   Hijrimonth.fromJson(Map<String, dynamic> json) {
-    hijrinumber = json['hijrinumber'];
-    hijrien = json['hijrien'];
-    hijriar = json['hijriar'];
-    hijridays = json['hijridays'];
+    hijrinumber = json['number'];
+    hijrien = json['en'];
+    hijriar = json['ar'];
+    hijridays = json['days'];
   }
 
   Map<String, dynamic> toJson() {
@@ -250,8 +250,8 @@ class Hijridesignation {
   Hijridesignation({this.hijriabbreviated, this.hijriexpanded});
 
   Hijridesignation.fromJson(Map<String, dynamic> json) {
-    hijriabbreviated = json['hijriabbreviated'];
-    hijriexpanded = json['hijriexpanded'];
+    hijriabbreviated = json['abbreviated'];
+    hijriexpanded = json['expanded'];
   }
 
   Map<String, dynamic> toJson() {

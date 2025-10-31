@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:prayer_time/features/monthlyPrayer/presentation/screens/calendar_screen.dart';
+import 'package:prayer_time/features/monthlyPrayer/presentation/screens/monthly_prayer_time.dart';
 import 'package:prayer_time/features/core/routing/app_routes.dart';
 import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
 import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';

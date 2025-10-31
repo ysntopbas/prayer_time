@@ -51,9 +51,9 @@ class MonthlyRepository {
         throw Exception('API\'den  aylık namaz vakitleri  alınamadı.');
       }
     } on DioException catch (e) {
-      throw Exception('Dio hatası: ${e.message}');
+      throw Exception('MONTHLY REPO Dio hatası: ${e.message}');
     } catch (e) {
-      throw Exception('Bir hata oluştu: $e');
+      throw Exception('MONTHLY REPO Bir hata oluştu: $e');
     }
   }
 }

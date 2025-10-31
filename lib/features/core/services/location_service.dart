@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -59,7 +58,6 @@ class LocationService {
       );
 
       if (placemarks.isNotEmpty) {
-        inspect(placemarks);
         Placemark place = placemarks[0];
         return {
           'city': place.administrativeArea ?? 'Unknown',

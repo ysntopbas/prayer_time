@@ -1,32 +1,31 @@
-
-{    
+{
   "@@locale": "en",
-  "@monthlyPrayerTimePageTitle": {
-    "description": "The title of the monthlyPrayerTime page"
-  },
-  "@drawermonthlyPrayerTimePageTile": {
-    "description": "Drawer item for monthlyPrayerTime page"
-  },
   "@drawerHomePageTile": {
     "description": "Drawer item for home page"
   },
   "@drawerSettingsPageTile": {
     "description": "Drawer item for settings page"
   },
+  "@drawermonthlyPrayerTimePageTile": {
+    "description": "Drawer item for monthlyPrayerTime page"
+  },
   "@homePageTitle": {
     "description": "The title of the home page"
+  },
+  "@monthlyPrayerTimePageTitle": {
+    "description": "The title of the monthlyPrayerTime page"
   },
   "@settingsPageTitle": {
     "description": "The title of the settings page"
   },
   "asr": "Asr",
-  "monthlyPrayerTimePageTitle": "monthlyPrayerTime Page",
   "darkMode": "Dark Theme",
+  "date": "Date",
   "dhuhr": "Dhuhr",
-  "drawermonthlyPrayerTimePageTile": "monthlyPrayerTime",
   "drawerHomePageTile": "Home Page",
   "drawerSettingsPageTile": "Settings",
   "drawerTitle": "Prayer Time ",
+  "drawermonthlyPrayerTimePageTile": "Monthly Prayers Calendar",
   "english": "English",
   "fajr": "Fajr",
   "homePageTitle": "Home Page",
@@ -36,6 +35,8 @@
   "languageSelect": "Select Language",
   "lightMode": "Light Theme",
   "maghrib": "Maghrib",
+  "monthlyPrayerTimePageTitle": "Calendar Page",
+  "prayTimeNotAvailable": "No prayer times available",
   "prayTimes": "Pray Times",
   "settingsPageTitle": "Settings",
   "sunrise": "Sunrise",

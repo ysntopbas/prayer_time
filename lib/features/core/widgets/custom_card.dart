@@ -15,7 +15,7 @@ class TimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10nL = AppLocalizations.of(context)!;
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -25,7 +25,7 @@ class TimeCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "${l10n.prayTimes} - $cityName", // Başlık
+              "${l10nL.prayTimes} - $cityName", // Başlık
             ),
             SizedBox(height: 16),
             Row(
