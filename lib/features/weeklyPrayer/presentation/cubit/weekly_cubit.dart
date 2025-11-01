@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/features/weeklyPrayer/data/repository/weekly_repository.dart';
 
 part 'weekly_state.dart';
 
 class WeeklyCubit extends Cubit<WeeklyState> {
-  WeeklyCubit() : super(WeeklyInitial());
+  final CacheService cacheService;
+
+  WeeklyCubit(this.cacheService) : super(WeeklyInitial());
 
   Future<void> fetchWeeklyPrayerTimes({
     Map<String, String>? savedLocation,
@@ -14,7 +17,7 @@ class WeeklyCubit extends Cubit<WeeklyState> {
     emit(WeeklyLoading());
 
     try {
-      final WeeklyRepository weeklyRepository = WeeklyRepository();
+      final WeeklyRepository weeklyRepository = WeeklyRepository(cacheService);
       final weeklyTimings = await weeklyRepository.getWeeklyPrayerTimes(
         savedLocation: savedLocation,
       );

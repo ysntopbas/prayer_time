@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/dio_client.dart';
 import 'package:prayer_time/core/services/location_service.dart';
 
@@ -9,10 +10,11 @@ class HomeRepository {
   String? cityName;
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
+  final CacheService _cacheService;
+
+  HomeRepository(this._cacheService);
 
   Future<Timings> getPrayerTimes({Map<String, String>? savedLocation}) async {
-    final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
     Map<String, String>? locationData;
 
     // Önce kaydedilmiş konumu kullan
@@ -29,6 +31,28 @@ class HomeRepository {
       }
     }
 
+    // Konum değişikliğini kontrol et
+    final locationChanged = _cacheService.hasLocationChanged(locationData);
+
+    // Cache'den veri al
+    if (!locationChanged && !_cacheService.shouldUpdateDaily()) {
+      final cachedTimings = _cacheService.getDailyTimings();
+      if (cachedTimings != null) {
+        log('Günlük namaz vakitleri cache\'den alındı');
+        return cachedTimings;
+      }
+    }
+
+    // Konum değiştiyse cache'i temizle
+    if (locationChanged && locationData != null) {
+      log('Konum değişti, cache temizleniyor');
+      await _cacheService.clearAllCache();
+      await _cacheService.saveCachedLocation(locationData);
+    }
+
+    // API'den veri çek
+    final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
     final Map<String, dynamic> queryParameters = {
       'city': locationData?['city'] ?? 'Kayseri',
       'country': locationData?['country'] ?? 'TR',
@@ -40,6 +64,7 @@ class HomeRepository {
     final String endpoint = '/timingsByCity/$todayDate';
 
     try {
+      log('Günlük namaz vakitleri API\'den çekiliyor');
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
@@ -48,13 +73,28 @@ class HomeRepository {
       final prayerResponse = PrayerTimeResponse.fromJson(response.data);
 
       if (prayerResponse.data.timings != null) {
+        // Cache'e kaydet
+        await _cacheService.saveDailyTimings(prayerResponse.data.timings!);
+        log('Günlük namaz vakitleri cache\'e kaydedildi');
         return prayerResponse.data.timings!;
       } else {
         throw Exception('API\'den namaz vakitleri (timings) alınamadı.');
       }
     } on DioException catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getDailyTimings();
+      if (cachedTimings != null) {
+        log('API hatası, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('Dio hatası: ${e.message}');
     } catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getDailyTimings();
+      if (cachedTimings != null) {
+        log('Hata oluştu, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('Bir hata oluştu: $e');
     }
   }
@@ -62,8 +102,6 @@ class HomeRepository {
   Future<Timings> getNextPrayerTimes({
     Map<String, String>? savedLocation,
   }) async {
-    final String tomorrowDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
     Map<String, String>? locationData;
 
     if (savedLocation != null) {
@@ -76,6 +114,20 @@ class HomeRepository {
       }
     }
 
+    // Konum değişikliğini kontrol et
+    final locationChanged = _cacheService.hasLocationChanged(locationData);
+
+    // Cache'den veri al (konum değişmediyse ve gün değişmediyse)
+    if (!locationChanged && !_cacheService.shouldUpdateDaily()) {
+      final cachedTimings = _cacheService.getNextDayTimings();
+      if (cachedTimings != null) {
+        log('Yarının namaz vakitleri cache\'den alındı');
+        return cachedTimings;
+      }
+    }
+
+    final String tomorrowDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
     final Map<String, dynamic> queryParameters = {
       'address': locationData?['city'] ?? 'Kayseri',
       'country': 'TR',
@@ -87,6 +139,7 @@ class HomeRepository {
     final String endpoint = '/nextPrayerByAddress/$tomorrowDate';
 
     try {
+      log('Yarının namaz vakitleri API\'den çekiliyor');
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
@@ -95,13 +148,28 @@ class HomeRepository {
       final prayerResponse = PrayerTimeResponse.fromJson(response.data);
 
       if (prayerResponse.data.timings != null) {
+        // Cache'e kaydet
+        await _cacheService.saveNextDayTimings(prayerResponse.data.timings!);
+        log('Yarının namaz vakitleri cache\'e kaydedildi');
         return prayerResponse.data.timings!;
       } else {
         throw Exception('API\'den namaz vakitleri (timings) alınamadı.');
       }
     } on DioException catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getNextDayTimings();
+      if (cachedTimings != null) {
+        log('API hatası, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('HOME REPO Dio hatası: ${e.message}');
     } catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getNextDayTimings();
+      if (cachedTimings != null) {
+        log('Hata oluştu, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('Bir hata oluştu: $e');
     }
   }

@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/dio_client.dart';
 import 'package:prayer_time/core/services/location_service.dart';
 
@@ -8,15 +10,13 @@ class WeeklyRepository {
   String? cityName;
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
+  final CacheService _cacheService;
+
+  WeeklyRepository(this._cacheService);
 
   Future<List<PrayerTimeModel>> getWeeklyPrayerTimes({
     Map<String, String>? savedLocation,
   }) async {
-    final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-    final String weekLaterDate = DateFormat(
-      'dd-MM-yyyy',
-    ).format(DateTime.now().add(const Duration(days: 7)));
-
     Map<String, String>? locationData;
 
     // Önce kaydedilmiş konumu kullan
@@ -29,9 +29,27 @@ class WeeklyRepository {
         locationData = await _locationService.getCurrentCity();
         cityName = locationData?['city'];
       } catch (e) {
-        // Konum alınamazsa varsayılan Kayseri kullan
+        log('Konum alınamadı: $e');
       }
     }
+
+    // Konum değişikliğini kontrol et
+    final locationChanged = _cacheService.hasLocationChanged(locationData);
+
+    // Cache'den veri al
+    if (!locationChanged && !_cacheService.shouldUpdateWeekly()) {
+      final cachedTimings = _cacheService.getWeeklyTimings();
+      if (cachedTimings != null && cachedTimings.isNotEmpty) {
+        log('Haftalık namaz vakitleri cache\'den alındı');
+        return cachedTimings;
+      }
+    }
+
+    // API'den veri çek
+    final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    final String weekLaterDate = DateFormat(
+      'dd-MM-yyyy',
+    ).format(DateTime.now().add(const Duration(days: 7)));
 
     final Map<String, dynamic> queryParameters = {
       'city': locationData?['city'] ?? 'Kayseri',
@@ -44,6 +62,7 @@ class WeeklyRepository {
     final String endpoint = '/calendarByCity/from/$todayDate/to/$weekLaterDate';
 
     try {
+      log('Haftalık namaz vakitleri API\'den çekiliyor');
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
@@ -58,13 +77,30 @@ class WeeklyRepository {
                   PrayerTimeModel.fromJson(jsonDay as Map<String, dynamic>),
             )
             .toList();
+
+        // Cache'e kaydet
+        await _cacheService.saveWeeklyTimings(prayerList);
+        log('Haftalık namaz vakitleri cache\'e kaydedildi');
+
         return prayerList;
       } else {
         throw Exception('API\'den haftalık namaz vakitleri alınamadı.');
       }
     } on DioException catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getWeeklyTimings();
+      if (cachedTimings != null && cachedTimings.isNotEmpty) {
+        log('API hatası, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('WEEKLY REPO Dio hatası: ${e.message}');
     } catch (e) {
+      // Hata durumunda cache'den dön
+      final cachedTimings = _cacheService.getWeeklyTimings();
+      if (cachedTimings != null && cachedTimings.isNotEmpty) {
+        log('Hata oluştu, cache\'den veri döndürülüyor');
+        return cachedTimings;
+      }
       throw Exception('WEEKLY REPO Bir hata oluştu: $e');
     }
   }

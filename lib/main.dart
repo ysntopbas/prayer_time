@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/theme/app_theme.dart';
@@ -26,17 +27,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context);
+    final storageServices = StorageServices(sharedPreferences);
+    final cacheService = CacheService(storageServices);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => SettingsCubit(
-            StorageServices(sharedPreferences),
-            LocationService(),
-          ),
+          create: (_) => SettingsCubit(storageServices, LocationService()),
         ),
-        BlocProvider(create: (_) => HomeCubit()),
-        BlocProvider(create: (_) => MonthlyCubit()),
-        BlocProvider(create: (_) => WeeklyCubit()),
+        BlocProvider(create: (_) => HomeCubit(cacheService)),
+        BlocProvider(create: (_) => MonthlyCubit(cacheService)),
+        BlocProvider(create: (_) => WeeklyCubit(cacheService)),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
