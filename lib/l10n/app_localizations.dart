@@ -98,6 +98,12 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
+  /// No description provided for @afternoonPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Afternoon Prayer'**
+  String get afternoonPrayer;
+
   /// No description provided for @asr.
   ///
   /// In en, this message translates to:
@@ -115,6 +121,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date'**
   String get date;
+
+  /// No description provided for @dawnPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Dawn Prayer'**
+  String get dawnPrayer;
 
   /// No description provided for @dhuhr.
   ///
@@ -137,7 +149,7 @@ abstract class AppLocalizations {
   /// No description provided for @drawerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Prayer Time '**
+  /// **'Prayer Times'**
   String get drawerTitle;
 
   /// Drawer item for monthlyPrayerTime page
@@ -158,11 +170,17 @@ abstract class AppLocalizations {
   /// **'Fajr'**
   String get fajr;
 
-  /// The title of the home page
+  /// No description provided for @headerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Home Page'**
-  String get homePageTitle;
+  /// **'Prayer Times'**
+  String get headerTitle;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours'**
+  String get hours;
 
   /// No description provided for @imsak.
   ///
@@ -200,11 +218,35 @@ abstract class AppLocalizations {
   /// **'Maghrib'**
   String get maghrib;
 
+  /// No description provided for @minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get minutes;
+
   /// The title of the monthlyPrayerTime page
   ///
   /// In en, this message translates to:
   /// **'Calendar Page'**
   String get monthlyPrayerTimePageTitle;
+
+  /// No description provided for @nextPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Prayer'**
+  String get nextPrayer;
+
+  /// No description provided for @nightPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Night Prayer'**
+  String get nightPrayer;
+
+  /// No description provided for @noonMiddayPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Noon/Midday Prayer'**
+  String get noonMiddayPrayer;
 
   /// No description provided for @prayTimeNotAvailable.
   ///
@@ -218,11 +260,23 @@ abstract class AppLocalizations {
   /// **'Pray Times'**
   String get prayTimes;
 
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds'**
+  String get seconds;
+
   /// The title of the settings page
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsPageTitle;
+
+  /// No description provided for @sunRise.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun Rise '**
+  String get sunRise;
 
   /// No description provided for @sunrise.
   ///
@@ -236,17 +290,137 @@ abstract class AppLocalizations {
   /// **'Sunset'**
   String get sunset;
 
+  /// No description provided for @sunsetPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunset Prayer'**
+  String get sunsetPrayer;
+
+  /// No description provided for @todaysPrayerTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Prayer Times'**
+  String get todaysPrayerTimes;
+
   /// No description provided for @turkish.
   ///
   /// In en, this message translates to:
   /// **'Turkish'**
   String get turkish;
 
-  /// No description provided for @welcomeMessage.
+  /// No description provided for @monday.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to the Prayer Time App!'**
-  String get welcomeMessage;
+  /// **'Monday'**
+  String get monday;
+
+  /// No description provided for @tuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get tuesday;
+
+  /// No description provided for @wednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get wednesday;
+
+  /// No description provided for @thursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get thursday;
+
+  /// No description provided for @friday.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get friday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get sunday;
+
+  /// No description provided for @january.
+  ///
+  /// In en, this message translates to:
+  /// **'January'**
+  String get january;
+
+  /// No description provided for @february.
+  ///
+  /// In en, this message translates to:
+  /// **'February'**
+  String get february;
+
+  /// No description provided for @march.
+  ///
+  /// In en, this message translates to:
+  /// **'March'**
+  String get march;
+
+  /// No description provided for @april.
+  ///
+  /// In en, this message translates to:
+  /// **'April'**
+  String get april;
+
+  /// No description provided for @may.
+  ///
+  /// In en, this message translates to:
+  /// **'May'**
+  String get may;
+
+  /// No description provided for @june.
+  ///
+  /// In en, this message translates to:
+  /// **'June'**
+  String get june;
+
+  /// No description provided for @july.
+  ///
+  /// In en, this message translates to:
+  /// **'July'**
+  String get july;
+
+  /// No description provided for @august.
+  ///
+  /// In en, this message translates to:
+  /// **'August'**
+  String get august;
+
+  /// No description provided for @september.
+  ///
+  /// In en, this message translates to:
+  /// **'September'**
+  String get september;
+
+  /// No description provided for @october.
+  ///
+  /// In en, this message translates to:
+  /// **'October'**
+  String get october;
+
+  /// No description provided for @november.
+  ///
+  /// In en, this message translates to:
+  /// **'November'**
+  String get november;
+
+  /// No description provided for @december.
+  ///
+  /// In en, this message translates to:
+  /// **'December'**
+  String get december;
 }
 
 class _AppLocalizationsDelegate

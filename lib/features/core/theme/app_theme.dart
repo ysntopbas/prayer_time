@@ -7,12 +7,13 @@ class AppTheme {
   static const String _fontFamily = 'Montserrat';
 
   // 3. Renk paletimizi tanımlıyoruz
-  static const Color _lightPrimaryColor = Colors.blue;
+  static const Color _lightPrimaryColor = Color(0xFF308C58);
+  static const Color _lightSecondaryColor = Color(0xFF0E978B);
   static const Color _lightOnPrimaryColor = Colors.white;
   static const Color _lightBackgroundColor = Colors.white;
-  static const Color _lightTextColor = Colors.black87;
+  static const Color _lightTextColor = Colors.black;
 
-  static const Color _darkPrimaryColor = Colors.blueAccent;
+  static const Color _darkPrimaryColor = Color(0xFF0E978B);
   static const Color _darkOnPrimaryColor = Colors.white;
   static const Color _darkBackgroundColor = Color(0xFF1A1A1A);
   static const Color _darkTextColor = Colors.white70;
@@ -22,9 +23,12 @@ class AppTheme {
   static const TextTheme _textTheme = TextTheme(
     headlineLarge: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
     headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+    headlineSmall: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
     titleLarge: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
+    titleMedium: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
     bodyLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
     bodyMedium: TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal),
+    bodySmall: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal),
     labelLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
   );
 
@@ -37,6 +41,7 @@ class AppTheme {
     // Renk şeması
     colorScheme: const ColorScheme.light(
       primary: _lightPrimaryColor,
+      secondary: _lightSecondaryColor,
       onPrimary: _lightOnPrimaryColor,
       surface: _lightBackgroundColor,
     ),
@@ -106,3 +111,7 @@ class AppTheme {
     ),
   );
 }
+
+
+//308c58 yeşil kodu #308c58 gradient first
+//0e978b mavi kodu #0e978b gradient last

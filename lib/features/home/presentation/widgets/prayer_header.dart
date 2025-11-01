@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:prayer_time/l10n/app_localizations.dart';
 
 class PrayerHeader extends StatelessWidget {
   final String cityName;
@@ -14,16 +15,35 @@ class PrayerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final dateFormat = DateFormat('EEEE, MMMM d, yyyy');
+    final dateFormat = DateFormat(
+      'EEEE, MMMM d, yyyy',
+      Localizations.localeOf(context).languageCode,
+    );
+    final appTheme = Theme.of(context);
+    final l10nL = AppLocalizations.of(context)!;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            appTheme.colorScheme.primary,
+            appTheme.colorScheme.secondary,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
             icon: const Icon(Icons.menu),
+            style: IconButton.styleFrom(
+              foregroundColor: appTheme.colorScheme.onPrimary,
+            ),
             onPressed: () {
               scaffoldKey.currentState?.openDrawer();
             },
@@ -32,24 +52,24 @@ class PrayerHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Prayer Times',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                l10nL.headerTitle,
+                style: appTheme.textTheme.headlineMedium?.copyWith(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
+
               const SizedBox(height: 4),
               Text(
                 cityName,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                style: appTheme.textTheme.headlineSmall?.copyWith(
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 dateFormat.format(now),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                style: appTheme.textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
                 ),
               ),
             ],

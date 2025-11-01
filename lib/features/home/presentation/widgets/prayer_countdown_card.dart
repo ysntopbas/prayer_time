@@ -140,7 +140,8 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appTheme = Theme.of(context);
+    final l10nL = AppLocalizations.of(context)!;
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -148,8 +149,8 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            colorScheme.primary,
-            colorScheme.primary.withValues(alpha: 0.7),
+            appTheme.colorScheme.primary,
+            appTheme.colorScheme.secondary,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -157,7 +158,7 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.3),
+            color: appTheme.colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -166,36 +167,36 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
       child: Column(
         children: [
           Text(
-            'Next Prayer',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.white.withValues(alpha: 0.9),
+            l10nL.nextPrayer,
+            style: appTheme.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             _nextPrayerName.isNotEmpty ? _nextPrayerName : '-',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+            style: appTheme.textTheme.headlineMedium?.copyWith(
               color: Colors.white,
             ),
           ),
+
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTimeBox(
                 _remainingTime.inHours.toString().padLeft(2, '0'),
-                'Hours',
+                l10nL.hours,
               ),
               const SizedBox(width: 12),
               _buildTimeBox(
                 (_remainingTime.inMinutes % 60).toString().padLeft(2, '0'),
-                'Minutes',
+                l10nL.minutes,
               ),
               const SizedBox(width: 12),
               _buildTimeBox(
                 (_remainingTime.inSeconds % 60).toString().padLeft(2, '0'),
-                'Seconds',
+                l10nL.seconds,
               ),
             ],
           ),
@@ -204,8 +205,7 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
             _nextPrayerTime.isNotEmpty
                 ? _nextPrayerTime.split('(').first.trim()
                 : '-',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
+            style: appTheme.textTheme.headlineSmall?.copyWith(
               color: Colors.white,
             ),
           ),
@@ -215,6 +215,7 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
   }
 
   Widget _buildTimeBox(String value, String label) {
+    final appTheme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -225,17 +226,14 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
         children: [
           Text(
             value,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+            style: appTheme.textTheme.headlineMedium?.copyWith(
               color: Colors.white,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.white.withValues(alpha: 0.8),
-            ),
+            style: appTheme.textTheme.bodySmall?.copyWith(color: Colors.white),
           ),
         ],
       ),

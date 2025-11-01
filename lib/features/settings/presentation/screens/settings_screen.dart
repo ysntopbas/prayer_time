@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/features/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
@@ -8,15 +9,27 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10nL = AppLocalizations.of(context)!;
+    final appTheme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settingsPageTitle),
+      appBar: CustomAppBar(
+        title: l10nL.settingsPageTitle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: const Icon(Icons.mosque, color: Colors.white, size: 28),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          Icon(Icons.settings, size: 100),
-          const Divider(height: 30, thickness: 5),
+          Icon(Icons.settings, size: 100, color: appTheme.colorScheme.primary),
+          Divider(
+            height: 30,
+            thickness: 5,
+            color: appTheme.colorScheme.primary,
+          ),
           // Tema
           BlocSelector<SettingsCubit, SettingsState, bool>(
             selector: (state) {
@@ -27,18 +40,22 @@ class SettingsScreen extends StatelessWidget {
                 builder: (context, state) {
                   return SwitchListTile(
                     value: isDarkMode,
+                    inactiveThumbColor: appTheme.colorScheme.primary,
                     onChanged: (bool value) {
                       // Tema değiştirme
                       context.read<SettingsCubit>().toggleDarkMode();
                     },
-                    secondary: const Icon(Icons.brightness_6),
-                    title: Text(AppLocalizations.of(context)!.darkMode),
+                    secondary: Icon(
+                      Icons.brightness_6,
+                      color: appTheme.colorScheme.primary,
+                    ),
+                    title: Text(l10nL.darkMode),
                   );
                 },
               );
             },
           ),
-          const Divider(),
+          Divider(color: appTheme.colorScheme.primary),
 
           // Dil Seçeneği
           BlocSelector<SettingsCubit, SettingsState, String>(
@@ -49,8 +66,11 @@ class SettingsScreen extends StatelessWidget {
               return BlocBuilder<SettingsCubit, SettingsState>(
                 builder: (context, state) {
                   return ListTile(
-                    leading: const Icon(Icons.language),
-                    title: Text(AppLocalizations.of(context)!.language),
+                    leading: Icon(
+                      Icons.language,
+                      color: appTheme.colorScheme.primary,
+                    ),
+                    title: Text(l10nL.language),
                     subtitle: Text(
                       languageCode == 'en'
                           ? 'English'
@@ -66,7 +86,7 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          const Divider(),
+          Divider(color: appTheme.colorScheme.primary),
         ],
       ),
     );
@@ -74,11 +94,12 @@ class SettingsScreen extends StatelessWidget {
 
   void _showLanguageSelectionDialog(BuildContext context) {
     //Her dil, diğer her dilde aynı gözükmesi için HardCoded girildi
+    final l10nL = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.language),
+          title: Text(l10nL.language),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -15,12 +15,12 @@ class PrayerTimesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
+    final appTheme = Theme.of(context);
 
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
+        color: appTheme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -36,7 +36,7 @@ class PrayerTimesList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
-              "Today's Prayer Times",
+              l10nL.todaysPrayerTimes,
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -47,7 +47,7 @@ class PrayerTimesList extends StatelessWidget {
             icon: Icons.nightlight_round,
             iconColor: const Color(0xFF7E57C2),
             title: l10nL.fajr,
-            subtitle: 'Dawn Prayer',
+            subtitle: l10nL.dawnPrayer,
             time: timings.fajr ?? '-',
             isNext: nextPrayerName == l10nL.fajr,
           ),
@@ -57,7 +57,7 @@ class PrayerTimesList extends StatelessWidget {
             icon: Icons.wb_sunny_outlined,
             iconColor: const Color(0xFFFFA726),
             title: l10nL.sunrise,
-            subtitle: 'Sun Rise',
+            subtitle: l10nL.sunRise,
             time: timings.sunrise ?? '-',
             isNext: nextPrayerName == l10nL.sunrise,
           ),
@@ -65,9 +65,9 @@ class PrayerTimesList extends StatelessWidget {
           _buildPrayerItem(
             context,
             icon: Icons.wb_sunny,
-            iconColor: const Color(0xFF9C27B0),
+            iconColor: const Color(0xFFFFA726),
             title: l10nL.dhuhr,
-            subtitle: 'Noon/Midday Prayer',
+            subtitle: l10nL.noonMiddayPrayer,
             time: timings.dhuhr ?? '-',
             isNext: nextPrayerName == l10nL.dhuhr,
           ),
@@ -77,7 +77,7 @@ class PrayerTimesList extends StatelessWidget {
             icon: Icons.wb_cloudy,
             iconColor: const Color(0xFFFF7043),
             title: l10nL.asr,
-            subtitle: 'Afternoon Prayer',
+            subtitle: l10nL.afternoonPrayer,
             time: timings.asr ?? '-',
             isNext: nextPrayerName == l10nL.asr,
           ),
@@ -87,7 +87,7 @@ class PrayerTimesList extends StatelessWidget {
             icon: Icons.wb_twilight,
             iconColor: const Color(0xFFEF5350),
             title: l10nL.maghrib,
-            subtitle: 'Sunset Prayer',
+            subtitle: l10nL.sunsetPrayer,
             time: timings.maghrib ?? '-',
             isNext: nextPrayerName == l10nL.maghrib,
           ),
@@ -97,7 +97,7 @@ class PrayerTimesList extends StatelessWidget {
             icon: Icons.nights_stay,
             iconColor: const Color(0xFF5C6BC0),
             title: l10nL.isha,
-            subtitle: 'Night Prayer',
+            subtitle: l10nL.nightPrayer,
             time: timings.isha ?? '-',
             isNext: nextPrayerName == l10nL.isha,
           ),
@@ -115,13 +115,16 @@ class PrayerTimesList extends StatelessWidget {
     required String time,
     required bool isNext,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final appTheme = Theme.of(context);
+    final l10nL = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
         border: isNext
-            ? Border(left: BorderSide(color: colorScheme.primary, width: 4))
+            ? Border(
+                left: BorderSide(color: appTheme.colorScheme.primary, width: 4),
+              )
             : null,
       ),
       child: Row(
@@ -140,31 +143,21 @@ class PrayerTimesList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(title, style: appTheme.textTheme.titleMedium),
                 const SizedBox(height: 2),
                 Text(
-                  isNext ? 'Next Prayer' : subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  isNext ? l10nL.nextPrayer : subtitle,
+                  style: appTheme.textTheme.bodySmall?.copyWith(
                     color: isNext
-                        ? colorScheme.primary
-                        : colorScheme.onSurface.withValues(alpha: 0.6),
+                        ? appTheme.colorScheme.primary
+                        : appTheme.colorScheme.onSurface.withValues(alpha: 0.6),
                     fontWeight: isNext ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               ],
             ),
           ),
-          Text(
-            _formatTime(time),
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
+          Text(_formatTime(time), style: appTheme.textTheme.titleMedium),
         ],
       ),
     );

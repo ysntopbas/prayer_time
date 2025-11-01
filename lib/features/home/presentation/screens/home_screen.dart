@@ -13,14 +13,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final appTheme = Theme.of(context);
 
     return Scaffold(
       key: scaffoldKey,
       drawer: CustomDrawer(),
       body: Container(
-        decoration: BoxDecoration(color: colorScheme.primary),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              appTheme.colorScheme.primary,
+              appTheme.colorScheme.secondary,
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeInitial) {

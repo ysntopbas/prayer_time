@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get afternoonPrayer => 'Afternoon Prayer';
+
+  @override
   String get asr => 'Asr';
 
   @override
@@ -16,6 +19,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get date => 'Date';
+
+  @override
+  String get dawnPrayer => 'Dawn Prayer';
 
   @override
   String get dhuhr => 'Dhuhr';
@@ -27,7 +33,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get drawerSettingsPageTile => 'Settings';
 
   @override
-  String get drawerTitle => 'Prayer Time ';
+  String get drawerTitle => 'Prayer Times';
 
   @override
   String get drawermonthlyPrayerTimePageTile => 'Monthly Prayers Calendar';
@@ -39,7 +45,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fajr => 'Fajr';
 
   @override
-  String get homePageTitle => 'Home Page';
+  String get headerTitle => 'Prayer Times';
+
+  @override
+  String get hours => 'Hours';
 
   @override
   String get imsak => 'Imsak';
@@ -60,7 +69,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get maghrib => 'Maghrib';
 
   @override
+  String get minutes => 'Minutes';
+
+  @override
   String get monthlyPrayerTimePageTitle => 'Calendar Page';
+
+  @override
+  String get nextPrayer => 'Next Prayer';
+
+  @override
+  String get nightPrayer => 'Night Prayer';
+
+  @override
+  String get noonMiddayPrayer => 'Noon/Midday Prayer';
 
   @override
   String get prayTimeNotAvailable => 'No prayer times available';
@@ -69,7 +90,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayTimes => 'Pray Times';
 
   @override
+  String get seconds => 'Seconds';
+
+  @override
   String get settingsPageTitle => 'Settings';
+
+  @override
+  String get sunRise => 'Sun Rise ';
 
   @override
   String get sunrise => 'Sunrise';
@@ -78,8 +105,68 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sunset => 'Sunset';
 
   @override
+  String get sunsetPrayer => 'Sunset Prayer';
+
+  @override
+  String get todaysPrayerTimes => 'Today\'s Prayer Times';
+
+  @override
   String get turkish => 'Turkish';
 
   @override
-  String get welcomeMessage => 'Welcome to the Prayer Time App!';
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
+  String get january => 'January';
+
+  @override
+  String get february => 'February';
+
+  @override
+  String get march => 'March';
+
+  @override
+  String get april => 'April';
+
+  @override
+  String get may => 'May';
+
+  @override
+  String get june => 'June';
+
+  @override
+  String get july => 'July';
+
+  @override
+  String get august => 'August';
+
+  @override
+  String get september => 'September';
+
+  @override
+  String get october => 'October';
+
+  @override
+  String get november => 'November';
+
+  @override
+  String get december => 'December';
 }
