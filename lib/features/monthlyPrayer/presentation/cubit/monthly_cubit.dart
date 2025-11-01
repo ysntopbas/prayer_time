@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/features/monthlyPrayer/data/repository/monthly_repository.dart';
 
 part 'monthly_state.dart';

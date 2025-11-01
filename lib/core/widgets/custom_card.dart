@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class TimeCard extends StatelessWidget {

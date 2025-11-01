@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/core/routing/app_router.dart';
-import 'package:prayer_time/features/core/services/storage_services.dart';
-import 'package:prayer_time/features/core/theme/app_theme.dart';
+import 'package:prayer_time/core/routing/app_router.dart';
+import 'package:prayer_time/core/services/storage_services.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';

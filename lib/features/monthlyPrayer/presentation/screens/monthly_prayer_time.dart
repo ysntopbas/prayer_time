@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/core/widgets/custom_app_bar.dart';
+import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/widgets/monthly_prayer_day_card.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';

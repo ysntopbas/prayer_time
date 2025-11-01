@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
-import 'package:prayer_time/features/core/services/dio_client.dart';
-import 'package:prayer_time/features/core/services/location_service.dart';
+import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/services/dio_client.dart';
+import 'package:prayer_time/core/services/location_service.dart';
 
 class MonthlyRepository {
   String? cityName;

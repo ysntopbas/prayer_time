@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/core/domain/models/prayer_time_model.dart';
-import 'package:prayer_time/features/core/widgets/custom_drawer.dart';
+import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/widgets/custom_drawer.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_countdown_card.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_header.dart';

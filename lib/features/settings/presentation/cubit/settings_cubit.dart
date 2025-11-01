@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/features/core/services/storage_services.dart';
+import 'package:prayer_time/core/services/storage_services.dart';
 
 part 'settings_state.dart';
 
