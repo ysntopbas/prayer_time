@@ -36,6 +36,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get december => 'December';
 
   @override
+  String get dhuAlHijjah => 'Dhu al-Hijjah';
+
+  @override
+  String get dhuAlQiDah => 'Dhu al-Qi\'dah';
+
+  @override
   String get dhuhr => 'Dhuhr';
 
   @override
@@ -81,6 +87,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get july => 'July';
 
   @override
+  String get jumadaAlAwwal => 'Jumada al-awwal';
+
+  @override
+  String get jumadaAlThani => 'Jumada al-thani';
+
+  @override
   String get june => 'June';
 
   @override
@@ -111,6 +123,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthlyPrayerTimePageTitle => 'Calendar Page';
 
   @override
+  String get muharram => 'Muharram';
+
+  @override
   String get nextPrayer => 'Next Prayer';
 
   @override
@@ -132,6 +147,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prayTimes => 'Pray Times';
 
   @override
+  String get rabiAlThani => 'Rabi\' al-thani\t';
+
+  @override
+  String get rabialAwwal => 'Rabi\' al-awwal\t';
+
+  @override
+  String get rajab => 'Rajab';
+
+  @override
+  String get ramadan => 'Ramadan';
+
+  @override
+  String get safar => 'Safar\t';
+
+  @override
   String get saturday => 'Saturday';
 
   @override
@@ -142,6 +172,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPageTitle => 'Settings';
+
+  @override
+  String get shaban => 'Sha\'ban';
+
+  @override
+  String get shawwal => 'Shawwal';
 
   @override
   String get sunRise => 'Sun Rise ';
@@ -171,5 +207,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get turkish => 'Turkish';
 
   @override
+  String get updateLocation => 'Update my location';
+
+  @override
   String get wednesday => 'Wednesday';
+
+  @override
+  String get weeklyPrayCalendar => 'Weekly Prayers Calendar';
+
+  @override
+  String get weeklyPrayerTimePageTitle => 'Weekly Prayer Times';
 }

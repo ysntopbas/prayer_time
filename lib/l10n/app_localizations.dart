@@ -152,6 +152,18 @@ abstract class AppLocalizations {
   /// **'December'**
   String get december;
 
+  /// No description provided for @dhuAlHijjah.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhu al-Hijjah'**
+  String get dhuAlHijjah;
+
+  /// No description provided for @dhuAlQiDah.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhu al-Qi\'dah'**
+  String get dhuAlQiDah;
+
   /// No description provided for @dhuhr.
   ///
   /// In en, this message translates to:
@@ -242,6 +254,18 @@ abstract class AppLocalizations {
   /// **'July'**
   String get july;
 
+  /// No description provided for @jumadaAlAwwal.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumada al-awwal'**
+  String get jumadaAlAwwal;
+
+  /// No description provided for @jumadaAlThani.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumada al-thani'**
+  String get jumadaAlThani;
+
   /// No description provided for @june.
   ///
   /// In en, this message translates to:
@@ -302,6 +326,12 @@ abstract class AppLocalizations {
   /// **'Calendar Page'**
   String get monthlyPrayerTimePageTitle;
 
+  /// No description provided for @muharram.
+  ///
+  /// In en, this message translates to:
+  /// **'Muharram'**
+  String get muharram;
+
   /// No description provided for @nextPrayer.
   ///
   /// In en, this message translates to:
@@ -344,6 +374,36 @@ abstract class AppLocalizations {
   /// **'Pray Times'**
   String get prayTimes;
 
+  /// No description provided for @rabiAlThani.
+  ///
+  /// In en, this message translates to:
+  /// **'Rabi\' al-thani\t'**
+  String get rabiAlThani;
+
+  /// No description provided for @rabialAwwal.
+  ///
+  /// In en, this message translates to:
+  /// **'Rabi\' al-awwal\t'**
+  String get rabialAwwal;
+
+  /// No description provided for @rajab.
+  ///
+  /// In en, this message translates to:
+  /// **'Rajab'**
+  String get rajab;
+
+  /// No description provided for @ramadan.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan'**
+  String get ramadan;
+
+  /// No description provided for @safar.
+  ///
+  /// In en, this message translates to:
+  /// **'Safar\t'**
+  String get safar;
+
   /// No description provided for @saturday.
   ///
   /// In en, this message translates to:
@@ -367,6 +427,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsPageTitle;
+
+  /// No description provided for @shaban.
+  ///
+  /// In en, this message translates to:
+  /// **'Sha\'ban'**
+  String get shaban;
+
+  /// No description provided for @shawwal.
+  ///
+  /// In en, this message translates to:
+  /// **'Shawwal'**
+  String get shawwal;
 
   /// No description provided for @sunRise.
   ///
@@ -422,11 +494,29 @@ abstract class AppLocalizations {
   /// **'Turkish'**
   String get turkish;
 
+  /// No description provided for @updateLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Update my location'**
+  String get updateLocation;
+
   /// No description provided for @wednesday.
   ///
   /// In en, this message translates to:
   /// **'Wednesday'**
   String get wednesday;
+
+  /// No description provided for @weeklyPrayCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Prayers Calendar'**
+  String get weeklyPrayCalendar;
+
+  /// No description provided for @weeklyPrayerTimePageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly Prayer Times'**
+  String get weeklyPrayerTimePageTitle;
 }
 
 class _AppLocalizationsDelegate

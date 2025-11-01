@@ -6,6 +6,7 @@ import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:prayer_time/features/weeklyPrayer/presentation/cubit/weekly_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => HomeCubit()),
         BlocProvider(create: (_) => MonthlyCubit()),
+        BlocProvider(create: (_) => WeeklyCubit()),
       ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {

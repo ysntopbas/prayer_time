@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
-import 'package:prayer_time/features/monthlyPrayer/presentation/widgets/prayer_time_item.dart';
+import 'package:prayer_time/features/weeklyPrayer/presentation/widgets/prayer_time_item.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
-class MonthlyPrayerDayCard extends StatelessWidget {
+class WeeklyPrayerDayCard extends StatelessWidget {
   final PrayerTimeModel prayerTime;
   final String cityName;
 
-  const MonthlyPrayerDayCard({
+  const WeeklyPrayerDayCard({
     super.key,
     required this.prayerTime,
     required this.cityName,
@@ -107,9 +107,7 @@ class MonthlyPrayerDayCard extends StatelessWidget {
                   cityName,
                   style: TextStyle(
                     fontSize: 20,
-                    color: appTheme.colorScheme.onPrimary.withValues(
-                      alpha: 0.8,
-                    ),
+                    color: appTheme.colorScheme.onPrimary,
                   ),
                 ),
               ],

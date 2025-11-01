@@ -36,6 +36,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get december => 'Aralık';
 
   @override
+  String get dhuAlHijjah => 'Zilhicce';
+
+  @override
+  String get dhuAlQiDah => 'Zilkade';
+
+  @override
   String get dhuhr => 'Öğle';
 
   @override
@@ -81,6 +87,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get july => 'Temmuz';
 
   @override
+  String get jumadaAlAwwal => 'Cemaziyelevvel';
+
+  @override
+  String get jumadaAlThani => 'Cemaziyelahir';
+
+  @override
   String get june => 'Haziran';
 
   @override
@@ -111,6 +123,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get monthlyPrayerTimePageTitle => 'Takvim Sayfası';
 
   @override
+  String get muharram => 'Muharrem';
+
+  @override
   String get nextPrayer => 'Sonraki Vakit';
 
   @override
@@ -132,6 +147,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get prayTimes => 'Namaz Vakitleri';
 
   @override
+  String get rabiAlThani => 'Rebiülahir';
+
+  @override
+  String get rabialAwwal => 'Rebiülevvel';
+
+  @override
+  String get rajab => 'Recep';
+
+  @override
+  String get ramadan => 'Ramazan';
+
+  @override
+  String get safar => 'Safer';
+
+  @override
   String get saturday => 'Cumartesi';
 
   @override
@@ -142,6 +172,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsPageTitle => 'Ayarlar';
+
+  @override
+  String get shaban => 'Şaban';
+
+  @override
+  String get shawwal => 'Şevval';
 
   @override
   String get sunRise => ' ';
@@ -171,5 +207,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get turkish => 'Türkçe';
 
   @override
+  String get updateLocation => 'Konumu Güncelle';
+
+  @override
   String get wednesday => 'Çarşamba';
+
+  @override
+  String get weeklyPrayCalendar => 'Haftalık Namaz Vakitleri';
+
+  @override
+  String get weeklyPrayerTimePageTitle => 'Haftalık Namaz Vakitleri';
 }

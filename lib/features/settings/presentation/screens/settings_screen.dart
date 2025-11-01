@@ -87,6 +87,14 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           Divider(color: appTheme.colorScheme.primary),
+          ListTile(
+            leading: Icon(
+              Icons.location_on,
+              color: appTheme.colorScheme.primary,
+            ),
+            title: Text(l10nL.updateLocation),
+          ),
+          Divider(color: appTheme.colorScheme.primary),
         ],
       ),
     );

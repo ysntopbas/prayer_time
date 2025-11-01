@@ -4,6 +4,7 @@ import 'package:prayer_time/features/monthlyPrayer/presentation/screens/monthly_
 import 'package:prayer_time/core/routing/app_routes.dart';
 import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
 import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';
+import 'package:prayer_time/features/weeklyPrayer/presentation/screens/weekly_prayer_time.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -24,6 +25,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.compassPage,
         builder: (context, state) => const CompassPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.weeklyPrayerTime,
+        builder: (context, state) => const WeeklyPrayerTimeScreen(),
       ),
     ],
   );
