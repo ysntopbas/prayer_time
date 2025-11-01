@@ -3,13 +3,34 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/widgets/custom_drawer.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
+import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_countdown_card.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_header.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_time_list.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // İlk yükleme
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadPrayerTimes();
+    });
+  }
+
+  void _loadPrayerTimes() {
+    final settingsCubit = context.read<SettingsCubit>();
+    final savedLocation = settingsCubit.getSavedLocation();
+    context.read<HomeCubit>().fetchPrayerTimes(savedLocation: savedLocation);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +39,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -30,68 +51,83 @@ class HomeScreen extends StatelessWidget {
             end: Alignment.centerRight,
           ),
         ),
-        child: BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            if (state is HomeInitial) {
-              context.read<HomeCubit>().fetchPrayerTimes();
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.purpleAccent),
-              );
-            } else if (state is HomeLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.purpleAccent),
-              );
-            } else if (state is HomeError) {
-              return Center(
-                child: Text(
-                  state.message,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              );
-            } else if (state is HomeLoaded) {
-              final prayerTimings = state.prayerTimings;
-              final cityName = state.cityName ?? 'Kayseri';
-              final nextTimings = state.nextTimings;
-
-              // Bir sonraki namaz adını bul
-              final now = DateTime.now();
-              String nextPrayerName = _getNextPrayerName(
-                nextTimings,
-                now,
-                context,
-              );
-
-              return Column(
-                children: [
-                  PrayerHeader(cityName: cityName, scaffoldKey: scaffoldKey),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
+        child: BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (previous, current) =>
+              previous.cityName != current.cityName,
+          listener: (context, state) {
+            // Konum güncellendiğinde namaz vakitlerini yeniden yükle
+            _loadPrayerTimes();
+          },
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              if (state is HomeInitial || state is HomeLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: appTheme.colorScheme.onPrimary,
+                  ),
+                );
+              } else if (state is HomeError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        state.message,
+                        style: const TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
                       ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            PrayerCountdownCard(nextTimings: nextTimings),
-                            PrayerTimesList(
-                              timings: prayerTimings,
-                              nextPrayerName: nextPrayerName,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loadPrayerTimes,
+                        child: const Text('Tekrar Dene'),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is HomeLoaded) {
+                final prayerTimings = state.prayerTimings;
+                final cityName = state.cityName ?? 'Kayseri';
+                final nextTimings = state.nextTimings;
+
+                final now = DateTime.now();
+                String nextPrayerName = _getNextPrayerName(
+                  nextTimings,
+                  now,
+                  context,
+                );
+
+                return Column(
+                  children: [
+                    PrayerHeader(cityName: cityName, scaffoldKey: scaffoldKey),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              PrayerCountdownCard(nextTimings: nextTimings),
+                              PrayerTimesList(
+                                timings: prayerTimings,
+                                nextPrayerName: nextPrayerName,
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          },
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

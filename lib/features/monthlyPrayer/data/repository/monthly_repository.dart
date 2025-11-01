@@ -9,18 +9,29 @@ class MonthlyRepository {
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
 
-  Future<List<PrayerTimeModel>> getMonthlyPrayerTimes() async {
+  Future<List<PrayerTimeModel>> getMonthlyPrayerTimes({
+    Map<String, String>? savedLocation,
+  }) async {
     final now = DateTime.now();
     final String currentMonth = DateFormat('MM').format(now);
     final String currentYear = DateFormat('yyyy').format(now);
-    // Kullanıcının konumunu al
+
     Map<String, String>? locationData;
-    try {
-      locationData = await _locationService.getCurrentCity();
-      cityName = locationData?['city'];
-    } catch (e) {
-      // Konum alınamazsa varsayılan Kayseri kullan
+
+    // Önce kaydedilmiş konumu kullan
+    if (savedLocation != null) {
+      locationData = savedLocation;
+      cityName = savedLocation['city'];
+    } else {
+      // Kaydedilmiş konum yoksa GPS'ten al
+      try {
+        locationData = await _locationService.getCurrentCity();
+        cityName = locationData?['city'];
+      } catch (e) {
+        // Konum alınamazsa varsayılan Kayseri kullan
+      }
     }
+
     final Map<String, dynamic> queryParameters = {
       'city': locationData?['city'] ?? 'Kayseri',
       'country': locationData?['country'] ?? 'TR',
@@ -48,7 +59,7 @@ class MonthlyRepository {
             .toList();
         return prayerList;
       } else {
-        throw Exception('API\'den  aylık namaz vakitleri  alınamadı.');
+        throw Exception('API\'den aylık namaz vakitleri alınamadı.');
       }
     } on DioException catch (e) {
       throw Exception('MONTHLY REPO Dio hatası: ${e.message}');

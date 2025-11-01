@@ -50,11 +50,13 @@ class _CompassPageState extends State<CompassPage> {
       final hasPermission = await _locationService.handleLocationPermission();
 
       if (!hasPermission) {
-        setState(() {
-          _hasPermission = false;
-          _isLoading = false;
-          _errorMessage = 'Konum izni gerekli';
-        });
+        if (mounted) {
+          setState(() {
+            _hasPermission = false;
+            _isLoading = false;
+            _errorMessage = 'Konum izni gerekli';
+          });
+        }
         return;
       }
 
@@ -62,10 +64,12 @@ class _CompassPageState extends State<CompassPage> {
       final position = await _locationService.getCurrentPosition();
 
       if (position == null) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'Konum bilgisi alınamadı';
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'Konum bilgisi alınamadı';
+          });
+        }
         return;
       }
 
@@ -75,26 +79,30 @@ class _CompassPageState extends State<CompassPage> {
         position.longitude,
       );
 
-      setState(() {
-        _hasPermission = true;
-        _currentPosition = position;
-        _qiblahDirection = qiblahAngle;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _hasPermission = true;
+          _currentPosition = position;
+          _qiblahDirection = qiblahAngle;
+          _isLoading = false;
+        });
 
-      // Pusula akışını başlat
-      _startCompassListener();
+        // Pusula akışını başlat
+        _startCompassListener();
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Hata: $e';
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Hata: $e';
+        });
+      }
     }
   }
 
   void _startCompassListener() {
     _compassSubscription = FlutterCompass.events?.listen((CompassEvent event) {
-      if (event.heading != null) {
+      if (event.heading != null && mounted) {
         setState(() {
           _currentHeading = event.heading!;
         });
@@ -133,40 +141,54 @@ class _CompassPageState extends State<CompassPage> {
   double _degreesToRadians(double degrees) => degrees * pi / 180;
   double _radiansToDegrees(double radians) => radians * 180 / pi;
 
+  Future<bool> _onWillPop() async {
+    // Yükleme devam ediyorsa geri gitmeyi engelle
+    if (_isLoading) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: l10n.compassTile,
-        leading: const BackButton(),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Icon(Icons.mosque, color: Colors.white, size: 28),
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.primary.withValues(alpha: 0.1),
-              theme.colorScheme.secondary.withValues(alpha: 0.1),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+    // ignore: deprecated_member_use SONRA GÜNCELLENECEK
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: CustomAppBar(
+          title: l10n.compassTile,
+          leading: _isLoading
+              ? const SizedBox.shrink() // Yükleme sırasında geri tuşunu gizle
+              : const BackButton(),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(Icons.mosque, color: Colors.white, size: 28),
+            ),
+          ],
         ),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : !_hasPermission ||
-                  _currentPosition == null ||
-                  _qiblahDirection == null
-            ? _buildErrorWidget(_errorMessage ?? 'Konum bilgisi alınamadı')
-            : _buildCompassContent(),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                theme.colorScheme.primary.withValues(alpha: 0.1),
+                theme.colorScheme.secondary.withValues(alpha: 0.1),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : !_hasPermission ||
+                    _currentPosition == null ||
+                    _qiblahDirection == null
+              ? _buildErrorWidget(_errorMessage ?? 'Konum bilgisi alınamadı')
+              : _buildCompassContent(),
+        ),
       ),
     );
   }

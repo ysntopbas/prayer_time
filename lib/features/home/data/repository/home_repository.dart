@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
@@ -11,17 +10,25 @@ class HomeRepository {
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
 
-  Future<Timings> getPrayerTimes() async {
+  Future<Timings> getPrayerTimes({Map<String, String>? savedLocation}) async {
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-    // Kullanıcının konumunu al
+
     Map<String, String>? locationData;
-    try {
-      locationData = await _locationService.getCurrentCity();
-      cityName = locationData?['city'];
-    } catch (e) {
-      // Konum alınamazsa varsayılan Kayseri kullan
-      log('Konum alınamadı, varsayılan konum kullanılacak: $e');
+
+    // Önce kaydedilmiş konumu kullan
+    if (savedLocation != null) {
+      locationData = savedLocation;
+      cityName = savedLocation['city'];
+    } else {
+      // Kaydedilmiş konum yoksa GPS'ten al
+      try {
+        locationData = await _locationService.getCurrentCity();
+        cityName = locationData?['city'];
+      } catch (e) {
+        log('Konum alınamadı, varsayılan konum kullanılacak: $e');
+      }
     }
+
     final Map<String, dynamic> queryParameters = {
       'city': locationData?['city'] ?? 'Kayseri',
       'country': locationData?['country'] ?? 'TR',
@@ -52,10 +59,25 @@ class HomeRepository {
     }
   }
 
-  Future<Timings> getNextPrayerTimes() async {
+  Future<Timings> getNextPrayerTimes({
+    Map<String, String>? savedLocation,
+  }) async {
     final String tomorrowDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+    Map<String, String>? locationData;
+
+    if (savedLocation != null) {
+      locationData = savedLocation;
+    } else {
+      try {
+        locationData = await _locationService.getCurrentCity();
+      } catch (e) {
+        log('Konum alınamadı: $e');
+      }
+    }
+
     final Map<String, dynamic> queryParameters = {
-      'address': cityName ?? 'Kayseri',
+      'address': locationData?['city'] ?? 'Kayseri',
       'country': 'TR',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',

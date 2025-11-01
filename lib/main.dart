@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
+import 'package:prayer_time/core/services/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
-import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/cubit/weekly_cubit.dart';
+import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,10 +25,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10nL = AppLocalizations.of(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => SettingsCubit(StorageServices(sharedPreferences)),
+          create: (_) => SettingsCubit(
+            StorageServices(sharedPreferences),
+            LocationService(),
+          ),
         ),
         BlocProvider(create: (_) => HomeCubit()),
         BlocProvider(create: (_) => MonthlyCubit()),
@@ -41,7 +46,7 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             locale: Locale(state.languageCode),
             debugShowCheckedModeBanner: false,
-            title: 'Prayer Time',
+            title: l10nL?.headerTitle ?? 'Prayer Time',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,

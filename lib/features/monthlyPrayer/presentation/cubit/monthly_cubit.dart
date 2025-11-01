@@ -8,12 +8,16 @@ part 'monthly_state.dart';
 class MonthlyCubit extends Cubit<MonthlyState> {
   MonthlyCubit() : super(MonthlyInitial());
 
-  Future<void> fetchMonthlyPrayerTimes() async {
+  Future<void> fetchMonthlyPrayerTimes({
+    Map<String, String>? savedLocation,
+  }) async {
     emit(MonthlyLoading());
 
     try {
       final MonthlyRepository monthlyRepository = MonthlyRepository();
-      final monthlyTimings = await monthlyRepository.getMonthlyPrayerTimes();
+      final monthlyTimings = await monthlyRepository.getMonthlyPrayerTimes(
+        savedLocation: savedLocation,
+      );
       final cityName = monthlyRepository.cityName;
       emit(MonthlyLoaded(cityName, monthlyTimings));
     } catch (e) {

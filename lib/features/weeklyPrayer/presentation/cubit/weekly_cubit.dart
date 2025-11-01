@@ -8,12 +8,16 @@ part 'weekly_state.dart';
 class WeeklyCubit extends Cubit<WeeklyState> {
   WeeklyCubit() : super(WeeklyInitial());
 
-  Future<void> fetchWeeklyPrayerTimes() async {
+  Future<void> fetchWeeklyPrayerTimes({
+    Map<String, String>? savedLocation,
+  }) async {
     emit(WeeklyLoading());
 
     try {
       final WeeklyRepository weeklyRepository = WeeklyRepository();
-      final weeklyTimings = await weeklyRepository.getWeeklyPrayerTimes();
+      final weeklyTimings = await weeklyRepository.getWeeklyPrayerTimes(
+        savedLocation: savedLocation,
+      );
       final cityName = weeklyRepository.cityName;
       emit(WeeklyLoaded(weeklyTimings: weeklyTimings, cityName: cityName));
     } catch (e) {

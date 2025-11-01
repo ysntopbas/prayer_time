@@ -9,20 +9,30 @@ class WeeklyRepository {
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
 
-  Future<List<PrayerTimeModel>> getWeeklyPrayerTimes() async {
+  Future<List<PrayerTimeModel>> getWeeklyPrayerTimes({
+    Map<String, String>? savedLocation,
+  }) async {
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
     final String weekLaterDate = DateFormat(
       'dd-MM-yyyy',
-    ).format(DateTime.now().add(Duration(days: 7)));
+    ).format(DateTime.now().add(const Duration(days: 7)));
 
-    // Kullanıcının konumunu al
     Map<String, String>? locationData;
-    try {
-      locationData = await _locationService.getCurrentCity();
-      cityName = locationData?['city'];
-    } catch (e) {
-      // Konum alınamazsa varsayılan Kayseri kullan
+
+    // Önce kaydedilmiş konumu kullan
+    if (savedLocation != null) {
+      locationData = savedLocation;
+      cityName = savedLocation['city'];
+    } else {
+      // Kaydedilmiş konum yoksa GPS'ten al
+      try {
+        locationData = await _locationService.getCurrentCity();
+        cityName = locationData?['city'];
+      } catch (e) {
+        // Konum alınamazsa varsayılan Kayseri kullan
+      }
     }
+
     final Map<String, dynamic> queryParameters = {
       'city': locationData?['city'] ?? 'Kayseri',
       'country': locationData?['country'] ?? 'TR',
@@ -50,7 +60,7 @@ class WeeklyRepository {
             .toList();
         return prayerList;
       } else {
-        throw Exception('API\'den  haftalık namaz vakitleri  alınamadı.');
+        throw Exception('API\'den haftalık namaz vakitleri alınamadı.');
       }
     } on DioException catch (e) {
       throw Exception('WEEKLY REPO Dio hatası: ${e.message}');

@@ -8,13 +8,17 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
-  Future<void> fetchPrayerTimes() async {
+  Future<void> fetchPrayerTimes({Map<String, String>? savedLocation}) async {
     emit(HomeLoading());
 
     try {
       final HomeRepository homeRepository = HomeRepository();
-      final prayerTimes = await homeRepository.getPrayerTimes();
-      final nextPrayerTimes = await homeRepository.getNextPrayerTimes();
+      final prayerTimes = await homeRepository.getPrayerTimes(
+        savedLocation: savedLocation,
+      );
+      final nextPrayerTimes = await homeRepository.getNextPrayerTimes(
+        savedLocation: savedLocation,
+      );
       final cityName = homeRepository.cityName;
       emit(
         HomeLoaded(

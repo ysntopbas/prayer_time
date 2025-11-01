@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/widgets/monthly_prayer_day_card.dart';
+import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class MonthlyPrayerTimeScreen extends StatefulWidget {
@@ -14,6 +15,22 @@ class MonthlyPrayerTimeScreen extends StatefulWidget {
 }
 
 class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadMonthlyPrayerTimes();
+    });
+  }
+
+  void _loadMonthlyPrayerTimes() {
+    final settingsCubit = context.read<SettingsCubit>();
+    final savedLocation = settingsCubit.getSavedLocation();
+    context.read<MonthlyCubit>().fetchMonthlyPrayerTimes(
+      savedLocation: savedLocation,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context)!;
@@ -30,37 +47,54 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         title: l10nL.monthlyPrayerTimePageTitle,
         leading: const BackButton(),
       ),
-      body: BlocBuilder<MonthlyCubit, MonthlyState>(
-        builder: (context, state) {
-          if (state is MonthlyInitial) {
-            context.read<MonthlyCubit>().fetchMonthlyPrayerTimes();
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MonthlyLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is MonthlyError) {
-            return Center(child: Text(state.message));
-          } else if (state is MonthlyLoaded) {
-            final monthlyTimings = state.monthlyTimings ?? [];
-            final cityName = state.cityName ?? 'Kayseri';
-
-            if (monthlyTimings.isEmpty) {
-              return Center(child: Text(l10nL.prayTimeNotAvailable));
-            }
-
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: monthlyTimings.length,
-              itemBuilder: (context, index) {
-                final prayerTime = monthlyTimings[index];
-                return MonthlyPrayerDayCard(
-                  prayerTime: prayerTime,
-                  cityName: cityName,
-                );
-              },
-            );
-          }
-          return const SizedBox.shrink();
+      body: BlocListener<SettingsCubit, SettingsState>(
+        listenWhen: (previous, current) =>
+            previous.cityName != current.cityName,
+        listener: (context, state) {
+          // Konum güncellendiğinde namaz vakitlerini yeniden yükle
+          _loadMonthlyPrayerTimes();
         },
+        child: BlocBuilder<MonthlyCubit, MonthlyState>(
+          builder: (context, state) {
+            if (state is MonthlyInitial || state is MonthlyLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is MonthlyError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(state.message),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _loadMonthlyPrayerTimes,
+                      child: const Text('Tekrar Dene'),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is MonthlyLoaded) {
+              final monthlyTimings = state.monthlyTimings ?? [];
+              final cityName = state.cityName ?? 'Kayseri';
+
+              if (monthlyTimings.isEmpty) {
+                return Center(child: Text(l10nL.prayTimeNotAvailable));
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: monthlyTimings.length,
+                itemBuilder: (context, index) {
+                  final prayerTime = monthlyTimings[index];
+                  return MonthlyPrayerDayCard(
+                    prayerTime: prayerTime,
+                    cityName: cityName,
+                  );
+                },
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }

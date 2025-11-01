@@ -105,6 +105,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lightMode => 'Light Theme';
 
   @override
+  String get locationCantUpdated => 'Failed to update location';
+
+  @override
+  String get locationNotSpecified => 'Location not specified';
+
+  @override
+  String get locationUpdated => 'Location Updated';
+
+  @override
   String get maghrib => 'Maghrib';
 
   @override
@@ -139,6 +148,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get october => 'October';
+
+  @override
+  String get ownerName => 'Created by atQs';
 
   @override
   String get prayTimeNotAvailable => 'No prayer times available';
@@ -208,6 +220,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateLocation => 'Update my location';
+
+  @override
+  String get version => 'Version';
 
   @override
   String get wednesday => 'Wednesday';

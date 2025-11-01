@@ -105,6 +105,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get lightMode => 'Aydınlık Tema';
 
   @override
+  String get locationCantUpdated => 'Konum Güncellenemedi';
+
+  @override
+  String get locationNotSpecified => 'Konum Belirtilmedi';
+
+  @override
+  String get locationUpdated => 'Konum Güncellendi';
+
+  @override
   String get maghrib => 'Akşam';
 
   @override
@@ -139,6 +148,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get october => 'Ekim';
+
+  @override
+  String get ownerName => 'Hazırlayan atQs';
 
   @override
   String get prayTimeNotAvailable => 'Namaz vakitlerine erişilemedi';
@@ -208,6 +220,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get updateLocation => 'Konumu Güncelle';
+
+  @override
+  String get version => 'Versiyon';
 
   @override
   String get wednesday => 'Çarşamba';

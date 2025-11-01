@@ -32,26 +32,19 @@ class SettingsScreen extends StatelessWidget {
           ),
           // Tema
           BlocSelector<SettingsCubit, SettingsState, bool>(
-            selector: (state) {
-              return state.isDarkMode;
-            },
+            selector: (state) => state.isDarkMode,
             builder: (context, isDarkMode) {
-              return BlocBuilder<SettingsCubit, SettingsState>(
-                builder: (context, state) {
-                  return SwitchListTile(
-                    value: isDarkMode,
-                    inactiveThumbColor: appTheme.colorScheme.primary,
-                    onChanged: (bool value) {
-                      // Tema değiştirme
-                      context.read<SettingsCubit>().toggleDarkMode();
-                    },
-                    secondary: Icon(
-                      Icons.brightness_6,
-                      color: appTheme.colorScheme.primary,
-                    ),
-                    title: Text(l10nL.darkMode),
-                  );
+              return SwitchListTile(
+                value: isDarkMode,
+                inactiveThumbColor: appTheme.colorScheme.primary,
+                onChanged: (bool value) {
+                  context.read<SettingsCubit>().toggleDarkMode();
                 },
+                secondary: Icon(
+                  Icons.brightness_6,
+                  color: appTheme.colorScheme.primary,
+                ),
+                title: Text(l10nL.darkMode),
               );
             },
           ),
@@ -59,40 +52,66 @@ class SettingsScreen extends StatelessWidget {
 
           // Dil Seçeneği
           BlocSelector<SettingsCubit, SettingsState, String>(
-            selector: (state) {
-              return state.languageCode;
-            },
+            selector: (state) => state.languageCode,
             builder: (context, languageCode) {
-              return BlocBuilder<SettingsCubit, SettingsState>(
-                builder: (context, state) {
-                  return ListTile(
-                    leading: Icon(
-                      Icons.language,
-                      color: appTheme.colorScheme.primary,
-                    ),
-                    title: Text(l10nL.language),
-                    subtitle: Text(
-                      languageCode == 'en'
-                          ? 'English'
-                          : languageCode == 'tr'
-                          ? 'Türkçe'
-                          : 'Unknown',
-                    ),
-                    onTap: () {
-                      _showLanguageSelectionDialog(context);
-                    },
-                  );
+              return ListTile(
+                leading: Icon(
+                  Icons.language,
+                  color: appTheme.colorScheme.primary,
+                ),
+                title: Text(l10nL.language),
+                subtitle: Text(
+                  languageCode == 'en'
+                      ? 'English'
+                      : languageCode == 'tr'
+                      ? 'Türkçe'
+                      : 'Unknown',
+                ),
+                onTap: () {
+                  _showLanguageSelectionDialog(context);
                 },
               );
             },
           ),
           Divider(color: appTheme.colorScheme.primary),
-          ListTile(
-            leading: Icon(
-              Icons.location_on,
-              color: appTheme.colorScheme.primary,
-            ),
-            title: Text(l10nL.updateLocation),
+
+          // Konum Güncelleme
+          BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
+              return ListTile(
+                leading: Icon(
+                  Icons.location_on,
+                  color: appTheme.colorScheme.primary,
+                ),
+                title: Text(l10nL.updateLocation),
+                subtitle: state.cityName != null
+                    ? Text('${state.cityName}, ${state.countryName}')
+                    : Text(l10nL.locationNotSpecified),
+                trailing: state.isLocationLoading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Icon(Icons.refresh, color: appTheme.colorScheme.primary),
+                onTap: state.isLocationLoading
+                    ? null
+                    : () async {
+                        await context.read<SettingsCubit>().updateLocation();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                state.cityName != null
+                                    ? '${l10nL.locationUpdated}: ${state.cityName}'
+                                    : l10nL.locationCantUpdated,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+              );
+            },
           ),
           Divider(color: appTheme.colorScheme.primary),
         ],
@@ -101,7 +120,6 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _showLanguageSelectionDialog(BuildContext context) {
-    //Her dil, diğer her dilde aynı gözükmesi için HardCoded girildi
     final l10nL = AppLocalizations.of(context)!;
     showDialog(
       context: context,

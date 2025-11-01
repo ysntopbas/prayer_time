@@ -138,6 +138,35 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Icon(Icons.info_outline)],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "${l10nL.version} 1.0.0",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Text(
+                        l10nL.ownerName,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Padding(padding: const EdgeInsets.only(bottom: 12)),
         ],
       ),
     );

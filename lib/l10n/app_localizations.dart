@@ -290,6 +290,24 @@ abstract class AppLocalizations {
   /// **'Light Theme'**
   String get lightMode;
 
+  /// No description provided for @locationCantUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update location'**
+  String get locationCantUpdated;
+
+  /// No description provided for @locationNotSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Location not specified'**
+  String get locationNotSpecified;
+
+  /// No description provided for @locationUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Updated'**
+  String get locationUpdated;
+
   /// No description provided for @maghrib.
   ///
   /// In en, this message translates to:
@@ -361,6 +379,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'October'**
   String get october;
+
+  /// No description provided for @ownerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Created by atQs'**
+  String get ownerName;
 
   /// No description provided for @prayTimeNotAvailable.
   ///
@@ -499,6 +523,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update my location'**
   String get updateLocation;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
 
   /// No description provided for @wednesday.
   ///
