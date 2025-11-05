@@ -21,6 +21,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get august => 'Ağustos';
 
   @override
+  String get cancel => 'İptal';
+
+  @override
   String get compassTile => 'Kıble Pusulası';
 
   @override
@@ -43,6 +46,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dhuhr => 'Öğle';
+
+  @override
+  String get done => 'Tamam';
 
   @override
   String get drawerHomePageTile => 'Ana Sayfa';
@@ -144,6 +150,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noonMiddayPrayer => ' ';
 
   @override
+  String get notificationBeforePrayTime => 'Vakit Öncesi Bİldirimleri';
+
+  @override
+  String get notificationMinutes => 'Dakika';
+
+  @override
+  String get notificationOff => 'Kapalı';
+
+  @override
+  String get notificationOn => 'Açık';
+
+  @override
   String get november => 'Kasım';
 
   @override
@@ -180,6 +198,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get seconds => 'Saniye';
 
   @override
+  String get selectTime => 'Süre Seçin';
+
+  @override
   String get september => 'Eylül';
 
   @override
@@ -190,6 +211,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shawwal => 'Şevval';
+
+  @override
+  String get silentMode => 'Namaz Esnasında Sessize Al';
+
+  @override
+  String get silentModeOff => 'Kapalı';
+
+  @override
+  String get silentModeOn => 'Açık';
 
   @override
   String get sunRise => ' ';

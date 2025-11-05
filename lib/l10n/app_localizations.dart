@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'August'**
   String get august;
 
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
   /// No description provided for @compassTile.
   ///
   /// In en, this message translates to:
@@ -169,6 +175,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dhuhr'**
   String get dhuhr;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
 
   /// Drawer item for home page
   ///
@@ -368,6 +380,30 @@ abstract class AppLocalizations {
   /// **'Noon/Midday Prayer'**
   String get noonMiddayPrayer;
 
+  /// No description provided for @notificationBeforePrayTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Before Prayer Time Notifications'**
+  String get notificationBeforePrayTime;
+
+  /// No description provided for @notificationMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get notificationMinutes;
+
+  /// No description provided for @notificationOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get notificationOff;
+
+  /// No description provided for @notificationOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get notificationOn;
+
   /// No description provided for @november.
   ///
   /// In en, this message translates to:
@@ -440,6 +476,12 @@ abstract class AppLocalizations {
   /// **'Seconds'**
   String get seconds;
 
+  /// No description provided for @selectTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Time'**
+  String get selectTime;
+
   /// No description provided for @september.
   ///
   /// In en, this message translates to:
@@ -463,6 +505,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shawwal'**
   String get shawwal;
+
+  /// No description provided for @silentMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent Mode During Prayer'**
+  String get silentMode;
+
+  /// No description provided for @silentModeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get silentModeOff;
+
+  /// No description provided for @silentModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get silentModeOn;
 
   /// No description provided for @sunRise.
   ///

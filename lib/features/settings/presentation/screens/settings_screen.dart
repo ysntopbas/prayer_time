@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:prayer_time/features/settings/presentation/widgets/notification_switch_list_tile.dart';
+import 'package:prayer_time/features/settings/presentation/widgets/slient_mode_list_tile.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -113,6 +115,10 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
+          Divider(color: appTheme.colorScheme.primary),
+          NotificationSwitchListTile(),
+          Divider(color: appTheme.colorScheme.primary),
+          SilentModeListTile(),
           Divider(color: appTheme.colorScheme.primary),
         ],
       ),
