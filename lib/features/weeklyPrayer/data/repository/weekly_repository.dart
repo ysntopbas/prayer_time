@@ -8,6 +8,7 @@ import 'package:prayer_time/core/services/location_service.dart';
 
 class WeeklyRepository {
   String? cityName;
+  String? subAdministrativeArea;
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
   final CacheService _cacheService;
@@ -23,11 +24,13 @@ class WeeklyRepository {
     if (savedLocation != null) {
       locationData = savedLocation;
       cityName = savedLocation['city'];
+      subAdministrativeArea = savedLocation['subAdministrativeArea'];
     } else {
       // Kaydedilmiş konum yoksa GPS'ten al
       try {
         locationData = await _locationService.getCurrentCity();
         cityName = locationData?['city'];
+        subAdministrativeArea = locationData?['subAdministrativeArea'];
       } catch (e) {
         log('Konum alınamadı: $e');
       }
@@ -51,15 +54,19 @@ class WeeklyRepository {
       'dd-MM-yyyy',
     ).format(DateTime.now().add(const Duration(days: 7)));
 
+    final String city = locationData?['city'] ?? 'Kayseri';
+    subAdministrativeArea =
+        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+    final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
-      'city': locationData?['city'] ?? 'Kayseri',
-      'country': locationData?['country'] ?? 'TR',
+      'address': '$subAdministrativeArea, $city, $country',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',
     };
 
-    final String endpoint = '/calendarByCity/from/$todayDate/to/$weekLaterDate';
+    final String endpoint =
+        '/calendarByAddress/from/$todayDate/to/$weekLaterDate';
 
     try {
       log('Haftalık namaz vakitleri API\'den çekiliyor');

@@ -4,11 +4,13 @@ import 'package:prayer_time/l10n/app_localizations.dart';
 
 class PrayerHeader extends StatelessWidget {
   final String cityName;
+  final String? subAdministrativeArea;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   const PrayerHeader({
     super.key,
     required this.cityName,
+    this.subAdministrativeArea,
     required this.scaffoldKey,
   });
 
@@ -60,7 +62,7 @@ class PrayerHeader extends StatelessWidget {
 
               const SizedBox(height: 4),
               Text(
-                cityName,
+                '$subAdministrativeArea, $cityName',
                 style: appTheme.textTheme.headlineSmall?.copyWith(
                   color: Colors.white,
                 ),

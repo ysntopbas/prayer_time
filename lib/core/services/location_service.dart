@@ -1,4 +1,3 @@
-
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -63,6 +62,7 @@ class LocationService {
           'city': place.administrativeArea ?? 'Unknown',
           'country': place.country ?? 'Unknown',
           'countryCode': place.isoCountryCode ?? 'Unknown',
+          'subAdministrativeArea': place.subAdministrativeArea ?? 'Unknown',
         };
       }
       return null;

@@ -88,7 +88,7 @@ class SettingsScreen extends StatelessWidget {
                 title: Text(l10nL.updateLocation),
                 subtitle: state.cityName != null
                     ? Text('${state.cityName}, ${state.countryName}')
-                    : Text(l10nL.locationNotSpecified),
+                    : Text(l10nL.setFirstLocation),
                 trailing: state.isLocationLoading
                     ? const SizedBox(
                         width: 24,
@@ -100,17 +100,9 @@ class SettingsScreen extends StatelessWidget {
                     ? null
                     : () async {
                         await context.read<SettingsCubit>().updateLocation();
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                state.cityName != null
-                                    ? '${l10nL.locationUpdated}: ${state.cityName}'
-                                    : l10nL.locationCantUpdated,
-                              ),
-                            ),
-                          );
-                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10nL.locationUpdated)),
+                        );
                       },
               );
             },

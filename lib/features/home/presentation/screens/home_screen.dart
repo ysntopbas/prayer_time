@@ -9,24 +9,10 @@ import 'package:prayer_time/features/home/presentation/widgets/prayer_header.dar
 import 'package:prayer_time/features/home/presentation/widgets/prayer_time_list.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // İlk yükleme
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadPrayerTimes();
-    });
-  }
-
-  void _loadPrayerTimes() {
+  void _loadPrayerTimes(BuildContext context) {
     final settingsCubit = context.read<SettingsCubit>();
     final savedLocation = settingsCubit.getSavedLocation();
     context.read<HomeCubit>().fetchPrayerTimes(savedLocation: savedLocation);
@@ -36,6 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final appTheme = Theme.of(context);
+
+    // İlk yükleme için
+    final homeState = context.watch<HomeCubit>().state;
+    if (homeState is HomeInitial) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadPrayerTimes(context);
+      });
+    }
 
     return Scaffold(
       key: scaffoldKey,
@@ -55,8 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           listenWhen: (previous, current) =>
               previous.cityName != current.cityName,
           listener: (context, state) {
-            // Konum güncellendiğinde namaz vakitlerini yeniden yükle
-            _loadPrayerTimes();
+            _loadPrayerTimes(context);
           },
           child: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
@@ -78,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: _loadPrayerTimes,
+                        onPressed: () => _loadPrayerTimes(context),
                         child: const Text('Tekrar Dene'),
                       ),
                     ],
@@ -88,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 final prayerTimings = state.prayerTimings;
                 final cityName = state.cityName ?? 'Kayseri';
                 final nextTimings = state.nextTimings;
+                final subAdministrativeArea = state.subAdministrativeArea ?? '';
 
                 final now = DateTime.now();
                 String nextPrayerName = _getNextPrayerName(
@@ -98,7 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 return Column(
                   children: [
-                    PrayerHeader(cityName: cityName, scaffoldKey: scaffoldKey),
+                    PrayerHeader(
+                      subAdministrativeArea: subAdministrativeArea,
+                      cityName: cityName,
+                      scaffoldKey: scaffoldKey,
+                    ),
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(

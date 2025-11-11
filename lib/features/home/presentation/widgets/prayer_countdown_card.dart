@@ -46,7 +46,11 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
     final now = DateTime.now();
     final l10nL = AppLocalizations.of(context)!;
 
-    final (timeStr, prayerName) = _getNextPrayer(widget.nextTimings, l10nL);
+    final (timeStr, prayerName) = _getNextPrayer(
+      widget.nextTimings,
+      l10nL,
+      now,
+    );
 
     if (timeStr.isEmpty) {
       _remainingTime = Duration.zero;
@@ -92,8 +96,11 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
     return baseDate;
   }
 
-  (String, String) _getNextPrayer(Timings timings, AppLocalizations l10nL) {
-    final now = DateTime.now();
+  (String, String) _getNextPrayer(
+    Timings timings,
+    AppLocalizations l10nL,
+    DateTime now,
+  ) {
     final currentHour = now.hour;
     final currentMinute = now.minute;
 
@@ -116,6 +123,7 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
       return false;
     }
 
+    // Bugünün vakitlerini kontrol et
     if (timings.fajr != null && !hasPassed(timings.fajr)) {
       return (timings.fajr!, l10nL.fajr);
     }
@@ -135,7 +143,10 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
       return (timings.isha!, l10nL.isha);
     }
 
-    return (timings.fajr ?? '', l10nL.fajr);
+    // Tüm vakitler geçtiyse yarının sabah namazını göster
+    // Ancak yarının verisini almadığımız için boş dönelim
+    // ve üst katmanda yeni gün verisi çekilsin
+    return ('', '');
   }
 
   @override

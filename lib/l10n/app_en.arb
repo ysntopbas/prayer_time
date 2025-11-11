@@ -15,10 +15,12 @@
   "@settingsPageTitle": {
     "description": "The title of the settings page"
   },
+  "after": "After",
   "afternoonPrayer": "Afternoon Prayer",
   "april": "April",
   "asr": "Asr",
   "august": "August",
+  "before": "Before",
   "cancel": "Cancel",
   "compassTile": "Qıblah Compass",
   "darkMode": "Dark Theme",
@@ -80,6 +82,7 @@
   "seconds": "Seconds",
   "selectTime": "Select Time",
   "september": "September",
+  "setFirstLocation": "Please press refresh button for set first location",
   "settingsPageTitle": "Settings",
   "shaban": "Sha'ban",
   "shawwal": "Shawwal",

@@ -9,6 +9,9 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get after => 'Sonra';
+
+  @override
   String get afternoonPrayer => ' ';
 
   @override
@@ -19,6 +22,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get august => 'Ağustos';
+
+  @override
+  String get before => 'Önce';
 
   @override
   String get cancel => 'İptal';
@@ -202,6 +208,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get september => 'Eylül';
+
+  @override
+  String get setFirstLocation =>
+      'İlk konumunuz için yenileme düğmesine basınız.';
 
   @override
   String get settingsPageTitle => 'Ayarlar';

@@ -8,6 +8,8 @@ import 'package:prayer_time/core/services/location_service.dart';
 
 class MonthlyRepository {
   String? cityName;
+  String? subAdministrativeArea;
+
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
   final CacheService _cacheService;
@@ -23,11 +25,13 @@ class MonthlyRepository {
     if (savedLocation != null) {
       locationData = savedLocation;
       cityName = savedLocation['city'];
+      subAdministrativeArea = savedLocation['subAdministrativeArea'];
     } else {
       // Kaydedilmiş konum yoksa GPS'ten al
       try {
         locationData = await _locationService.getCurrentCity();
         cityName = locationData?['city'];
+        subAdministrativeArea = locationData?['subAdministrativeArea'];
       } catch (e) {
         log('Konum alınamadı: $e');
       }
@@ -49,16 +53,19 @@ class MonthlyRepository {
     final now = DateTime.now();
     final String currentMonth = DateFormat('MM').format(now);
     final String currentYear = DateFormat('yyyy').format(now);
+    final String city = locationData?['city'] ?? 'Kayseri';
+    subAdministrativeArea =
+        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+    final String country = locationData?['country'] ?? 'TR';
 
     final Map<String, dynamic> queryParameters = {
-      'city': locationData?['city'] ?? 'Kayseri',
-      'country': locationData?['country'] ?? 'TR',
+      'address': '$subAdministrativeArea, $city, $country',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',
     };
 
-    final String endpoint = '/calendarByCity/$currentYear/$currentMonth';
+    final String endpoint = '/calendarByAddress/$currentYear/$currentMonth';
 
     try {
       log('Aylık namaz vakitleri API\'den çekiliyor');

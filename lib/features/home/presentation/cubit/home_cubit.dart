@@ -23,10 +23,12 @@ class HomeCubit extends Cubit<HomeState> {
         savedLocation: savedLocation,
       );
       final cityName = homeRepository.cityName;
+      final subAdministrativeArea = homeRepository.subAdministrativeArea;
       emit(
         HomeLoaded(
           prayerTimings: prayerTimes,
           cityName: cityName,
+          subAdministrativeArea: subAdministrativeArea,
           nextTimings: nextPrayerTimes,
         ),
       );

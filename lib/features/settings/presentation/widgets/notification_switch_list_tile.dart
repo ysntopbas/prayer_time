@@ -10,27 +10,19 @@ class NotificationSwitchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context);
-    final appThme = Theme.of(context);
-    final prayTimeName = [
-      l10nL?.fajr ?? "Fajr",
-      l10nL?.sunrise ?? "Sunrise",
-      l10nL?.dhuhr ?? "Dhuhr",
-      l10nL?.asr ?? "Asr",
-      l10nL?.maghrib ?? "Maghrib",
-      l10nL?.isha ?? "Isha",
-    ];
+    final appTheme = Theme.of(context);
 
-    return BlocSelector<SettingsCubit, SettingsState, bool>(
-      selector: (state) {
-        return state.mainNotificationsEnabled;
-      },
-      builder: (context, mainNotificationsEnabled) {
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        final mainNotificationsEnabled = state.mainNotificationsEnabled;
+
         return Column(
           children: [
+            // Ana Switch
             ListTile(
               leading: Icon(
-                Icons.notifications,
-                color: appThme.colorScheme.primary,
+                Icons.notifications_active,
+                color: appTheme.colorScheme.primary,
               ),
               title: Text(l10nL!.notificationBeforePrayTime),
               trailing: Row(
@@ -38,126 +30,179 @@ class NotificationSwitchListTile extends StatelessWidget {
                 children: [
                   Switch(
                     value: mainNotificationsEnabled,
-                    onChanged: (bool value) {
+                    onChanged: (value) {
                       context.read<SettingsCubit>().mainToggleNotifications();
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      mainNotificationsEnabled
-                          ? l10nL.notificationOn
-                          : l10nL.notificationOff,
-                      style: TextStyle(color: appThme.colorScheme.primary),
-                    ),
+                  Icon(
+                    mainNotificationsEnabled
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
                   ),
                 ],
               ),
             ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              child: mainNotificationsEnabled
-                  ? _buildCollapsibleContent(context, prayTimeName)
-                  : const SizedBox(width: double.infinity, height: 0),
+
+            // Alt Ayarlar (Expandable)
+            if (mainNotificationsEnabled)
+              _buildPrayerNotificationSettings(
+                context,
+                state,
+                mainNotificationsEnabled,
+                l10nL,
+                appTheme,
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildPrayerNotificationSettings(
+    BuildContext context,
+    SettingsState state,
+    bool mainEnabled,
+    AppLocalizations l10n,
+    ThemeData theme,
+  ) {
+    final prayers = {
+      'fajr': (l10n.fajr, state.notificationBeforePraysSettings.fajr),
+      'sunrise': (l10n.sunrise, state.notificationBeforePraysSettings.sunrise),
+      'dhuhr': (l10n.dhuhr, state.notificationBeforePraysSettings.dhuhr),
+      'asr': (l10n.asr, state.notificationBeforePraysSettings.asr),
+      'maghrib': (l10n.maghrib, state.notificationBeforePraysSettings.maghrib),
+      'isha': (l10n.isha, state.notificationBeforePraysSettings.isha),
+    };
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+        ),
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        children: prayers.entries.map((entry) {
+          final prayerKey = entry.key;
+          final prayerName = entry.value.$1;
+          final prayerSettings = entry.value.$2;
+
+          return ListTile(
+            leading: Icon(
+              Icons.alarm,
+              color: prayerSettings.isEnabled && mainEnabled
+                  ? theme.colorScheme.primary
+                  : Colors.grey,
+            ),
+            title: Text(
+              prayerName,
+              style: TextStyle(color: mainEnabled ? null : Colors.grey),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Dakika Seçici
+                TextButton(
+                  onPressed: mainEnabled
+                      ? () {
+                          _showMinutePicker(
+                            context,
+                            prayerKey,
+                            prayerSettings.minutesBefore,
+                            l10n,
+                          );
+                        }
+                      : null,
+                  child: Text(
+                    '${prayerSettings.minutesBefore} ${l10n.minutes}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: mainEnabled
+                          ? theme.colorScheme.primary
+                          : Colors.grey,
+                    ),
+                  ),
+                ),
+
+                // Switch (Ana switch kapalıysa devre dışı)
+                Opacity(
+                  opacity: mainEnabled ? 1.0 : 0.5,
+                  child: Switch(
+                    value: prayerSettings.isEnabled,
+                    onChanged: mainEnabled
+                        ? (value) {
+                            context
+                                .read<SettingsCubit>()
+                                .updateNotificationSetting(
+                                  prayerName: prayerKey,
+                                  isEnabled: value,
+                                );
+                          }
+                        : null,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  void _showMinutePicker(
+    BuildContext context,
+    String prayerKey,
+    int currentMinutes,
+    AppLocalizations l10n,
+  ) {
+    int selectedMinutes = currentMinutes;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l10n.selectTime),
+          content: SizedBox(
+            height: 200,
+            child: CupertinoPicker(
+              scrollController: FixedExtentScrollController(
+                initialItem: (currentMinutes ~/ 5) - 1,
+              ),
+              itemExtent: 50,
+              onSelectedItemChanged: (index) {
+                selectedMinutes = (index + 1) * 5;
+              },
+              children: List<Widget>.generate(12, (index) {
+                final minutes = (index + 1) * 5;
+                return Center(
+                  child: Text(
+                    '$minutes ${l10n.minutes}',
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                );
+              }),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<SettingsCubit>().updateNotificationSetting(
+                  prayerName: prayerKey,
+                  minutesBefore: selectedMinutes,
+                );
+                Navigator.pop(context);
+              },
+              child: Text(l10n.done),
             ),
           ],
         );
       },
     );
   }
-}
-
-Widget _buildCollapsibleContent(
-  BuildContext context,
-  List<String> prayTimeName,
-) {
-  final l10nL = AppLocalizations.of(context)!;
-  final appTheme = Theme.of(context);
-
-  return ListView.builder(
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-
-    itemCount: prayTimeName.length,
-    itemBuilder: (context, int index) {
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListTile(
-          leading: Icon(
-            Icons.notifications,
-            color: appTheme.colorScheme.primary,
-          ),
-          title: Text(prayTimeName[index]),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () {
-                  showPickerDialgo(context).then((duration) {});
-                },
-                child: Text(l10nL.selectTime),
-              ),
-              Switch(value: true, onChanged: (bool value) {}),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  true
-                      ? AppLocalizations.of(context)!.notificationOn
-                      : AppLocalizations.of(context)!.notificationOff,
-                  style: TextStyle(color: appTheme.colorScheme.primary),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-Future<Duration?> showPickerDialgo(BuildContext context) {
-  Duration selectedDuration = const Duration(minutes: 10);
-  final l10nL = AppLocalizations.of(context)!;
-  final appTheme = Theme.of(context);
-
-  return showDialog<Duration>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(l10nL.selectTime),
-        content: StatefulBuilder(
-          builder: (context, setState) {
-            return SizedBox(
-              height: 200,
-              width: 300,
-              child: CupertinoTimerPicker(
-                mode: CupertinoTimerPickerMode.hm,
-                initialTimerDuration: selectedDuration,
-                minuteInterval: 5,
-                onTimerDurationChanged: (Duration newDuration) {
-                  selectedDuration = newDuration;
-                },
-              ),
-            );
-          },
-        ),
-        actions: [
-          TextButton(
-            child: Text(l10nL.cancel),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text(l10nL.done),
-            onPressed: () {
-              Navigator.of(context).pop(selectedDuration);
-            },
-          ),
-        ],
-      );
-    },
-  );
 }

@@ -1,5 +1,162 @@
 part of 'settings_cubit.dart';
 
+// Her namaz için bildirim ayarları
+class NotificationBeforePrays extends Equatable {
+  final bool isEnabled;
+  final int minutesBefore;
+
+  const NotificationBeforePrays({
+    this.isEnabled = false,
+    this.minutesBefore = 10,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {'isEnabled': isEnabled, 'minutesBefore': minutesBefore};
+  }
+
+  factory NotificationBeforePrays.fromJson(Map<String, dynamic> json) {
+    return NotificationBeforePrays(
+      isEnabled: json['isEnabled'] as bool? ?? false,
+      minutesBefore: json['minutesBefore'] as int? ?? 10,
+    );
+  }
+
+  NotificationBeforePrays copyWith({bool? isEnabled, int? minutesBefore}) {
+    return NotificationBeforePrays(
+      isEnabled: isEnabled ?? this.isEnabled,
+      minutesBefore: minutesBefore ?? this.minutesBefore,
+    );
+  }
+
+  @override
+  List<Object?> get props => [isEnabled, minutesBefore];
+}
+
+// Tüm namazlar için bildirim ayarları
+class NotificationBeforePraysSettings extends Equatable {
+  final NotificationBeforePrays fajr;
+  final NotificationBeforePrays sunrise;
+  final NotificationBeforePrays dhuhr;
+  final NotificationBeforePrays asr;
+  final NotificationBeforePrays maghrib;
+  final NotificationBeforePrays isha;
+
+  const NotificationBeforePraysSettings({
+    this.fajr = const NotificationBeforePrays(),
+    this.sunrise = const NotificationBeforePrays(),
+    this.dhuhr = const NotificationBeforePrays(),
+    this.asr = const NotificationBeforePrays(),
+    this.maghrib = const NotificationBeforePrays(),
+    this.isha = const NotificationBeforePrays(),
+  });
+
+  NotificationBeforePraysSettings copyWith({
+    NotificationBeforePrays? fajr,
+    NotificationBeforePrays? sunrise,
+    NotificationBeforePrays? dhuhr,
+    NotificationBeforePrays? asr,
+    NotificationBeforePrays? maghrib,
+    NotificationBeforePrays? isha,
+  }) {
+    return NotificationBeforePraysSettings(
+      fajr: fajr ?? this.fajr,
+      sunrise: sunrise ?? this.sunrise,
+      dhuhr: dhuhr ?? this.dhuhr,
+      asr: asr ?? this.asr,
+      maghrib: maghrib ?? this.maghrib,
+      isha: isha ?? this.isha,
+    );
+  }
+
+  @override
+  List<Object?> get props => [fajr, sunrise, dhuhr, asr, maghrib, isha];
+}
+
+// Her namaz için sessiz mod ayarları
+class SilentModeDuringPrays extends Equatable {
+  final bool isEnabled;
+  final int minutesBefore;
+  final int minutesAfter;
+
+  const SilentModeDuringPrays({
+    this.isEnabled = false,
+    this.minutesBefore = 5,
+    this.minutesAfter = 15,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'isEnabled': isEnabled,
+      'minutesBefore': minutesBefore,
+      'minutesAfter': minutesAfter,
+    };
+  }
+
+  factory SilentModeDuringPrays.fromJson(Map<String, dynamic> json) {
+    return SilentModeDuringPrays(
+      isEnabled: json['isEnabled'] as bool? ?? false,
+      minutesBefore: json['minutesBefore'] as int? ?? 5,
+      minutesAfter: json['minutesAfter'] as int? ?? 15,
+    );
+  }
+
+  SilentModeDuringPrays copyWith({
+    bool? isEnabled,
+    int? minutesBefore,
+    int? minutesAfter,
+  }) {
+    return SilentModeDuringPrays(
+      isEnabled: isEnabled ?? this.isEnabled,
+      minutesBefore: minutesBefore ?? this.minutesBefore,
+      minutesAfter: minutesAfter ?? this.minutesAfter,
+    );
+  }
+
+  @override
+  List<Object?> get props => [isEnabled, minutesBefore, minutesAfter];
+}
+
+// Tüm namazlar için sessiz mod ayarları
+class SilentModeDuringPraysSettings extends Equatable {
+  final SilentModeDuringPrays fajr;
+  final SilentModeDuringPrays sunrise;
+  final SilentModeDuringPrays dhuhr;
+  final SilentModeDuringPrays asr;
+  final SilentModeDuringPrays maghrib;
+  final SilentModeDuringPrays isha;
+
+  const SilentModeDuringPraysSettings({
+    this.fajr = const SilentModeDuringPrays(),
+    this.sunrise = const SilentModeDuringPrays(),
+    this.dhuhr = const SilentModeDuringPrays(),
+    this.asr = const SilentModeDuringPrays(),
+    this.maghrib = const SilentModeDuringPrays(),
+    this.isha = const SilentModeDuringPrays(),
+  });
+
+  SilentModeDuringPraysSettings copyWith({
+    SilentModeDuringPrays? fajr,
+    SilentModeDuringPrays? sunrise,
+    SilentModeDuringPrays? dhuhr,
+    SilentModeDuringPrays? asr,
+    SilentModeDuringPrays? maghrib,
+    SilentModeDuringPrays? isha,
+  }) {
+    return SilentModeDuringPraysSettings(
+      fajr: fajr ?? this.fajr,
+      sunrise: sunrise ?? this.sunrise,
+      dhuhr: dhuhr ?? this.dhuhr,
+      asr: asr ?? this.asr,
+      maghrib: maghrib ?? this.maghrib,
+      isha: isha ?? this.isha,
+    );
+  }
+
+  @override
+  List<Object?> get props => [fajr, sunrise, dhuhr, asr, maghrib, isha];
+}
+
+// Ana State Sınıfı
 class SettingsState extends Equatable {
   final bool isDarkMode;
   final String languageCode;
@@ -8,62 +165,20 @@ class SettingsState extends Equatable {
   final bool isLocationLoading;
   final bool mainNotificationsEnabled;
   final bool mainSilentModeEnabled;
-  //Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha
-  //Sabah, Gunes, Ogle, Ikindi, Aksam, Yatsi
-  final Map<String, bool> notificationBeforeSettings;
-  final Map<String, bool> silentModeDuringSettings;
-  final Map<String, int> notificationBeforeMinutes;
-  final Map<String, int> silentModeBeforeDurations;
-  final Map<String, int> silentModeAfterDurations;
+  final NotificationBeforePraysSettings notificationBeforePraysSettings;
+  final SilentModeDuringPraysSettings silentModeDuringPraysSettings;
 
   const SettingsState({
-    required this.isDarkMode,
-    required this.languageCode,
+    this.isDarkMode = false,
+    this.languageCode = 'en',
     this.cityName,
     this.countryName,
     this.isLocationLoading = false,
     this.mainNotificationsEnabled = false,
     this.mainSilentModeEnabled = false,
-    this.notificationBeforeSettings = const {
-      'fajr': false,
-      'sunrise': false,
-      'dhuhr': false,
-      'asr': false,
-      'maghrib': false,
-      'isha': false,
-    },
-    this.silentModeDuringSettings = const {
-      'fajr': false,
-      'sunrise': false,
-      'dhuhr': false,
-      'asr': false,
-      'maghrib': false,
-      'isha': false,
-    },
-    this.notificationBeforeMinutes = const {
-      'fajr': 1,
-      'sunrise': 1,
-      'dhuhr': 1,
-      'asr': 1,
-      'maghrib': 1,
-      'isha': 1,
-    },
-    this.silentModeBeforeDurations = const {
-      'fajr': 1,
-      'sunrise': 1,
-      'dhuhr': 1,
-      'asr': 1,
-      'maghrib': 1,
-      'isha': 1,
-    },
-    this.silentModeAfterDurations = const {
-      'fajr': 1,
-      'sunrise': 1,
-      'dhuhr': 1,
-      'asr': 1,
-      'maghrib': 1,
-      'isha': 1,
-    },
+    this.notificationBeforePraysSettings =
+        const NotificationBeforePraysSettings(),
+    this.silentModeDuringPraysSettings = const SilentModeDuringPraysSettings(),
   });
 
   @override
@@ -75,11 +190,8 @@ class SettingsState extends Equatable {
     isLocationLoading,
     mainNotificationsEnabled,
     mainSilentModeEnabled,
-    notificationBeforeSettings,
-    silentModeDuringSettings,
-    notificationBeforeMinutes,
-    silentModeBeforeDurations,
-    silentModeAfterDurations,
+    notificationBeforePraysSettings,
+    silentModeDuringPraysSettings,
   ];
 
   SettingsState copyWith({
@@ -90,11 +202,8 @@ class SettingsState extends Equatable {
     bool? isLocationLoading,
     bool? mainNotificationsEnabled,
     bool? mainSilentModeEnabled,
-    Map<String, bool>? notificationBeforeSettings,
-    Map<String, bool>? silentModeDuringSettings,
-    Map<String, int>? notificationBeforeMinutes,
-    Map<String, int>? silentModeBeforeDurations,
-    Map<String, int>? silentModeAfterDurations,
+    NotificationBeforePraysSettings? notificationBeforePraysSettings,
+    SilentModeDuringPraysSettings? silentModeDuringPraysSettings,
   }) {
     return SettingsState(
       isDarkMode: isDarkMode ?? this.isDarkMode,
@@ -106,16 +215,11 @@ class SettingsState extends Equatable {
           mainNotificationsEnabled ?? this.mainNotificationsEnabled,
       mainSilentModeEnabled:
           mainSilentModeEnabled ?? this.mainSilentModeEnabled,
-      notificationBeforeSettings:
-          notificationBeforeSettings ?? this.notificationBeforeSettings,
-      silentModeDuringSettings:
-          silentModeDuringSettings ?? this.silentModeDuringSettings,
-      notificationBeforeMinutes:
-          notificationBeforeMinutes ?? this.notificationBeforeMinutes,
-      silentModeBeforeDurations:
-          silentModeBeforeDurations ?? this.silentModeBeforeDurations,
-      silentModeAfterDurations:
-          silentModeAfterDurations ?? this.silentModeAfterDurations,
+      notificationBeforePraysSettings:
+          notificationBeforePraysSettings ??
+          this.notificationBeforePraysSettings,
+      silentModeDuringPraysSettings:
+          silentModeDuringPraysSettings ?? this.silentModeDuringPraysSettings,
     );
   }
 }

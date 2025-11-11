@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/services/location_service.dart';
@@ -10,7 +11,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   final LocationService locationService;
 
   SettingsCubit(this.storageServices, this.locationService)
-    : super(const SettingsState(isDarkMode: false, languageCode: 'en')) {
+    : super(const SettingsState()) {
     _loadInitialSettings();
   }
 
@@ -23,66 +24,9 @@ class SettingsCubit extends Cubit<SettingsState> {
         storageServices.getBool('mainNotificationsEnabled') ?? false;
     final mainSilentModeEnabled =
         storageServices.getBool('mainSilentModeEnabled') ?? false;
-    final notificationBeforeSettings =
-        storageServices
-            .getMap('notificationBeforeSettings')
-            ?.map((key, value) => MapEntry(key, value as bool)) ??
-        const {
-          'fajr': false,
-          'sunrise': false,
-          'dhuhr': false,
-          'asr': false,
-          'maghrib': false,
-          'isha': false,
-        };
-    final silentModeDuringSettings =
-        storageServices
-            .getMap('silentModeDuringSettings')
-            ?.map((key, value) => MapEntry(key, value as bool)) ??
-        const {
-          'fajr': false,
-          'sunrise': false,
-          'dhuhr': false,
-          'asr': false,
-          'maghrib': false,
-          'isha': false,
-        };
-    final notificationBeforeMinutes =
-        storageServices
-            .getMap('notificationBeforeMinutes')
-            ?.map((key, value) => MapEntry(key, value as int)) ??
-        const {
-          'fajr': 1,
-          'sunrise': 1,
-          'dhuhr': 1,
-          'asr': 1,
-          'maghrib': 1,
-          'isha': 1,
-        };
-    final silentModeBeforeDurations =
-        storageServices
-            .getMap('silentModeBeforeDurations')
-            ?.map((key, value) => MapEntry(key, value as int)) ??
-        const {
-          'fajr': 1,
-          'sunrise': 1,
-          'dhuhr': 1,
-          'asr': 1,
-          'maghrib': 1,
-          'isha': 1,
-        };
-    final silentModeAfterDurations =
-        storageServices
-            .getMap('silentModeAfterDurations')
-            ?.map((key, value) => MapEntry(key, value as int)) ??
-        const {
-          'fajr': 1,
-          'sunrise': 1,
-          'dhuhr': 1,
-          'asr': 1,
-          'maghrib': 1,
-          'isha': 1,
-        };
+
+    final notificationSettings = _loadNotificationSettings();
+    final silentModeSettings = _loadSilentModeSettings();
 
     emit(
       SettingsState(
@@ -92,13 +36,60 @@ class SettingsCubit extends Cubit<SettingsState> {
         countryName: countryName,
         mainNotificationsEnabled: mainNotificationsEnabled,
         mainSilentModeEnabled: mainSilentModeEnabled,
-        notificationBeforeSettings: notificationBeforeSettings,
-        silentModeDuringSettings: silentModeDuringSettings,
-        notificationBeforeMinutes: notificationBeforeMinutes,
-        silentModeBeforeDurations: silentModeBeforeDurations,
-        silentModeAfterDurations: silentModeAfterDurations,
+        notificationBeforePraysSettings: notificationSettings,
+        silentModeDuringPraysSettings: silentModeSettings,
       ),
     );
+  }
+
+  NotificationBeforePraysSettings _loadNotificationSettings() {
+    return NotificationBeforePraysSettings(
+      fajr: _loadSingleNotificationSetting('fajr_notification'),
+      sunrise: _loadSingleNotificationSetting('sunrise_notification'),
+      dhuhr: _loadSingleNotificationSetting('dhuhr_notification'),
+      asr: _loadSingleNotificationSetting('asr_notification'),
+      maghrib: _loadSingleNotificationSetting('maghrib_notification'),
+      isha: _loadSingleNotificationSetting('isha_notification'),
+    );
+  }
+
+  NotificationBeforePrays _loadSingleNotificationSetting(String key) {
+    final jsonString = storageServices.getString(key);
+    if (jsonString != null) {
+      try {
+        return NotificationBeforePrays.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>,
+        );
+      } catch (e) {
+        return const NotificationBeforePrays();
+      }
+    }
+    return const NotificationBeforePrays();
+  }
+
+  SilentModeDuringPraysSettings _loadSilentModeSettings() {
+    return SilentModeDuringPraysSettings(
+      fajr: _loadSingleSilentModeSetting('fajr_silent'),
+      sunrise: _loadSingleSilentModeSetting('sunrise_silent'),
+      dhuhr: _loadSingleSilentModeSetting('dhuhr_silent'),
+      asr: _loadSingleSilentModeSetting('asr_silent'),
+      maghrib: _loadSingleSilentModeSetting('maghrib_silent'),
+      isha: _loadSingleSilentModeSetting('isha_silent'),
+    );
+  }
+
+  SilentModeDuringPrays _loadSingleSilentModeSetting(String key) {
+    final jsonString = storageServices.getString(key);
+    if (jsonString != null) {
+      try {
+        return SilentModeDuringPrays.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>,
+        );
+      } catch (e) {
+        return const SilentModeDuringPrays();
+      }
+    }
+    return const SilentModeDuringPrays();
   }
 
   void toggleDarkMode() {
@@ -112,61 +103,208 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   void mainToggleNotifications() {
-    emit(
-      state.copyWith(mainNotificationsEnabled: !state.mainNotificationsEnabled),
-    );
-    storageServices.saveBool(
-      'mainNotificationsEnabled',
-      state.mainNotificationsEnabled,
-    );
+    final newValue = !state.mainNotificationsEnabled;
+    emit(state.copyWith(mainNotificationsEnabled: newValue));
+    storageServices.saveBool('mainNotificationsEnabled', newValue);
+
+    if (!newValue) {
+      _disableAllNotifications();
+    }
+  }
+
+  void _disableAllNotifications() {
+    final prayers = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    for (final prayer in prayers) {
+      updateNotificationSetting(prayerName: prayer, isEnabled: false);
+    }
   }
 
   void mainToggleSilentMode() {
-    emit(state.copyWith(mainSilentModeEnabled: !state.mainSilentModeEnabled));
-    storageServices.saveBool(
-      'mainSilentModeEnabled',
-      state.mainSilentModeEnabled,
-    );
+    final newValue = !state.mainSilentModeEnabled;
+    emit(state.copyWith(mainSilentModeEnabled: newValue));
+    storageServices.saveBool('mainSilentModeEnabled', newValue);
+
+    if (!newValue) {
+      _disableAllSilentModes();
+    }
   }
 
-  void toggleNotificationBeforeSetting(String prayTime, bool value) {
-    final updatedSettings = Map<String, bool>.from(
-      state.notificationBeforeSettings,
-    );
-    updatedSettings[prayTime] = value;
-
-    emit(state.copyWith(notificationBeforeSettings: updatedSettings));
-    storageServices.saveMap('notificationBeforeSettings', updatedSettings);
+  void _disableAllSilentModes() {
+    final prayers = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+    for (final prayer in prayers) {
+      updateSilentModeSetting(prayerName: prayer, isEnabled: false);
+    }
   }
 
-  void toggleSilentModeDuringSetting(String prayTime, bool value) {
-    final updatedSettings = Map<String, bool>.from(
-      state.silentModeDuringSettings,
-    );
-    updatedSettings[prayTime] = value;
+  Future<void> updateNotificationSetting({
+    required String prayerName,
+    bool? isEnabled,
+    int? minutesBefore,
+  }) async {
+    final currentSettings = state.notificationBeforePraysSettings;
+    NotificationBeforePraysSettings newSettings;
 
-    emit(state.copyWith(silentModeDuringSettings: updatedSettings));
-    storageServices.saveMap('silentModeDuringSettings', updatedSettings);
+    switch (prayerName.toLowerCase()) {
+      case 'fajr':
+        final updated = currentSettings.fajr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(fajr: updated);
+        await storageServices.saveString(
+          'fajr_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'sunrise':
+        final updated = currentSettings.sunrise.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(sunrise: updated);
+        await storageServices.saveString(
+          'sunrise_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'dhuhr':
+        final updated = currentSettings.dhuhr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(dhuhr: updated);
+        await storageServices.saveString(
+          'dhuhr_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'asr':
+        final updated = currentSettings.asr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(asr: updated);
+        await storageServices.saveString(
+          'asr_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'maghrib':
+        final updated = currentSettings.maghrib.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(maghrib: updated);
+        await storageServices.saveString(
+          'maghrib_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'isha':
+        final updated = currentSettings.isha.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+        );
+        newSettings = currentSettings.copyWith(isha: updated);
+        await storageServices.saveString(
+          'isha_notification',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      default:
+        return;
+    }
+
+    emit(state.copyWith(notificationBeforePraysSettings: newSettings));
   }
 
-  void updateNotificationBeforeMinutes(String prayTime, int minutes) {
-    final updatedMinutes = Map<String, int>.from(
-      state.notificationBeforeMinutes,
-    );
-    updatedMinutes[prayTime] = minutes;
+  Future<void> updateSilentModeSetting({
+    required String prayerName,
+    bool? isEnabled,
+    int? minutesBefore,
+    int? minutesAfter,
+  }) async {
+    final currentSettings = state.silentModeDuringPraysSettings;
+    SilentModeDuringPraysSettings newSettings;
 
-    emit(state.copyWith(notificationBeforeMinutes: updatedMinutes));
-    storageServices.saveMap('notificationBeforeMinutes', updatedMinutes);
-  }
+    switch (prayerName.toLowerCase()) {
+      case 'fajr':
+        final updated = currentSettings.fajr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(fajr: updated);
+        await storageServices.saveString(
+          'fajr_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'sunrise':
+        final updated = currentSettings.sunrise.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(sunrise: updated);
+        await storageServices.saveString(
+          'sunrise_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'dhuhr':
+        final updated = currentSettings.dhuhr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(dhuhr: updated);
+        await storageServices.saveString(
+          'dhuhr_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'asr':
+        final updated = currentSettings.asr.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(asr: updated);
+        await storageServices.saveString(
+          'asr_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'maghrib':
+        final updated = currentSettings.maghrib.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(maghrib: updated);
+        await storageServices.saveString(
+          'maghrib_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      case 'isha':
+        final updated = currentSettings.isha.copyWith(
+          isEnabled: isEnabled,
+          minutesBefore: minutesBefore,
+          minutesAfter: minutesAfter,
+        );
+        newSettings = currentSettings.copyWith(isha: updated);
+        await storageServices.saveString(
+          'isha_silent',
+          jsonEncode(updated.toJson()),
+        );
+        break;
+      default:
+        return;
+    }
 
-  void updateSilentModeBeforeDurations(String prayTime, int minutes) {
-    final updatedDurations = Map<String, int>.from(
-      state.silentModeBeforeDurations,
-    );
-    updatedDurations[prayTime] = minutes;
-
-    emit(state.copyWith(silentModeBeforeDurations: updatedDurations));
-    storageServices.saveMap('silentModeBeforeDurations', updatedDurations);
+    emit(state.copyWith(silentModeDuringPraysSettings: newSettings));
   }
 
   Future<void> updateLocation() async {

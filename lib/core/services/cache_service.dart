@@ -145,7 +145,9 @@ class CacheService {
     if (cachedLocation == null) return true;
 
     return cachedLocation['city'] != newLocation['city'] ||
-        cachedLocation['country'] != newLocation['country'];
+        cachedLocation['country'] != newLocation['country'] ||
+        cachedLocation['subAdministrativeArea'] !=
+            newLocation['subAdministrativeArea'];
   }
 
   // Tüm cache'i temizle

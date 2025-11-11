@@ -98,6 +98,12 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
+  /// No description provided for @after.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get after;
+
   /// No description provided for @afternoonPrayer.
   ///
   /// In en, this message translates to:
@@ -121,6 +127,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'August'**
   String get august;
+
+  /// No description provided for @before.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get before;
 
   /// No description provided for @cancel.
   ///
@@ -487,6 +499,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'September'**
   String get september;
+
+  /// No description provided for @setFirstLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Please press refresh button for set first location'**
+  String get setFirstLocation;
 
   /// The title of the settings page
   ///

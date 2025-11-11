@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get after => 'After';
+
+  @override
   String get afternoonPrayer => 'Afternoon Prayer';
 
   @override
@@ -19,6 +22,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get august => 'August';
+
+  @override
+  String get before => 'Before';
 
   @override
   String get cancel => 'Cancel';
@@ -202,6 +208,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get september => 'September';
+
+  @override
+  String get setFirstLocation =>
+      'Please press refresh button for set first location';
 
   @override
   String get settingsPageTitle => 'Settings';

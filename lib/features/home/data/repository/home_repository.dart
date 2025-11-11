@@ -7,10 +7,11 @@ import 'package:prayer_time/core/services/dio_client.dart';
 import 'package:prayer_time/core/services/location_service.dart';
 
 class HomeRepository {
-  String? cityName;
   final Dio _dio = DioClient.dio;
   final LocationService _locationService = LocationService();
   final CacheService _cacheService;
+  String? cityName;
+  String? subAdministrativeArea;
 
   HomeRepository(this._cacheService);
 
@@ -21,14 +22,17 @@ class HomeRepository {
     if (savedLocation != null) {
       locationData = savedLocation;
       cityName = savedLocation['city'];
+      subAdministrativeArea = savedLocation['subAdministrativeArea'];
     } else {
       // Kaydedilmiş konum yoksa GPS'ten al
       try {
         locationData = await _locationService.getCurrentCity();
         cityName = locationData?['city'];
+        subAdministrativeArea = locationData?['subAdministrativeArea'];
       } catch (e) {
         log('Konum alınamadı, varsayılan konum kullanılacak: $e');
       }
+      log("$locationData");
     }
 
     // Konum değişikliğini kontrol et
@@ -52,16 +56,22 @@ class HomeRepository {
 
     // API'den veri çek
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
+    final String city = locationData?['city'] ?? 'Kayseri';
+    final String subAdministrativeArea2 =
+        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+    final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
-      'city': locationData?['city'] ?? 'Kayseri',
-      'country': locationData?['country'] ?? 'TR',
+      'address': '$subAdministrativeArea2, $city, $country',
+      // 'subAdministrativeArea':
+      //     locationData?['subAdministrativeArea'] ?? 'Melikgazi',
+      // 'city': locationData?['city'] ?? 'Kayseri',
+      // 'country': locationData?['country'] ?? 'TR',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',
     };
 
-    final String endpoint = '/timingsByCity/$todayDate';
+    final String endpoint = '/timingsByAddress/$todayDate';
 
     try {
       log('Günlük namaz vakitleri API\'den çekiliyor');
@@ -127,10 +137,12 @@ class HomeRepository {
     }
 
     final String tomorrowDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
+    final String city = locationData?['city'] ?? 'Kayseri';
+    final String subAdministrativeArea2 =
+        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+    final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
-      'address': locationData?['city'] ?? 'Kayseri',
-      'country': 'TR',
+      'address': '$subAdministrativeArea2, $city, $country',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',
