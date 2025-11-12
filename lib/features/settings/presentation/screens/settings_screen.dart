@@ -99,9 +99,13 @@ class SettingsScreen extends StatelessWidget {
                 onTap: state.isLocationLoading
                     ? null
                     : () async {
+                        final scaffoldMessenger = ScaffoldMessenger.of(context);
+                        final localizations = AppLocalizations.of(context)!;
                         await context.read<SettingsCubit>().updateLocation();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10nL.locationUpdated)),
+                        scaffoldMessenger.showSnackBar(
+                          SnackBar(
+                            content: Text(localizations.locationUpdated),
+                          ),
                         );
                       },
               );

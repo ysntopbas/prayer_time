@@ -1,11 +1,13 @@
 {
   "@@locale": "tr",
   "after": "Sonra",
+  "afterSilentMode": "Sesi Aç",
   "afternoonPrayer": " ",
   "april": "Nisan",
   "asr": "İkindi",
   "august": "Ağustos",
   "before": "Önce",
+  "beforeSilentMode": "Sessize Al",
   "cancel": "İptal",
   "compassTile": "Kıble Pusulası",
   "darkMode": "Karanlık Tema",

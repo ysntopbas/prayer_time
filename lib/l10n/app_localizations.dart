@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'After'**
   String get after;
 
+  /// No description provided for @afterSilentMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Silent Mode'**
+  String get afterSilentMode;
+
   /// No description provided for @afternoonPrayer.
   ///
   /// In en, this message translates to:
@@ -133,6 +139,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Before'**
   String get before;
+
+  /// No description provided for @beforeSilentMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent Mode Active'**
+  String get beforeSilentMode;
 
   /// No description provided for @cancel.
   ///

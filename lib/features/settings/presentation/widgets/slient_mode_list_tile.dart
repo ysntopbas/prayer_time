@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
@@ -66,12 +67,18 @@ class SilentModeListTile extends StatelessWidget {
     ThemeData theme,
   ) {
     final prayers = {
-      'fajr': (l10n.fajr, state.silentModeDuringPraysSettings.fajr),
-      'sunrise': (l10n.sunrise, state.silentModeDuringPraysSettings.sunrise),
-      'dhuhr': (l10n.dhuhr, state.silentModeDuringPraysSettings.dhuhr),
-      'asr': (l10n.asr, state.silentModeDuringPraysSettings.asr),
-      'maghrib': (l10n.maghrib, state.silentModeDuringPraysSettings.maghrib),
-      'isha': (l10n.isha, state.silentModeDuringPraysSettings.isha),
+      PrayerType.fajr: (l10n.fajr, state.silentModeDuringPraysSettings.fajr),
+      PrayerType.sunrise: (
+        l10n.sunrise,
+        state.silentModeDuringPraysSettings.sunrise,
+      ),
+      PrayerType.dhuhr: (l10n.dhuhr, state.silentModeDuringPraysSettings.dhuhr),
+      PrayerType.asr: (l10n.asr, state.silentModeDuringPraysSettings.asr),
+      PrayerType.maghrib: (
+        l10n.maghrib,
+        state.silentModeDuringPraysSettings.maghrib,
+      ),
+      PrayerType.isha: (l10n.isha, state.silentModeDuringPraysSettings.isha),
     };
 
     return Container(
@@ -85,87 +92,185 @@ class SilentModeListTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: prayers.entries.map((entry) {
-          final prayerKey = entry.key;
+          final prayerType = entry.key;
           final prayerName = entry.value.$1;
           final prayerSettings = entry.value.$2;
 
-          return ExpansionTile(
-            leading: Icon(
-              Icons.volume_off,
-              color: prayerSettings.isEnabled && mainEnabled
-                  ? theme.colorScheme.primary
-                  : Colors.grey,
-            ),
-            title: Text(
-              prayerName,
-              style: TextStyle(color: mainEnabled ? null : Colors.grey),
-            ),
-            trailing: Opacity(
-              opacity: mainEnabled ? 1.0 : 0.5,
-              child: Switch(
-                value: prayerSettings.isEnabled,
-                onChanged: mainEnabled
-                    ? (value) {
-                        context.read<SettingsCubit>().updateSilentModeSetting(
-                          prayerName: prayerKey,
-                          isEnabled: value,
-                        );
-                      }
-                    : null,
-              ),
-            ),
+          return Column(
             children: [
-              // Before Duration
+              // ✅ Ana ListTile (Namaz adı + Switch)
               ListTile(
-                title: Text('${l10n.before} (${l10n.minutes})'),
-                trailing: TextButton(
-                  onPressed: mainEnabled && prayerSettings.isEnabled
-                      ? () {
-                          _showDurationPicker(
-                            context,
-                            prayerKey,
-                            prayerSettings.minutesBefore,
-                            true,
-                            l10n,
-                          );
-                        }
-                      : null,
-                  child: Text(
-                    '${prayerSettings.minutesBefore} ${l10n.minutes}',
-                    style: TextStyle(
-                      color: mainEnabled && prayerSettings.isEnabled
-                          ? theme.colorScheme.primary
-                          : Colors.grey,
-                    ),
+                leading: Icon(
+                  Icons.volume_off,
+                  color: prayerSettings.isEnabled && mainEnabled
+                      ? theme.colorScheme.primary
+                      : Colors.grey,
+                ),
+                title: Text(
+                  prayerName,
+                  style: TextStyle(color: mainEnabled ? null : Colors.grey),
+                ),
+                trailing: Opacity(
+                  opacity: mainEnabled ? 1.0 : 0.5,
+                  child: Switch(
+                    value: prayerSettings.isEnabled,
+                    onChanged: mainEnabled
+                        ? (value) {
+                            context
+                                .read<SettingsCubit>()
+                                .updateSilentModeSetting(
+                                  prayerType: prayerType,
+                                  isEnabled: value,
+                                );
+                          }
+                        : null,
                   ),
                 ),
               ),
 
-              // After Duration
-              ListTile(
-                title: Text('${l10n.after} (${l10n.minutes})'),
-                trailing: TextButton(
-                  onPressed: mainEnabled && prayerSettings.isEnabled
-                      ? () {
-                          _showDurationPicker(
-                            context,
-                            prayerKey,
-                            prayerSettings.minutesAfter,
-                            false,
-                            l10n,
-                          );
-                        }
-                      : null,
-                  child: Text(
-                    '${prayerSettings.minutesAfter} ${l10n.minutes}',
-                    style: TextStyle(
-                      color: mainEnabled && prayerSettings.isEnabled
-                          ? theme.colorScheme.primary
-                          : Colors.grey,
-                    ),
+              // ✅ Switch açıksa before/after kartlarını ortalanmış göster
+              if (prayerSettings.isEnabled && mainEnabled)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      // Before Kartı
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            _showDurationPicker(
+                              context,
+                              prayerType,
+                              prayerSettings.minutesBefore,
+                              true,
+                              l10n,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.arrow_back,
+                                  color: theme.colorScheme.primary,
+                                  size: 28,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  l10n.beforeSilentMode,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  l10n.before,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${prayerSettings.minutesBefore} ${l10n.minutes}',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      // After Kartı
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            _showDurationPicker(
+                              context,
+                              prayerType,
+                              prayerSettings.minutesAfter,
+                              false,
+                              l10n,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.arrow_forward,
+                                  color: theme.colorScheme.primary,
+                                  size: 28,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  l10n.afterSilentMode,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  l10n.after,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${prayerSettings.minutesAfter} ${l10n.minutes}',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
             ],
           );
         }).toList(),
@@ -175,7 +280,7 @@ class SilentModeListTile extends StatelessWidget {
 
   void _showDurationPicker(
     BuildContext context,
-    String prayerKey,
+    PrayerType prayerType,
     int currentMinutes,
     bool isBefore,
     AppLocalizations l10n,
@@ -186,12 +291,16 @@ class SilentModeListTile extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(l10n.selectTime),
+          title: Text(
+            isBefore
+                ? '${l10n.before} ${l10n.selectTime}'
+                : '${l10n.after} ${l10n.selectTime}',
+          ),
           content: SizedBox(
             height: 200,
             child: CupertinoPicker(
               scrollController: FixedExtentScrollController(
-                initialItem: (currentMinutes ~/ 5) - 1,
+                initialItem: (currentMinutes ~/ 5).clamp(1, 24) - 1,
               ),
               itemExtent: 50,
               onSelectedItemChanged: (index) {
@@ -216,7 +325,7 @@ class SilentModeListTile extends StatelessWidget {
             TextButton(
               onPressed: () {
                 context.read<SettingsCubit>().updateSilentModeSetting(
-                  prayerName: prayerKey,
+                  prayerType: prayerType,
                   minutesBefore: isBefore ? selectedMinutes : null,
                   minutesAfter: !isBefore ? selectedMinutes : null,
                 );

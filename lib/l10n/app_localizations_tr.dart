@@ -12,6 +12,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get after => 'Sonra';
 
   @override
+  String get afterSilentMode => 'Sesi Aç';
+
+  @override
   String get afternoonPrayer => ' ';
 
   @override
@@ -25,6 +28,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get before => 'Önce';
+
+  @override
+  String get beforeSilentMode => 'Sessize Al';
 
   @override
   String get cancel => 'İptal';

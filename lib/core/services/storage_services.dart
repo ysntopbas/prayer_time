@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageServices {
@@ -43,5 +46,33 @@ class StorageServices {
   // Tüm verileri temizle
   Future<void> clear() async {
     await _preferences.clear();
+  }
+
+  NotificationBeforePrays loadSingleNotificationSetting(String key) {
+    final jsonString = _preferences.getString(key);
+    if (jsonString != null) {
+      try {
+        return NotificationBeforePrays.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>,
+        );
+      } catch (e) {
+        return const NotificationBeforePrays();
+      }
+    }
+    return const NotificationBeforePrays();
+  }
+
+  SilentModeDuringPrays loadSingleSilentModeSetting(String key) {
+    final jsonString = _preferences.getString(key);
+    if (jsonString != null) {
+      try {
+        return SilentModeDuringPrays.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>,
+        );
+      } catch (e) {
+        return const SilentModeDuringPrays();
+      }
+    }
+    return const SilentModeDuringPrays();
   }
 }

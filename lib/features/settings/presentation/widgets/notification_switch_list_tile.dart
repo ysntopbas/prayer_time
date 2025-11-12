@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
@@ -66,12 +67,21 @@ class NotificationSwitchListTile extends StatelessWidget {
     ThemeData theme,
   ) {
     final prayers = {
-      'fajr': (l10n.fajr, state.notificationBeforePraysSettings.fajr),
-      'sunrise': (l10n.sunrise, state.notificationBeforePraysSettings.sunrise),
-      'dhuhr': (l10n.dhuhr, state.notificationBeforePraysSettings.dhuhr),
-      'asr': (l10n.asr, state.notificationBeforePraysSettings.asr),
-      'maghrib': (l10n.maghrib, state.notificationBeforePraysSettings.maghrib),
-      'isha': (l10n.isha, state.notificationBeforePraysSettings.isha),
+      PrayerType.fajr: (l10n.fajr, state.notificationBeforePraysSettings.fajr),
+      PrayerType.sunrise: (
+        l10n.sunrise,
+        state.notificationBeforePraysSettings.sunrise,
+      ),
+      PrayerType.dhuhr: (
+        l10n.dhuhr,
+        state.notificationBeforePraysSettings.dhuhr,
+      ),
+      PrayerType.asr: (l10n.asr, state.notificationBeforePraysSettings.asr),
+      PrayerType.maghrib: (
+        l10n.maghrib,
+        state.notificationBeforePraysSettings.maghrib,
+      ),
+      PrayerType.isha: (l10n.isha, state.notificationBeforePraysSettings.isha),
     };
 
     return Container(
@@ -85,49 +95,25 @@ class NotificationSwitchListTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: prayers.entries.map((entry) {
-          final prayerKey = entry.key;
+          final prayerType = entry.key;
           final prayerName = entry.value.$1;
           final prayerSettings = entry.value.$2;
 
-          return ListTile(
-            leading: Icon(
-              Icons.alarm,
-              color: prayerSettings.isEnabled && mainEnabled
-                  ? theme.colorScheme.primary
-                  : Colors.grey,
-            ),
-            title: Text(
-              prayerName,
-              style: TextStyle(color: mainEnabled ? null : Colors.grey),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Dakika Seçici
-                TextButton(
-                  onPressed: mainEnabled
-                      ? () {
-                          _showMinutePicker(
-                            context,
-                            prayerKey,
-                            prayerSettings.minutesBefore,
-                            l10n,
-                          );
-                        }
-                      : null,
-                  child: Text(
-                    '${prayerSettings.minutesBefore} ${l10n.minutes}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: mainEnabled
-                          ? theme.colorScheme.primary
-                          : Colors.grey,
-                    ),
-                  ),
+          return Column(
+            children: [
+              // ✅ Ana ListTile (Namaz adı + Switch)
+              ListTile(
+                leading: Icon(
+                  Icons.alarm,
+                  color: prayerSettings.isEnabled && mainEnabled
+                      ? theme.colorScheme.primary
+                      : Colors.grey,
                 ),
-
-                // Switch (Ana switch kapalıysa devre dışı)
-                Opacity(
+                title: Text(
+                  prayerName,
+                  style: TextStyle(color: mainEnabled ? null : Colors.grey),
+                ),
+                trailing: Opacity(
                   opacity: mainEnabled ? 1.0 : 0.5,
                   child: Switch(
                     value: prayerSettings.isEnabled,
@@ -136,15 +122,79 @@ class NotificationSwitchListTile extends StatelessWidget {
                             context
                                 .read<SettingsCubit>()
                                 .updateNotificationSetting(
-                                  prayerName: prayerKey,
+                                  prayerType: prayerType,
                                   isEnabled: value,
                                 );
                           }
                         : null,
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // ✅ Switch açıksa before kartını ortalanmış göster
+              if (prayerSettings.isEnabled && mainEnabled)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: 12,
+                  ),
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        _showMinutePicker(
+                          context,
+                          prayerType,
+                          prayerSettings.minutesBefore,
+                          l10n,
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.3,
+                            ),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.notifications_active,
+                              color: theme.colorScheme.primary,
+                              size: 28,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.before,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '${prayerSettings.minutesBefore} ${l10n.minutes}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           );
         }).toList(),
       ),
@@ -153,7 +203,7 @@ class NotificationSwitchListTile extends StatelessWidget {
 
   void _showMinutePicker(
     BuildContext context,
-    String prayerKey,
+    PrayerType prayerType,
     int currentMinutes,
     AppLocalizations l10n,
   ) {
@@ -168,7 +218,7 @@ class NotificationSwitchListTile extends StatelessWidget {
             height: 200,
             child: CupertinoPicker(
               scrollController: FixedExtentScrollController(
-                initialItem: (currentMinutes ~/ 5) - 1,
+                initialItem: (currentMinutes ~/ 5).clamp(1, 12) - 1,
               ),
               itemExtent: 50,
               onSelectedItemChanged: (index) {
@@ -193,7 +243,7 @@ class NotificationSwitchListTile extends StatelessWidget {
             TextButton(
               onPressed: () {
                 context.read<SettingsCubit>().updateNotificationSetting(
-                  prayerName: prayerKey,
+                  prayerType: prayerType,
                   minutesBefore: selectedMinutes,
                 );
                 Navigator.pop(context);

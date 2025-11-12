@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get after => 'After';
 
   @override
+  String get afterSilentMode => 'Disable Silent Mode';
+
+  @override
   String get afternoonPrayer => 'Afternoon Prayer';
 
   @override
@@ -25,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get before => 'Before';
+
+  @override
+  String get beforeSilentMode => 'Silent Mode Active';
 
   @override
   String get cancel => 'Cancel';
