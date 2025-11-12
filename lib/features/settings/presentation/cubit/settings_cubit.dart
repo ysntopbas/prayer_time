@@ -11,9 +11,13 @@ part 'settings_state.dart';
 class SettingsCubit extends Cubit<SettingsState> {
   final StorageServices storageServices;
   final LocationService locationService;
+  final BatteryOptimizationService batteryOptimizationService;
 
-  SettingsCubit(this.storageServices, this.locationService)
-    : super(const SettingsState()) {
+  SettingsCubit(
+    this.storageServices,
+    this.locationService,
+    this.batteryOptimizationService,
+  ) : super(const SettingsState()) {
     _loadInitialSettings();
   }
 
@@ -81,9 +85,34 @@ class SettingsCubit extends Cubit<SettingsState> {
     storageServices.saveString('languageCode', languageCode);
   }
 
-  void mainToggleNotifications() {
+  /// Bildirim açılırken pil optimizasyonu kontrolü
+  Future<bool> shouldShowBatteryDialog() async {
+    return !batteryOptimizationService.hasShownBatteryDialog();
+  }
+
+  Future<void> markBatteryDialogShown() async {
+    await batteryOptimizationService.markBatteryDialogAsShown();
+  }
+
+  Future<void> requestBatteryPermission() async {
+    await batteryOptimizationService.requestBatteryOptimizationPermission();
+  }
+
+  void mainToggleNotifications() async {
     final newValue = !state.mainNotificationsEnabled;
-    emit(state.copyWith(mainNotificationsEnabled: newValue));
+
+    // Eğer açılıyorsa ve daha önce dialog gösterilmediyse
+    if (newValue && await shouldShowBatteryDialog()) {
+      emit(
+        state.copyWith(
+          mainNotificationsEnabled: newValue,
+          shouldShowBatteryDialog: true,
+        ),
+      );
+    } else {
+      emit(state.copyWith(mainNotificationsEnabled: newValue));
+    }
+
     storageServices.saveBool('mainNotificationsEnabled', newValue);
 
     if (!newValue) {
@@ -97,9 +126,21 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void mainToggleSilentMode() {
+  void mainToggleSilentMode() async {
     final newValue = !state.mainSilentModeEnabled;
-    emit(state.copyWith(mainSilentModeEnabled: newValue));
+
+    // Eğer açılıyorsa ve daha önce dialog gösterilmediyse
+    if (newValue && await shouldShowBatteryDialog()) {
+      emit(
+        state.copyWith(
+          mainSilentModeEnabled: newValue,
+          shouldShowBatteryDialog: true,
+        ),
+      );
+    } else {
+      emit(state.copyWith(mainSilentModeEnabled: newValue));
+    }
+
     storageServices.saveBool('mainSilentModeEnabled', newValue);
 
     if (!newValue) {
@@ -216,5 +257,9 @@ class SettingsCubit extends Cubit<SettingsState> {
       return {'city': cityName, 'country': countryName};
     }
     return null;
+  }
+
+  void clearBatteryDialogFlag() {
+    emit(state.copyWith(shouldShowBatteryDialog: false));
   }
 }

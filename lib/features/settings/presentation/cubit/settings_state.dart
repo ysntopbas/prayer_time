@@ -165,6 +165,7 @@ class SettingsState extends Equatable {
   final bool isLocationLoading;
   final bool mainNotificationsEnabled;
   final bool mainSilentModeEnabled;
+  final bool shouldShowBatteryDialog;
   final NotificationBeforePraysSettings notificationBeforePraysSettings;
   final SilentModeDuringPraysSettings silentModeDuringPraysSettings;
 
@@ -176,6 +177,7 @@ class SettingsState extends Equatable {
     this.isLocationLoading = false,
     this.mainNotificationsEnabled = false,
     this.mainSilentModeEnabled = false,
+    this.shouldShowBatteryDialog = false,
     this.notificationBeforePraysSettings =
         const NotificationBeforePraysSettings(),
     this.silentModeDuringPraysSettings = const SilentModeDuringPraysSettings(),
@@ -190,6 +192,7 @@ class SettingsState extends Equatable {
     isLocationLoading,
     mainNotificationsEnabled,
     mainSilentModeEnabled,
+    shouldShowBatteryDialog,
     notificationBeforePraysSettings,
     silentModeDuringPraysSettings,
   ];
@@ -202,6 +205,7 @@ class SettingsState extends Equatable {
     bool? isLocationLoading,
     bool? mainNotificationsEnabled,
     bool? mainSilentModeEnabled,
+    bool? shouldShowBatteryDialog,
     NotificationBeforePraysSettings? notificationBeforePraysSettings,
     SilentModeDuringPraysSettings? silentModeDuringPraysSettings,
   }) {
@@ -215,6 +219,8 @@ class SettingsState extends Equatable {
           mainNotificationsEnabled ?? this.mainNotificationsEnabled,
       mainSilentModeEnabled:
           mainSilentModeEnabled ?? this.mainSilentModeEnabled,
+      shouldShowBatteryDialog:
+          shouldShowBatteryDialog ?? this.shouldShowBatteryDialog,
       notificationBeforePraysSettings:
           notificationBeforePraysSettings ??
           this.notificationBeforePraysSettings,

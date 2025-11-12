@@ -29,11 +29,18 @@ class MyApp extends StatelessWidget {
     final l10nL = AppLocalizations.of(context);
     final storageServices = StorageServices(sharedPreferences);
     final cacheService = CacheService(storageServices);
+    final batteryOptimizationService = BatteryOptimizationService(
+      sharedPreferences,
+    );
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => SettingsCubit(storageServices, LocationService()),
+          create: (_) => SettingsCubit(
+            storageServices,
+            LocationService(),
+            batteryOptimizationService,
+          ),
         ),
         BlocProvider(create: (_) => HomeCubit(cacheService)),
         BlocProvider(create: (_) => MonthlyCubit(cacheService)),

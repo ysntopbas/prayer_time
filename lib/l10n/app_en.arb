@@ -104,5 +104,11 @@
   "version": "Version",
   "wednesday": "Wednesday",
   "weeklyPrayCalendar": "Weekly Prayers Calendar",
-  "weeklyPrayerTimePageTitle": "Weekly Prayer Times"
+  "weeklyPrayerTimePageTitle": "Weekly Prayer Times",
+  "batteryOptimizationTitle": "Battery Optimization Required",
+  "batteryOptimizationMessage": "To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.",
+  "batteryOptimizationWhy": "Why is this necessary?",
+  "batteryOptimizationReason": "Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.",
+  "batteryOptimizationSteps": "Tap 'Go to Settings', find 'Prayer Times' app, and select 'Don't optimize'",
+  "batteryOptimizationGoToSettings": "Go to Settings"
 }

@@ -278,4 +278,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Haftalık Namaz Vakitleri';
+
+  @override
+  String get batteryOptimizationTitle => 'Pil Optimizasyonu Gerekli';
+
+  @override
+  String get batteryOptimizationMessage =>
+      'Namaz vakti bildirimlerinin ve sessiz modun zamanında çalışabilmesi için uygulamanın pil optimizasyonundan muaf tutulması gerekiyor.';
+
+  @override
+  String get batteryOptimizationWhy => 'Neden gerekli?';
+
+  @override
+  String get batteryOptimizationReason =>
+      'Android, pil tasarrufu için arka plandaki uygulamaları kapatabilir. Bu durum namaz vakti bildirimlerinin ve otomatik sessiz modun düzgün çalışmasını engelleyebilir.';
+
+  @override
+  String get batteryOptimizationSteps =>
+      '\'Ayarlara Git\' butonuna dokunun, \'Prayer Times\' uygulamasını bulun ve \'Optimize etme\' seçeneğini seçin';
+
+  @override
+  String get batteryOptimizationGoToSettings => 'Ayarlara Git';
 }

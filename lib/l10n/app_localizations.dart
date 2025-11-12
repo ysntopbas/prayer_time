@@ -637,6 +637,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly Prayer Times'**
   String get weeklyPrayerTimePageTitle;
+
+  /// No description provided for @batteryOptimizationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery Optimization Required'**
+  String get batteryOptimizationTitle;
+
+  /// No description provided for @batteryOptimizationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.'**
+  String get batteryOptimizationMessage;
+
+  /// No description provided for @batteryOptimizationWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Why is this necessary?'**
+  String get batteryOptimizationWhy;
+
+  /// No description provided for @batteryOptimizationReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.'**
+  String get batteryOptimizationReason;
+
+  /// No description provided for @batteryOptimizationSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \'Go to Settings\', find \'Prayer Times\' app, and select \'Don\'t optimize\''**
+  String get batteryOptimizationSteps;
+
+  /// No description provided for @batteryOptimizationGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get batteryOptimizationGoToSettings;
 }
 
 class _AppLocalizationsDelegate

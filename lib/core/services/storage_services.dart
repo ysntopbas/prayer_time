@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,5 +74,39 @@ class StorageServices {
       }
     }
     return const SilentModeDuringPrays();
+  }
+}
+
+class BatteryOptimizationService {
+  static const String _hasShownBatteryDialogKey = 'has_shown_battery_dialog';
+
+  final SharedPreferences _prefs;
+
+  BatteryOptimizationService(this._prefs);
+
+  /// Daha önce pil optimizasyonu diyalogu gösterildi mi?
+  bool hasShownBatteryDialog() {
+    return _prefs.getBool(_hasShownBatteryDialogKey) ?? false;
+  }
+
+  /// Pil optimizasyonu diyalogu gösterildi olarak işaretle
+  Future<void> markBatteryDialogAsShown() async {
+    await _prefs.setBool(_hasShownBatteryDialogKey, true);
+  }
+
+  /// Pil optimizasyonu iznini kontrol et
+  Future<bool> isBatteryOptimizationDisabled() async {
+    final status = await Permission.ignoreBatteryOptimizations.status;
+    return status.isGranted;
+  }
+
+  /// Pil optimizasyonu ayarlarını aç
+  Future<void> requestBatteryOptimizationPermission() async {
+    await Permission.ignoreBatteryOptimizations.request();
+  }
+
+  /// Cache'i temizle (test için)
+  Future<void> resetBatteryDialogFlag() async {
+    await _prefs.remove(_hasShownBatteryDialogKey);
   }
 }
