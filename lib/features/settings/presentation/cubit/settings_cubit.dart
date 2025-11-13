@@ -26,6 +26,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     final languageCode = storageServices.getString('languageCode') ?? 'en';
     final cityName = storageServices.getString('cityName');
     final countryName = storageServices.getString('countryName');
+    final subAdministrativeArea = storageServices.getString(
+      'subAdministrativeArea',
+    );
     final mainNotificationsEnabled =
         storageServices.getBool('mainNotificationsEnabled') ?? false;
     final mainSilentModeEnabled =
@@ -39,6 +42,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         languageCode: languageCode,
         cityName: cityName,
         countryName: countryName,
+        subAdministrativeArea: subAdministrativeArea,
         mainNotificationsEnabled: mainNotificationsEnabled,
         mainSilentModeEnabled: mainSilentModeEnabled,
         notificationBeforePraysSettings: notificationSettings,
@@ -230,14 +234,20 @@ class SettingsCubit extends Cubit<SettingsState> {
       if (locationData != null) {
         final cityName = locationData['city'];
         final countryName = locationData['country'];
+        final subAdministrativeArea = locationData['subAdministrativeArea'];
 
         await storageServices.saveString('cityName', cityName ?? '');
         await storageServices.saveString('countryName', countryName ?? '');
+        await storageServices.saveString(
+          'subAdministrativeArea',
+          subAdministrativeArea ?? '',
+        );
 
         emit(
           state.copyWith(
             cityName: cityName,
             countryName: countryName,
+            subAdministrativeArea: subAdministrativeArea,
             isLocationLoading: false,
           ),
         );
@@ -252,9 +262,14 @@ class SettingsCubit extends Cubit<SettingsState> {
   Map<String, String>? getSavedLocation() {
     final cityName = state.cityName;
     final countryName = state.countryName;
+    final subAdministrativeArea = state.subAdministrativeArea;
 
     if (cityName != null && countryName != null) {
-      return {'city': cityName, 'country': countryName};
+      return {
+        'city': cityName,
+        'country': countryName,
+        'subAdministrativeArea': subAdministrativeArea ?? '',
+      };
     }
     return null;
   }

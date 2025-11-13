@@ -162,6 +162,7 @@ class SettingsState extends Equatable {
   final String languageCode;
   final String? cityName;
   final String? countryName;
+  final String? subAdministrativeArea;
   final bool isLocationLoading;
   final bool mainNotificationsEnabled;
   final bool mainSilentModeEnabled;
@@ -174,6 +175,7 @@ class SettingsState extends Equatable {
     this.languageCode = 'en',
     this.cityName,
     this.countryName,
+    this.subAdministrativeArea,
     this.isLocationLoading = false,
     this.mainNotificationsEnabled = false,
     this.mainSilentModeEnabled = false,
@@ -189,6 +191,7 @@ class SettingsState extends Equatable {
     languageCode,
     cityName,
     countryName,
+    subAdministrativeArea,
     isLocationLoading,
     mainNotificationsEnabled,
     mainSilentModeEnabled,
@@ -202,6 +205,7 @@ class SettingsState extends Equatable {
     String? languageCode,
     String? cityName,
     String? countryName,
+    String? subAdministrativeArea,
     bool? isLocationLoading,
     bool? mainNotificationsEnabled,
     bool? mainSilentModeEnabled,
@@ -214,6 +218,8 @@ class SettingsState extends Equatable {
       languageCode: languageCode ?? this.languageCode,
       cityName: cityName ?? this.cityName,
       countryName: countryName ?? this.countryName,
+      subAdministrativeArea:
+          subAdministrativeArea ?? this.subAdministrativeArea,
       isLocationLoading: isLocationLoading ?? this.isLocationLoading,
       mainNotificationsEnabled:
           mainNotificationsEnabled ?? this.mainNotificationsEnabled,
