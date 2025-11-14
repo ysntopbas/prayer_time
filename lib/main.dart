@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/location_service.dart';
+import 'package:prayer_time/core/services/notification_services/notification_initialization_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
@@ -16,6 +17,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
+  final NotificationInitializationService notificationService =
+      NotificationInitializationService();
+  await notificationService.init(
+    timeZone: 'Europe/Istanbul',
+    androidIcon: '@mipmap/ic_launcher',
+  );
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 
