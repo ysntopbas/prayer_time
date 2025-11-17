@@ -32,7 +32,7 @@ class ScheduledNotificationService {
     return NotificationDetails(android: androidDetails, iOS: iosDetails);
   }
 
-  Future<void> scheduleNotification({
+  Future<void> showScheduleNotification({
     required int id,
     required String title,
     required String body,

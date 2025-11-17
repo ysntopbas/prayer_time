@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
+import 'package:prayer_time/core/services/background_service/background_service_initialization.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/location_service.dart';
 import 'package:prayer_time/core/services/notification_services/notification_initialization_service.dart';
@@ -15,14 +16,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
+
   final NotificationInitializationService notificationService =
       NotificationInitializationService();
   await notificationService.init(
     timeZone: 'Europe/Istanbul',
     androidIcon: '@mipmap/ic_launcher',
   );
+  final BackgroundServiceInitialization backgroundService =
+      BackgroundServiceInitialization();
+  await backgroundService.initializeBackgroundService();
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 

@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/services/notification_services/instant_notification_service.dart';
+import 'package:prayer_time/core/services/notification_services/scheduled_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/battery_optimization_dialog.dart';
@@ -135,6 +140,57 @@ class SettingsScreen extends StatelessWidget {
             Divider(color: appTheme.colorScheme.primary),
             SilentModeListTile(),
             Divider(color: appTheme.colorScheme.primary),
+            ElevatedButton(
+              onPressed: () {
+                InstantNotificationService().showNotification(
+                  id: 1,
+                  title: "TEST",
+                  body: "BU BİR TEST BİLDİRİM",
+                  channelId: "1",
+                  channelName: "Instant",
+                );
+              },
+              child: Text("İnstant Notification Test"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ScheduledNotificationService().showScheduleNotification(
+                  id: 2,
+                  title: "SCHEDULED TEST",
+                  body: "BU BİR SCHEDULED TEST NOTİFİCATİON",
+                  scheduledTime: DateTime.now().add(Duration(seconds: 5)),
+                  channelId: "2",
+                  channelName: "SCHEDULED",
+                );
+              },
+              child: Text("Scheduled Notification Test"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                FlutterBackgroundService().invoke('setAsForeground');
+              },
+              child: Text("Foreground Service Test"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                FlutterBackgroundService().invoke('setAsBackground');
+              },
+              child: Text("Background Service Test"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final service = FlutterBackgroundService();
+                final isRunning = await service.isRunning();
+                if (isRunning) {
+                  service.invoke('stopService');
+                  log('Service Stopped');
+                } else {
+                  service.startService();
+                  log('Service Started');
+                }
+              },
+              child: Text("Start/Stop Service Test"),
+            ),
           ],
         ),
       ),
