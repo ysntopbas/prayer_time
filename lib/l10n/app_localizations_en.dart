@@ -27,6 +27,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get august => 'August';
 
   @override
+  String get batteryOptimizationGoToSettings => 'Go to Settings';
+
+  @override
+  String get batteryOptimizationMessage =>
+      'To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.';
+
+  @override
+  String get batteryOptimizationReason =>
+      'Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.';
+
+  @override
+  String get batteryOptimizationSteps =>
+      'Tap \'Go to Settings\', find \'Prayer Times\' app, and select \'Don\'t optimize\'';
+
+  @override
+  String get batteryOptimizationTitle => 'Battery Optimization Required';
+
+  @override
+  String get batteryOptimizationWhy => 'Why is this necessary?';
+
+  @override
   String get before => 'Before';
 
   @override
@@ -165,6 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationBeforePrayTime => 'Before Prayer Time Notifications';
 
   @override
+  String get notificationDuringAdhan => 'During Adhan Notifications';
+
+  @override
   String get notificationMinutes => 'Minutes';
 
   @override
@@ -278,25 +302,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Weekly Prayer Times';
-
-  @override
-  String get batteryOptimizationTitle => 'Battery Optimization Required';
-
-  @override
-  String get batteryOptimizationMessage =>
-      'To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.';
-
-  @override
-  String get batteryOptimizationWhy => 'Why is this necessary?';
-
-  @override
-  String get batteryOptimizationReason =>
-      'Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.';
-
-  @override
-  String get batteryOptimizationSteps =>
-      'Tap \'Go to Settings\', find \'Prayer Times\' app, and select \'Don\'t optimize\'';
-
-  @override
-  String get batteryOptimizationGoToSettings => 'Go to Settings';
 }

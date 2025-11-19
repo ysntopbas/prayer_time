@@ -218,14 +218,14 @@ class NotificationSwitchListTile extends StatelessWidget {
             height: 200,
             child: CupertinoPicker(
               scrollController: FixedExtentScrollController(
-                initialItem: (currentMinutes ~/ 5).clamp(1, 12) - 1,
+                initialItem: (currentMinutes ~/ 5).clamp(0, 12),
               ),
               itemExtent: 50,
               onSelectedItemChanged: (index) {
-                selectedMinutes = (index + 1) * 5;
+                selectedMinutes = (index) * 5;
               },
-              children: List<Widget>.generate(12, (index) {
-                final minutes = (index + 1) * 5;
+              children: List<Widget>.generate(13, (index) {
+                final minutes = (index) * 5;
                 return Center(
                   child: Text(
                     '$minutes ${l10n.minutes}',

@@ -21,6 +21,12 @@
   "april": "April",
   "asr": "Asr",
   "august": "August",
+  "batteryOptimizationGoToSettings": "Go to Settings",
+  "batteryOptimizationMessage": "To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.",
+  "batteryOptimizationReason": "Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.",
+  "batteryOptimizationSteps": "Tap 'Go to Settings', find 'Prayer Times' app, and select 'Don't optimize'",
+  "batteryOptimizationTitle": "Battery Optimization Required",
+  "batteryOptimizationWhy": "Why is this necessary?",
   "before": "Before",
   "beforeSilentMode": "Silent Mode Active",
   "cancel": "Cancel",
@@ -67,6 +73,7 @@
   "nightPrayer": "Night Prayer",
   "noonMiddayPrayer": "Noon/Midday Prayer",
   "notificationBeforePrayTime": "Before Prayer Time Notifications",
+  "notificationDuringAdhan": "During Adhan Notifications",
   "notificationMinutes": "Minutes",
   "notificationOff": "Off",
   "notificationOn": "On",
@@ -104,11 +111,5 @@
   "version": "Version",
   "wednesday": "Wednesday",
   "weeklyPrayCalendar": "Weekly Prayers Calendar",
-  "weeklyPrayerTimePageTitle": "Weekly Prayer Times",
-  "batteryOptimizationTitle": "Battery Optimization Required",
-  "batteryOptimizationMessage": "To ensure timely prayer notifications and silent mode activation, we need to disable battery optimization for this app.",
-  "batteryOptimizationWhy": "Why is this necessary?",
-  "batteryOptimizationReason": "Android may close background apps to save battery. This can prevent prayer time notifications and automatic silent mode from working properly.",
-  "batteryOptimizationSteps": "Tap 'Go to Settings', find 'Prayer Times' app, and select 'Don't optimize'",
-  "batteryOptimizationGoToSettings": "Go to Settings"
+  "weeklyPrayerTimePageTitle": "Weekly Prayer Times"
 }

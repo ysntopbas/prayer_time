@@ -14,6 +14,7 @@ class AppTheme {
   static const Color _lightTextColor = Colors.black;
 
   static const Color _darkPrimaryColor = Color(0xFF0E978B);
+  static const Color _darkSecondaryColor = Color.fromARGB(255, 8, 91, 84);
   static const Color _darkOnPrimaryColor = Colors.white;
   static const Color _darkBackgroundColor = Color(0xFF1A1A1A);
   static const Color _darkTextColor = Colors.white70;
@@ -81,6 +82,7 @@ class AppTheme {
 
     colorScheme: const ColorScheme.dark(
       primary: _darkPrimaryColor,
+      secondary: _darkSecondaryColor,
       onPrimary: _darkOnPrimaryColor,
       surface: _darkBackgroundColor,
     ),

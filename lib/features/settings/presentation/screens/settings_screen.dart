@@ -144,8 +144,8 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 InstantNotificationService().showNotification(
                   id: 1,
-                  title: "TEST",
-                  body: "BU BİR TEST BİLDİRİM",
+                  title: "Namaz Vakti",
+                  body: "Öğrle Namazı Vakti Geldi",
                   channelId: "1",
                   channelName: "Instant",
                 );
@@ -156,8 +156,8 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 ScheduledNotificationService().showScheduleNotification(
                   id: 2,
-                  title: "SCHEDULED TEST",
-                  body: "BU BİR SCHEDULED TEST NOTİFİCATİON",
+                  title: "İkindi Namaz Vakti",
+                  body: "İkindi Namazı Vaktine 30 dakika kaldı.",
                   scheduledTime: DateTime.now().add(Duration(seconds: 5)),
                   channelId: "2",
                   channelName: "SCHEDULED",

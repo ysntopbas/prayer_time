@@ -136,7 +136,9 @@ class HomeRepository {
       }
     }
 
-    final String tomorrowDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    final String tomorrowDate = DateFormat(
+      'dd-MM-yyyy',
+    ).format(DateTime.now().add(const Duration(days: 1)));
     final String city = locationData?['city'] ?? 'Kayseri';
     final String subAdministrativeArea2 =
         locationData?['subAdministrativeArea'] ?? 'Melikgazi';

@@ -6,6 +6,12 @@
   "april": "Nisan",
   "asr": "İkindi",
   "august": "Ağustos",
+  "batteryOptimizationGoToSettings": "Ayarlara Git",
+  "batteryOptimizationMessage": "Namaz vakti bildirimlerinin ve sessiz modun zamanında çalışabilmesi için uygulamanın pil optimizasyonundan muaf tutulması gerekiyor.",
+  "batteryOptimizationReason": "Android, pil tasarrufu için arka plandaki uygulamaları kapatabilir. Bu durum namaz vakti bildirimlerinin ve otomatik sessiz modun düzgün çalışmasını engelleyebilir.",
+  "batteryOptimizationSteps": "'Ayarlara Git' butonuna dokunun, 'Prayer Times' uygulamasını bulun ve 'Optimize etme' seçeneğini seçin",
+  "batteryOptimizationTitle": "Pil Optimizasyonu Gerekli",
+  "batteryOptimizationWhy": "Neden gerekli?",
   "before": "Önce",
   "beforeSilentMode": "Sessize Al",
   "cancel": "İptal",
@@ -52,6 +58,7 @@
   "nightPrayer": " ",
   "noonMiddayPrayer": " ",
   "notificationBeforePrayTime": "Vakit Öncesi Bİldirimleri",
+  "notificationDuringAdhan": "Ezan Vaktinde Bildirimler",
   "notificationMinutes": "Dakika",
   "notificationOff": "Kapalı",
   "notificationOn": "Açık",
@@ -89,11 +96,5 @@
   "version": "Versiyon",
   "wednesday": "Çarşamba",
   "weeklyPrayCalendar": "Haftalık Namaz Vakitleri",
-  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri",
-  "batteryOptimizationTitle": "Pil Optimizasyonu Gerekli",
-  "batteryOptimizationMessage": "Namaz vakti bildirimlerinin ve sessiz modun zamanında çalışabilmesi için uygulamanın pil optimizasyonundan muaf tutulması gerekiyor.",
-  "batteryOptimizationWhy": "Neden gerekli?",
-  "batteryOptimizationReason": "Android, pil tasarrufu için arka plandaki uygulamaları kapatabilir. Bu durum namaz vakti bildirimlerinin ve otomatik sessiz modun düzgün çalışmasını engelleyebilir.",
-  "batteryOptimizationSteps": "'Ayarlara Git' butonuna dokunun, 'Prayer Times' uygulamasını bulun ve 'Optimize etme' seçeneğini seçin",
-  "batteryOptimizationGoToSettings": "Ayarlara Git"
+  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri"
 }
