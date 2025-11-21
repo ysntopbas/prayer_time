@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/dio_client.dart';
-import 'package:prayer_time/core/services/location_service.dart';
+import 'package:prayer_time/core/services/locationServices/location_service.dart';
 
 class HomeRepository {
   final Dio _dio = DioClient.dio;
@@ -32,7 +32,7 @@ class HomeRepository {
       } catch (e) {
         log('Konum alınamadı, varsayılan konum kullanılacak: $e');
       }
-      log("$locationData");
+      log("atQS2 $locationData");
     }
 
     // Konum değişikliğini kontrol et

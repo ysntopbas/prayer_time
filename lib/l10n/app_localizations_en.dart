@@ -141,6 +141,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageSelect => 'Select Language';
 
   @override
+  String get leftMinutes => 'Left Minutes';
+
+  @override
   String get lightMode => 'Light Theme';
 
   @override
@@ -205,6 +208,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ownerName => 'Created by atQs';
+
+  @override
+  String get prayTime => 'Pray Time';
 
   @override
   String get prayTimeNotAvailable => 'No prayer times available';

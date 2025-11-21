@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
-import 'package:prayer_time/core/services/background_service/background_service_initialization.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
-import 'package:prayer_time/core/services/location_service.dart';
-import 'package:prayer_time/core/services/notification_services/notification_initialization_service.dart';
+import 'package:prayer_time/core/services/locationServices/location_service.dart';
+import 'package:prayer_time/core/services/notificationServices/notification_initialization_service.dart';
+import 'package:prayer_time/core/services/notificationServices/notification_manager_service.dart';
+import 'package:prayer_time/core/services/notificationServices/scheduled_notification_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
@@ -26,9 +27,10 @@ void main() async {
     timeZone: 'Europe/Istanbul',
     androidIcon: '@mipmap/ic_launcher',
   );
-  final BackgroundServiceInitialization backgroundService =
-      BackgroundServiceInitialization();
-  await backgroundService.initializeBackgroundService();
+
+  // final BackgroundServiceInitialization backgroundService =
+  //     BackgroundServiceInitialization();
+  // await backgroundService.initializeBackgroundService();
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 
@@ -46,6 +48,12 @@ class MyApp extends StatelessWidget {
       sharedPreferences,
     );
 
+    final scheduledNotificationService = ScheduledNotificationService();
+    final notificationManagerService = NotificationManagerService(
+      storageServices,
+      scheduledNotificationService,
+      cacheService,
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -53,6 +61,7 @@ class MyApp extends StatelessWidget {
             storageServices,
             LocationService(),
             batteryOptimizationService,
+            notificationManagerService,
           ),
         ),
         BlocProvider(create: (_) => HomeCubit(cacheService)),

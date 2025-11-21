@@ -1,6 +1,6 @@
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:prayer_time/core/services/background_service/background_service_handler.dart';
+import 'package:prayer_time/core/services/backgroundServices/background_service_handler.dart';
 
 class BackgroundServiceInitialization {
   static const String _notificationChannelId = 'namaz_vakti_servisi';

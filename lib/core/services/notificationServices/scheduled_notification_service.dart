@@ -44,12 +44,19 @@ class ScheduledNotificationService {
     Importance importance = Importance.high,
     Priority priority = Priority.high,
     DateTimeComponents? matchDateTimeComponents,
+    int minutesBefore = 0,
   }) async {
+    final Duration notificationDelay = minutesBefore == 0
+        ? const Duration(seconds: 5)
+        : Duration(minutes: minutesBefore);
+
+    final notificationTime = scheduledTime.subtract(notificationDelay);
+
     await _plugin.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.from(scheduledTime, tz.local),
+      tz.TZDateTime.from(notificationTime, tz.local),
       _notificationDetails(
         channelId: channelId,
         channelName: channelName,

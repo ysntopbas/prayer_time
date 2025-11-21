@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
-import 'package:prayer_time/core/services/location_service.dart';
+import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
+import 'package:prayer_time/core/services/notificationServices/notification_manager_service.dart';
 
 part 'settings_state.dart';
 
@@ -12,11 +13,13 @@ class SettingsCubit extends Cubit<SettingsState> {
   final StorageServices storageServices;
   final LocationService locationService;
   final BatteryOptimizationService batteryOptimizationService;
+  final NotificationManagerService notificationManagerService;
 
   SettingsCubit(
     this.storageServices,
     this.locationService,
     this.batteryOptimizationService,
+    this.notificationManagerService,
   ) : super(const SettingsState()) {
     _loadInitialSettings();
   }
@@ -87,6 +90,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeLanguage(String languageCode) {
     emit(state.copyWith(languageCode: languageCode));
     storageServices.saveString('languageCode', languageCode);
+
+    // ✅ Dil değişince bildirimleri yeni dilde yeniden planla
+    notificationManagerService.scheduleAllNotifications();
   }
 
   /// Bildirim açılırken pil optimizasyonu kontrolü
@@ -122,6 +128,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (!newValue) {
       _disableAllNotifications();
     }
+
+    // Bildirimleri yeniden planla
+    await notificationManagerService.scheduleAllNotifications();
   }
 
   void _disableAllNotifications() {
@@ -159,7 +168,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> updateNotificationSetting({
-    required PrayerType prayerType, // String yerine enum
+    required PrayerType prayerType,
     bool? isEnabled,
     int? minutesBefore,
   }) async {
@@ -167,27 +176,25 @@ class SettingsCubit extends Cubit<SettingsState> {
       final currentSettings = state.notificationBeforePraysSettings;
       final prayerKey = prayerType.key;
 
-      // Extension ile mevcut ayarı al
       final currentPrayerSetting = currentSettings.getByKey(prayerKey);
       if (currentPrayerSetting == null) return;
 
-      // Yeni ayarı oluştur
       final updated = currentPrayerSetting.copyWith(
         isEnabled: isEnabled,
         minutesBefore: minutesBefore,
       );
 
-      // Extension ile state'i güncelle
       final newSettings = currentSettings.updateByKey(prayerKey, updated);
 
-      // Storage'a kaydet
       await storageServices.saveString(
         '${prayerKey}_notification',
         jsonEncode(updated.toJson()),
       );
 
-      // Emit yap
       emit(state.copyWith(notificationBeforePraysSettings: newSettings));
+
+      // ✅ Bildirimleri yeniden planla
+      await notificationManagerService.scheduleAllNotifications();
     } catch (e) {
       log('Bildirim ayarı güncellenirken hata: $e');
     }

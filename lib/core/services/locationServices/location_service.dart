@@ -10,7 +10,9 @@ class LocationService {
     // Konum servisi etkin mi kontrol et
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return false;
+      // BURAYI DEĞİŞTİRDİK: false dönmek yerine özel bir hata fırlatıyoruz.
+      // Böylece UI tarafı GPS'in kapalı olduğunu anlayıp ona göre dialog çıkaracak.
+      throw Exception('SERVICE_DISABLED');
     }
 
     permission = await Geolocator.checkPermission();
@@ -30,6 +32,7 @@ class LocationService {
 
   /// Kullanıcının mevcut konumunu alır
   Future<Position?> getCurrentPosition() async {
+    // handleLocationPermission hata fırlatırsa burası da durur ve UI'ya o hatayı iletir.
     final hasPermission = await handleLocationPermission();
     if (!hasPermission) return null;
 
@@ -45,7 +48,7 @@ class LocationService {
     }
   }
 
-  /// Koordinatlardan şehir ve ülke bilgisi alır
+  /// Koordinatlardan şehir ve ülke bilgisi alır (DOKUNMADIM)
   Future<Map<String, String>?> getCityFromCoordinates(
     double latitude,
     double longitude,
@@ -71,7 +74,7 @@ class LocationService {
     }
   }
 
-  /// Kullanıcının konumuna göre şehir bilgisini alır
+  /// Kullanıcının konumuna göre şehir bilgisini alır (DOKUNMADIM)
   Future<Map<String, String>?> getCurrentCity() async {
     final position = await getCurrentPosition();
     if (position == null) return null;

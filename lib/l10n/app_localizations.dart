@@ -356,6 +356,12 @@ abstract class AppLocalizations {
   /// **'Select Language'**
   String get languageSelect;
 
+  /// No description provided for @leftMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Minutes'**
+  String get leftMinutes;
+
   /// No description provided for @lightMode.
   ///
   /// In en, this message translates to:
@@ -487,6 +493,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Created by atQs'**
   String get ownerName;
+
+  /// No description provided for @prayTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pray Time'**
+  String get prayTime;
 
   /// No description provided for @prayTimeNotAvailable.
   ///

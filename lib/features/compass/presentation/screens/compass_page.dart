@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass_v2/flutter_compass_v2.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:prayer_time/core/services/location_service.dart';
+import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/compass/presentation/widgets/compass_widget.dart';
 import 'package:prayer_time/features/compass/presentation/widgets/direction_indicator.dart';

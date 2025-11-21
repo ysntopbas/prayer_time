@@ -141,6 +141,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get languageSelect => 'Dil Seçiniz';
 
   @override
+  String get leftMinutes => 'Dakika Kaldı';
+
+  @override
   String get lightMode => 'Aydınlık Tema';
 
   @override
@@ -205,6 +208,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ownerName => 'Hazırlayan atQs';
+
+  @override
+  String get prayTime => 'Namaz Vakti';
 
   @override
   String get prayTimeNotAvailable => 'Namaz vakitlerine erişilemedi';

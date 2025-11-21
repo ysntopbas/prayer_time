@@ -242,9 +242,13 @@ class NotificationSwitchListTile extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                final minutesToSave = selectedMinutes == 0
+                    ? 0
+                    : selectedMinutes;
+
                 context.read<SettingsCubit>().updateNotificationSetting(
                   prayerType: prayerType,
-                  minutesBefore: selectedMinutes,
+                  minutesBefore: minutesToSave,
                 );
                 Navigator.pop(context);
               },

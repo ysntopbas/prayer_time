@@ -15,7 +15,10 @@ class HomeScreen extends StatelessWidget {
   void _loadPrayerTimes(BuildContext context) {
     final settingsCubit = context.read<SettingsCubit>();
     final savedLocation = settingsCubit.getSavedLocation();
-    context.read<HomeCubit>().fetchPrayerTimes(savedLocation: savedLocation);
+    context.read<HomeCubit>().fetchPrayerTimes(
+      savedLocation: savedLocation,
+      context: context,
+    );
   }
 
   @override
@@ -81,7 +84,8 @@ class HomeScreen extends StatelessWidget {
                 final prayerTimings = state.prayerTimings;
                 final cityName = state.cityName ?? 'Kayseri';
                 final nextTimings = state.nextTimings;
-                final subAdministrativeArea = state.subAdministrativeArea ?? '';
+                final subAdministrativeArea =
+                    state.subAdministrativeArea ?? 'Melikgazi';
 
                 final now = DateTime.now();
                 String nextPrayerName = _getNextPrayerName(
