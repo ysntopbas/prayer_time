@@ -2,16 +2,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class LocationService {
-  /// Konum izinlerini kontrol eder ve gerekirse kullanıcıdan ister
   Future<bool> handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Konum servisi etkin mi kontrol et
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // BURAYI DEĞİŞTİRDİK: false dönmek yerine özel bir hata fırlatıyoruz.
-      // Böylece UI tarafı GPS'in kapalı olduğunu anlayıp ona göre dialog çıkaracak.
       throw Exception('SERVICE_DISABLED');
     }
 
@@ -30,25 +26,26 @@ class LocationService {
     return true;
   }
 
-  /// Kullanıcının mevcut konumunu alır
+  Future<bool> isLocationServiceEnabled() async {
+    return await Geolocator.isLocationServiceEnabled();
+  }
+
   Future<Position?> getCurrentPosition() async {
-    // handleLocationPermission hata fırlatırsa burası da durur ve UI'ya o hatayı iletir.
     final hasPermission = await handleLocationPermission();
     if (!hasPermission) return null;
 
     try {
-      final bedii = await Geolocator.getCurrentPosition(
+      final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
         ),
       );
-      return bedii;
+      return position;
     } catch (e) {
       throw Exception('Konum alınamadı: $e');
     }
   }
 
-  /// Koordinatlardan şehir ve ülke bilgisi alır (DOKUNMADIM)
   Future<Map<String, String>?> getCityFromCoordinates(
     double latitude,
     double longitude,
@@ -74,7 +71,6 @@ class LocationService {
     }
   }
 
-  /// Kullanıcının konumuna göre şehir bilgisini alır (DOKUNMADIM)
   Future<Map<String, String>?> getCurrentCity() async {
     final position = await getCurrentPosition();
     if (position == null) return null;

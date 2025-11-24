@@ -8,11 +8,10 @@ enum PrayerType {
   maghrib,
   isha;
 
-  String get key => name; // 'fajr', 'sunrise', etc.
+  String get key => name;
 }
 
 extension NotificationSettingsExtension on NotificationBeforePraysSettings {
-  // Belirli bir namazın ayarını al
   NotificationBeforePrays? getByKey(String prayerKey) {
     switch (prayerKey.toLowerCase()) {
       case 'fajr':
@@ -32,7 +31,6 @@ extension NotificationSettingsExtension on NotificationBeforePraysSettings {
     }
   }
 
-  // Belirli bir namazın ayarını güncelle
   NotificationBeforePraysSettings updateByKey(
     String prayerKey,
     NotificationBeforePrays updated,

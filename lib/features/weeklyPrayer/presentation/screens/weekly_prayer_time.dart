@@ -73,7 +73,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
               );
             } else if (state is WeeklyLoaded) {
               final weeklyTimings = state.weeklyTimings ?? [];
-              final cityName = state.cityName ?? 'Kayseri';
+              final cityName = state.cityName ?? 'Istanbul';
 
               if (weeklyTimings.isEmpty) {
                 return Center(child: Text(l10nL.prayTimeNotAvailable));

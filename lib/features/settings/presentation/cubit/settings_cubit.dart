@@ -91,11 +91,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(languageCode: languageCode));
     storageServices.saveString('languageCode', languageCode);
 
-    // ✅ Dil değişince bildirimleri yeni dilde yeniden planla
     notificationManagerService.scheduleAllNotifications();
   }
 
-  /// Bildirim açılırken pil optimizasyonu kontrolü
   Future<bool> shouldShowBatteryDialog() async {
     return !batteryOptimizationService.hasShownBatteryDialog();
   }
@@ -111,7 +109,6 @@ class SettingsCubit extends Cubit<SettingsState> {
   void mainToggleNotifications() async {
     final newValue = !state.mainNotificationsEnabled;
 
-    // Eğer açılıyorsa ve daha önce dialog gösterilmediyse
     if (newValue && await shouldShowBatteryDialog()) {
       emit(
         state.copyWith(
@@ -129,7 +126,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       _disableAllNotifications();
     }
 
-    // Bildirimleri yeniden planla
     await notificationManagerService.scheduleAllNotifications();
   }
 
@@ -142,7 +138,6 @@ class SettingsCubit extends Cubit<SettingsState> {
   void mainToggleSilentMode() async {
     final newValue = !state.mainSilentModeEnabled;
 
-    // Eğer açılıyorsa ve daha önce dialog gösterilmediyse
     if (newValue && await shouldShowBatteryDialog()) {
       emit(
         state.copyWith(
@@ -193,7 +188,6 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       emit(state.copyWith(notificationBeforePraysSettings: newSettings));
 
-      // ✅ Bildirimleri yeniden planla
       await notificationManagerService.scheduleAllNotifications();
     } catch (e) {
       log('Bildirim ayarı güncellenirken hata: $e');
@@ -236,6 +230,13 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(isLocationLoading: true));
 
     try {
+      final isServiceEnabled = await locationService.isLocationServiceEnabled();
+
+      if (!isServiceEnabled) {
+        emit(state.copyWith(isLocationLoading: false));
+        throw Exception('SERVICE_DISABLED');
+      }
+
       final locationData = await locationService.getCurrentCity();
 
       if (locationData != null) {
@@ -263,6 +264,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       }
     } catch (e) {
       emit(state.copyWith(isLocationLoading: false));
+      rethrow;
     }
   }
 

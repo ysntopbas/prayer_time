@@ -48,15 +48,13 @@ class WeeklyRepository {
       }
     }
 
-    // API'den veri çek
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
     final String weekLaterDate = DateFormat(
       'dd-MM-yyyy',
     ).format(DateTime.now().add(const Duration(days: 7)));
 
-    final String city = locationData?['city'] ?? 'Kayseri';
-    subAdministrativeArea =
-        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+    final String city = locationData?['city'] ?? 'Istanbul';
+    subAdministrativeArea = locationData?['subAdministrativeArea'] ?? 'Fatih';
     final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
       'address': '$subAdministrativeArea, $city, $country',
@@ -94,7 +92,6 @@ class WeeklyRepository {
         throw Exception('API\'den haftalık namaz vakitleri alınamadı.');
       }
     } on DioException catch (e) {
-      // Hata durumunda cache'den dön
       final cachedTimings = _cacheService.getWeeklyTimings();
       if (cachedTimings != null && cachedTimings.isNotEmpty) {
         log('API hatası, cache\'den veri döndürülüyor');
@@ -102,7 +99,6 @@ class WeeklyRepository {
       }
       throw Exception('WEEKLY REPO Dio hatası: ${e.message}');
     } catch (e) {
-      // Hata durumunda cache'den dön
       final cachedTimings = _cacheService.getWeeklyTimings();
       if (cachedTimings != null && cachedTimings.isNotEmpty) {
         log('Hata oluştu, cache\'den veri döndürülüyor');

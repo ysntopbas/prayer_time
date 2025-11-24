@@ -31,6 +31,7 @@ void main() async {
   // final BackgroundServiceInitialization backgroundService =
   //     BackgroundServiceInitialization();
   // await backgroundService.initializeBackgroundService();
+
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }
 

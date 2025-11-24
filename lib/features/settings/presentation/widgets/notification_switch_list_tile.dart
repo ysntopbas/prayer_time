@@ -101,7 +101,7 @@ class NotificationSwitchListTile extends StatelessWidget {
 
           return Column(
             children: [
-              // ✅ Ana ListTile (Namaz adı + Switch)
+              // Ana ListTile (Namaz adı + Switch)
               ListTile(
                 leading: Icon(
                   Icons.alarm,
@@ -131,7 +131,6 @@ class NotificationSwitchListTile extends StatelessWidget {
                 ),
               ),
 
-              // ✅ Switch açıksa before kartını ortalanmış göster
               if (prayerSettings.isEnabled && mainEnabled)
                 Padding(
                   padding: const EdgeInsets.only(

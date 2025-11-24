@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/battery_optimization_dialog.dart';
@@ -118,16 +120,60 @@ class SettingsScreen extends StatelessWidget {
                   onTap: state.isLocationLoading
                       ? null
                       : () async {
-                          final scaffoldMessenger = ScaffoldMessenger.of(
-                            context,
-                          );
-                          final localizations = AppLocalizations.of(context)!;
-                          await context.read<SettingsCubit>().updateLocation();
-                          scaffoldMessenger.showSnackBar(
-                            SnackBar(
-                              content: Text(localizations.locationUpdated),
-                            ),
-                          );
+                          final messenger = ScaffoldMessenger.of(context);
+                          final settingsCubit = context.read<SettingsCubit>();
+
+                          final locationService = LocationService();
+                          final isServiceEnabled = await locationService
+                              .isLocationServiceEnabled();
+
+                          if (!isServiceEnabled) {
+                            if (!context.mounted) return;
+
+                            final shouldOpenSettings =
+                                await _showLocationServiceDialog(context);
+
+                            if (shouldOpenSettings) {
+                              await Geolocator.openLocationSettings();
+                              await Future.delayed(
+                                const Duration(milliseconds: 1500),
+                              );
+
+                              final isNowEnabled = await locationService
+                                  .isLocationServiceEnabled();
+                              if (!isNowEnabled) {
+                                if (context.mounted) {
+                                  messenger.showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10nL.locationCantUpdated),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                                return;
+                              }
+                            } else {
+                              return;
+                            }
+                          }
+
+                          try {
+                            await settingsCubit.updateLocation();
+                            if (context.mounted) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(l10nL.locationUpdated)),
+                              );
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              messenger.showSnackBar(
+                                SnackBar(
+                                  content: Text(l10nL.locationCantUpdated),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
                         },
                 );
               },
@@ -170,25 +216,22 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _showBatteryOptimizationDialog(BuildContext context) {
+    final navigator = Navigator.of(context);
+    final settingsCubit = context.read<SettingsCubit>();
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => BatteryOptimizationDialog(
         onConfirm: () async {
-          Navigator.of(dialogContext).pop();
-
-          // Capture the cubit before any async operation
-          final settingsCubit = context.read<SettingsCubit>();
+          navigator.pop();
 
           await settingsCubit.requestBatteryPermission();
           await settingsCubit.markBatteryDialogShown();
           settingsCubit.clearBatteryDialogFlag();
         },
         onCancel: () async {
-          Navigator.of(dialogContext).pop();
-
-          // Capture the cubit before any async operation
-          final settingsCubit = context.read<SettingsCubit>();
+          navigator.pop();
 
           await settingsCubit.markBatteryDialogShown();
           settingsCubit.clearBatteryDialogFlag();
@@ -226,5 +269,34 @@ class SettingsScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<bool> _showLocationServiceDialog(BuildContext context) async {
+    final navigator = Navigator.of(context);
+
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text("Konum Servisi Kapalı"),
+            content: const Text(
+              "Konumunuzu güncellemek için cihazınızın GPS'ini açmanız gerekmektedir.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => navigator.pop(false),
+                child: const Text(
+                  "Vazgeç",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => navigator.pop(true),
+                child: const Text("Ayarları Aç"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 }

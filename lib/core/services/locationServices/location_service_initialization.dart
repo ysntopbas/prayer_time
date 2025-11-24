@@ -6,15 +6,11 @@ class LocationServiceInitialization {
 
   LocationServiceInitialization(this.context);
 
-  /// Bu fonksiyon:
-  /// 1. GPS açık mı bakar. Kapalıysa açtırır ve (tekrardan) kontrol eder.
-  /// 2. İzin verilmiş mi bakar. Verilmemişse ister.
-  /// 3. Her şey tamamsa `true`, kullanıcı vazgeçerse `false` döner.
   Future<bool> initialize() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // 1. AŞAMA: Cihazın Konum Servisi (GPS) Açık mı?
+    // Cihazın Konum Servisi (GPS) Açık mı?
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
@@ -25,17 +21,24 @@ class LocationServiceInitialization {
         // Kullanıcı "Ayarları Aç" dedi.
         await Geolocator.openLocationSettings();
 
-        // KRİTİK NOKTA: Kullanıcı ayarlardan geri döndü.
-        // Fonksiyonu baştan çağırıyoruz (Recursion).
-        // Böylece GPS'i açıp açmadığını tekrar kontrol ediyoruz.
-        return await initialize();
+        //Kullanıcının ayarlardan dönmesini bekle
+        await Future.delayed(const Duration(milliseconds: 1500));
+
+        //GPS'in açılıp açılmadığını kontrol et
+        serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+        if (!serviceEnabled) {
+          // GPS hala kapalı, tekrar dialog göster
+          return await initialize();
+        }
+        // GPS açıldı, devam et
       } else {
         // Kullanıcı "Vazgeç" dedi. Varsayılan şehirle devam edilecek.
         return false;
       }
     }
 
-    // 2. AŞAMA: İzin Kontrolü (GPS açıksa buraya geçer)
+    //  İzin Kontrolü (GPS açıksa buraya geçer)
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
@@ -47,11 +50,11 @@ class LocationServiceInitialization {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Kalıcı engellendi (Ayarlara gitmesi lazım ama şimdilik false dönelim)
+      // Kalıcı engellendi
+      await _showPermissionDeniedDialog();
       return false;
     }
 
-    // 3. AŞAMA: Başarılı
     return true;
   }
 
@@ -67,19 +70,45 @@ class LocationServiceInitialization {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(false), // Vazgeç
+                onPressed: () => Navigator.of(context).pop(false),
                 child: const Text(
                   "Vazgeç",
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(true), // Ayarları Aç
+                onPressed: () => Navigator.of(context).pop(true),
                 child: const Text("Ayarları Aç"),
               ),
             ],
           ),
         ) ??
         false;
+  }
+
+  /// Konum izni kalıcı olarak reddedildiğinde gösterilecek dialog
+  Future<void> _showPermissionDeniedDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Konum İzni Gerekli"),
+        content: const Text(
+          "Konum izni kalıcı olarak reddedildi. Lütfen uygulama ayarlarından konum iznini açın.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Tamam"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              await Geolocator.openAppSettings();
+            },
+            child: const Text("Ayarları Aç"),
+          ),
+        ],
+      ),
+    );
   }
 }

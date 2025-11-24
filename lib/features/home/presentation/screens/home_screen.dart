@@ -82,10 +82,10 @@ class HomeScreen extends StatelessWidget {
                 );
               } else if (state is HomeLoaded) {
                 final prayerTimings = state.prayerTimings;
-                final cityName = state.cityName ?? 'Kayseri';
+                final cityName = state.cityName ?? 'Istanbul';
                 final nextTimings = state.nextTimings;
                 final subAdministrativeArea =
-                    state.subAdministrativeArea ?? 'Melikgazi';
+                    state.subAdministrativeArea ?? 'Fatih';
 
                 final now = DateTime.now();
                 String nextPrayerName = _getNextPrayerName(

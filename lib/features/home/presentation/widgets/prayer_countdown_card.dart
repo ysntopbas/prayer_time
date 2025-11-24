@@ -143,9 +143,6 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
       return (timings.isha!, l10nL.isha);
     }
 
-    // Tüm vakitler geçtiyse yarının sabah namazını göster
-    // Ancak yarının verisini almadığımız için boş dönelim
-    // ve üst katmanda yeni gün verisi çekilsin
     return ('', '');
   }
 

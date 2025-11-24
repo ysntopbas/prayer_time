@@ -98,7 +98,7 @@ class SilentModeListTile extends StatelessWidget {
 
           return Column(
             children: [
-              // ✅ Ana ListTile (Namaz adı + Switch)
+              // Ana ListTile (Namaz adı + Switch)
               ListTile(
                 leading: Icon(
                   Icons.volume_off,
@@ -128,7 +128,6 @@ class SilentModeListTile extends StatelessWidget {
                 ),
               ),
 
-              // ✅ Switch açıksa before/after kartlarını ortalanmış göster
               if (prayerSettings.isEnabled && mainEnabled)
                 Padding(
                   padding: const EdgeInsets.only(

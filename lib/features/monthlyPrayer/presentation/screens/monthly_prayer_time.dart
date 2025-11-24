@@ -51,7 +51,6 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         listenWhen: (previous, current) =>
             previous.cityName != current.cityName,
         listener: (context, state) {
-          // Konum güncellendiğinde namaz vakitlerini yeniden yükle
           _loadMonthlyPrayerTimes();
         },
         child: BlocBuilder<MonthlyCubit, MonthlyState>(
@@ -74,7 +73,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
               );
             } else if (state is MonthlyLoaded) {
               final monthlyTimings = state.monthlyTimings ?? [];
-              final cityName = state.cityName ?? 'Kayseri';
+              final cityName = state.cityName ?? 'Istanbul';
 
               if (monthlyTimings.isEmpty) {
                 return Center(child: Text(l10nL.prayTimeNotAvailable));

@@ -18,13 +18,11 @@ class HomeRepository {
   Future<Timings> getPrayerTimes({Map<String, String>? savedLocation}) async {
     Map<String, String>? locationData;
 
-    // Önce kaydedilmiş konumu kullan
     if (savedLocation != null) {
       locationData = savedLocation;
       cityName = savedLocation['city'];
       subAdministrativeArea = savedLocation['subAdministrativeArea'];
     } else {
-      // Kaydedilmiş konum yoksa GPS'ten al
       try {
         locationData = await _locationService.getCurrentCity();
         cityName = locationData?['city'];
@@ -35,10 +33,8 @@ class HomeRepository {
       log("atQS2 $locationData");
     }
 
-    // Konum değişikliğini kontrol et
     final locationChanged = _cacheService.hasLocationChanged(locationData);
 
-    // Cache'den veri al
     if (!locationChanged && !_cacheService.shouldUpdateDaily()) {
       final cachedTimings = _cacheService.getDailyTimings();
       if (cachedTimings != null) {
@@ -47,25 +43,19 @@ class HomeRepository {
       }
     }
 
-    // Konum değiştiyse cache'i temizle
     if (locationChanged && locationData != null) {
       log('Konum değişti, cache temizleniyor');
       await _cacheService.clearAllCache();
       await _cacheService.saveCachedLocation(locationData);
     }
 
-    // API'den veri çek
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
-    final String city = locationData?['city'] ?? 'Kayseri';
+    final String city = locationData?['city'] ?? 'Istanbul';
     final String subAdministrativeArea2 =
-        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+        locationData?['subAdministrativeArea'] ?? 'Fatih';
     final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
       'address': '$subAdministrativeArea2, $city, $country',
-      // 'subAdministrativeArea':
-      //     locationData?['subAdministrativeArea'] ?? 'Melikgazi',
-      // 'city': locationData?['city'] ?? 'Kayseri',
-      // 'country': locationData?['country'] ?? 'TR',
       'method': 13,
       'timezonestring': 'Europe/Istanbul',
       'calendarMethod': 'DIYANET',
@@ -83,7 +73,6 @@ class HomeRepository {
       final prayerResponse = PrayerTimeResponse.fromJson(response.data);
 
       if (prayerResponse.data.timings != null) {
-        // Cache'e kaydet
         await _cacheService.saveDailyTimings(prayerResponse.data.timings!);
         log('Günlük namaz vakitleri cache\'e kaydedildi');
         return prayerResponse.data.timings!;
@@ -91,7 +80,6 @@ class HomeRepository {
         throw Exception('API\'den namaz vakitleri (timings) alınamadı.');
       }
     } on DioException catch (e) {
-      // Hata durumunda cache'den dön
       final cachedTimings = _cacheService.getDailyTimings();
       if (cachedTimings != null) {
         log('API hatası, cache\'den veri döndürülüyor');
@@ -99,7 +87,6 @@ class HomeRepository {
       }
       throw Exception('Dio hatası: ${e.message}');
     } catch (e) {
-      // Hata durumunda cache'den dön
       final cachedTimings = _cacheService.getDailyTimings();
       if (cachedTimings != null) {
         log('Hata oluştu, cache\'den veri döndürülüyor');
@@ -124,10 +111,8 @@ class HomeRepository {
       }
     }
 
-    // Konum değişikliğini kontrol et
     final locationChanged = _cacheService.hasLocationChanged(locationData);
 
-    // Cache'den veri al (konum değişmediyse ve gün değişmediyse)
     if (!locationChanged && !_cacheService.shouldUpdateDaily()) {
       final cachedTimings = _cacheService.getNextDayTimings();
       if (cachedTimings != null) {
@@ -139,9 +124,9 @@ class HomeRepository {
     final String tomorrowDate = DateFormat(
       'dd-MM-yyyy',
     ).format(DateTime.now().add(const Duration(days: 1)));
-    final String city = locationData?['city'] ?? 'Kayseri';
+    final String city = locationData?['city'] ?? 'Istanbul';
     final String subAdministrativeArea2 =
-        locationData?['subAdministrativeArea'] ?? 'Melikgazi';
+        locationData?['subAdministrativeArea'] ?? 'Fatih';
     final String country = locationData?['country'] ?? 'TR';
     final Map<String, dynamic> queryParameters = {
       'address': '$subAdministrativeArea2, $city, $country',
