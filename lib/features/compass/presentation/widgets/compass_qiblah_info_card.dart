@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:prayer_time/features/compass/presentation/widgets/info_item.dart';
+import 'package:prayer_time/features/compass/presentation/widgets/compass_info_item.dart';
 
 class QiblahInfoCard extends StatelessWidget {
   final Position currentPosition;

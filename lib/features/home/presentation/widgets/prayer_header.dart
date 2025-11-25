@@ -3,15 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class PrayerHeader extends StatelessWidget {
+  final String subAdministrativeArea;
   final String cityName;
-  final String? subAdministrativeArea;
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const PrayerHeader({
     super.key,
+    required this.subAdministrativeArea,
     required this.cityName,
-    this.subAdministrativeArea,
-    required this.scaffoldKey,
+    this.scaffoldKey,
   });
 
   @override
@@ -43,12 +43,9 @@ class PrayerHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              icon: const Icon(Icons.menu),
-              style: IconButton.styleFrom(
-                foregroundColor: appTheme.colorScheme.onPrimary,
-              ),
+              icon: Icon(Icons.menu, color: Colors.white),
               onPressed: () {
-                scaffoldKey.currentState?.openDrawer();
+                Scaffold.of(context).openDrawer();
               },
             ),
             Column(

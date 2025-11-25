@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:prayer_time/features/compass/presentation/widgets/compass_base.dart';
-import 'package:prayer_time/features/compass/presentation/widgets/qiblah_needle.dart';
+import 'package:prayer_time/features/compass/presentation/widgets/compass_qiblah_needle.dart';
 
 class CompassWidget extends StatelessWidget {
   final double qiblahDirection;

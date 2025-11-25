@@ -1,150 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
-class PrayerCountdownCard extends StatefulWidget {
-  final Timings nextTimings;
-  const PrayerCountdownCard({super.key, required this.nextTimings});
+class PrayerCountdownCard extends StatelessWidget {
+  final Duration remainingTime;
+  final String nextPrayerName;
+  final String nextPrayerTime;
 
-  @override
-  State<PrayerCountdownCard> createState() => _PrayerCountdownCardState();
-}
-
-class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
-  Timer? _timer;
-  Duration _remainingTime = Duration.zero;
-  String _nextPrayerTime = '';
-  String _nextPrayerName = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          _updateCountdown();
-        });
-      }
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateCountdown();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _updateCountdown() {
-    final now = DateTime.now();
-    final l10nL = AppLocalizations.of(context)!;
-
-    final (timeStr, prayerName) = _getNextPrayer(
-      widget.nextTimings,
-      l10nL,
-      now,
-    );
-
-    if (timeStr.isEmpty) {
-      _remainingTime = Duration.zero;
-      _nextPrayerTime = '';
-      _nextPrayerName = '';
-      return;
-    }
-
-    final nextPrayerDateTime = _parseTimeString(timeStr, now);
-    final difference = nextPrayerDateTime.difference(now);
-
-    _remainingTime = difference.isNegative ? Duration.zero : difference;
-    _nextPrayerTime = timeStr;
-    _nextPrayerName = prayerName;
-  }
-
-  DateTime _parseTimeString(String timeStr, DateTime baseDate) {
-    try {
-      final cleanTime = timeStr.split('(').first.trim();
-      final parts = cleanTime.split(':');
-
-      if (parts.length >= 2) {
-        final hour = int.parse(parts[0]);
-        final minute = int.parse(parts[1]);
-
-        var targetTime = DateTime(
-          baseDate.year,
-          baseDate.month,
-          baseDate.day,
-          hour,
-          minute,
-        );
-
-        if (targetTime.isBefore(baseDate)) {
-          targetTime = targetTime.add(const Duration(days: 1));
-        }
-
-        return targetTime;
-      }
-    } catch (e) {
-      debugPrint('Saat parse hatası: $e');
-    }
-    return baseDate;
-  }
-
-  (String, String) _getNextPrayer(
-    Timings timings,
-    AppLocalizations l10nL,
-    DateTime now,
-  ) {
-    final currentHour = now.hour;
-    final currentMinute = now.minute;
-
-    bool hasPassed(String? timeStr) {
-      if (timeStr == null) return true;
-      try {
-        final cleanTime = timeStr.split('(').first.trim();
-        final parts = cleanTime.split(':');
-
-        if (parts.length >= 2) {
-          final hour = int.parse(parts[0]);
-          final minute = int.parse(parts[1]);
-
-          if (currentHour > hour) return true;
-          if (currentHour == hour && currentMinute >= minute) return true;
-        }
-      } catch (e) {
-        debugPrint('Zaman kontrol hatası: $e');
-      }
-      return false;
-    }
-
-    // Bugünün vakitlerini kontrol et
-    if (timings.fajr != null && !hasPassed(timings.fajr)) {
-      return (timings.fajr!, l10nL.fajr);
-    }
-    if (timings.sunrise != null && !hasPassed(timings.sunrise)) {
-      return (timings.sunrise!, l10nL.sunrise);
-    }
-    if (timings.dhuhr != null && !hasPassed(timings.dhuhr)) {
-      return (timings.dhuhr!, l10nL.dhuhr);
-    }
-    if (timings.asr != null && !hasPassed(timings.asr)) {
-      return (timings.asr!, l10nL.asr);
-    }
-    if (timings.maghrib != null && !hasPassed(timings.maghrib)) {
-      return (timings.maghrib!, l10nL.maghrib);
-    }
-    if (timings.isha != null && !hasPassed(timings.isha)) {
-      return (timings.isha!, l10nL.isha);
-    }
-
-    return ('', '');
-  }
+  const PrayerCountdownCard({
+    super.key,
+    required this.remainingTime,
+    required this.nextPrayerName,
+    required this.nextPrayerTime,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -182,36 +49,38 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
           ),
           const SizedBox(height: 8),
           Text(
-            _nextPrayerName.isNotEmpty ? _nextPrayerName : '-',
+            nextPrayerName.isNotEmpty ? nextPrayerName : '-',
             style: appTheme.textTheme.headlineMedium?.copyWith(
               color: Colors.white,
             ),
           ),
-
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTimeBox(
-                _remainingTime.inHours.toString().padLeft(2, '0'),
+                appTheme,
+                remainingTime.inHours.toString().padLeft(2, '0'),
                 l10nL.hours,
               ),
               const SizedBox(width: 12),
               _buildTimeBox(
-                (_remainingTime.inMinutes % 60).toString().padLeft(2, '0'),
+                appTheme,
+                (remainingTime.inMinutes % 60).toString().padLeft(2, '0'),
                 l10nL.minutes,
               ),
               const SizedBox(width: 12),
               _buildTimeBox(
-                (_remainingTime.inSeconds % 60).toString().padLeft(2, '0'),
+                appTheme,
+                (remainingTime.inSeconds % 60).toString().padLeft(2, '0'),
                 l10nL.seconds,
               ),
             ],
           ),
           const SizedBox(height: 16),
           Text(
-            _nextPrayerTime.isNotEmpty
-                ? _nextPrayerTime.split('(').first.trim()
+            nextPrayerTime.isNotEmpty
+                ? nextPrayerTime.split('(').first.trim()
                 : '-',
             style: appTheme.textTheme.headlineSmall?.copyWith(
               color: Colors.white,
@@ -222,8 +91,8 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
     );
   }
 
-  Widget _buildTimeBox(String value, String label) {
-    final appTheme = Theme.of(context);
+  Widget _buildTimeBox(ThemeData theme, String value, String label) {
+    final appTheme = theme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(

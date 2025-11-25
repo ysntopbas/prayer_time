@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/widgets/custom_drawer.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_countdown_card.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_header.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_time_list.dart';
-import 'package:prayer_time/l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,19 +21,51 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final appTheme = Theme.of(context);
 
-    // İlk yükleme için
-    final homeState = context.watch<HomeCubit>().state;
-    if (homeState is HomeInitial) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _loadPrayerTimes(context);
-      });
-    }
+    return BlocBuilder<HomeCubit, HomeState>(
+      buildWhen: (previous, current) {
+        // İlk yükleme için HomeInitial'dan geçişi izin ver
+        if (previous is HomeInitial) return true;
+        // Loading ve Error state'leri için izin ver
+        if (current is HomeLoading || current is HomeError) return true;
+        // HomeLoaded içinde sadece prayer timings değişirse rebuild et
+        if (previous is HomeLoaded && current is HomeLoaded) {
+          return previous.prayerTimings != current.prayerTimings ||
+              previous.cityName != current.cityName ||
+              previous.subAdministrativeArea != current.subAdministrativeArea;
+        }
+        return true;
+      },
+      builder: (context, homeState) {
+        // İlk yükleme kontrolü - sadece bir kez çalışacak
+        if (homeState is HomeInitial) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _loadPrayerTimes(context);
+          });
+        }
 
+        return _HomeScaffold(
+          appTheme: appTheme,
+          onLoadPrayerTimes: () => _loadPrayerTimes(context),
+        );
+      },
+    );
+  }
+}
+
+class _HomeScaffold extends StatelessWidget {
+  final ThemeData appTheme;
+  final VoidCallback onLoadPrayerTimes;
+
+  const _HomeScaffold({
+    required this.appTheme,
+    required this.onLoadPrayerTimes,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       drawer: const CustomDrawer(),
       body: Container(
         decoration: BoxDecoration(
@@ -52,9 +82,19 @@ class HomeScreen extends StatelessWidget {
           listenWhen: (previous, current) =>
               previous.cityName != current.cityName,
           listener: (context, state) {
-            _loadPrayerTimes(context);
+            onLoadPrayerTimes();
           },
           child: BlocBuilder<HomeCubit, HomeState>(
+            buildWhen: (previous, current) {
+              // HomeLoaded içindeki countdown güncellemelerini ignore et
+              if (previous is HomeLoaded && current is HomeLoaded) {
+                return previous.prayerTimings != current.prayerTimings ||
+                    previous.cityName != current.cityName ||
+                    previous.subAdministrativeArea !=
+                        current.subAdministrativeArea;
+              }
+              return true;
+            },
             builder: (context, state) {
               if (state is HomeInitial || state is HomeLoading) {
                 return Center(
@@ -69,13 +109,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         state.message,
-                        style: const TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () => _loadPrayerTimes(context),
-                        child: const Text('Tekrar Dene'),
+                        style: TextStyle(color: appTheme.colorScheme.onPrimary),
                       ),
                     ],
                   ),
@@ -83,23 +117,15 @@ class HomeScreen extends StatelessWidget {
               } else if (state is HomeLoaded) {
                 final prayerTimings = state.prayerTimings;
                 final cityName = state.cityName ?? 'Istanbul';
-                final nextTimings = state.nextTimings;
                 final subAdministrativeArea =
                     state.subAdministrativeArea ?? 'Fatih';
-
-                final now = DateTime.now();
-                String nextPrayerName = _getNextPrayerName(
-                  nextTimings,
-                  now,
-                  context,
-                );
 
                 return Column(
                   children: [
                     PrayerHeader(
                       subAdministrativeArea: subAdministrativeArea,
                       cityName: cityName,
-                      scaffoldKey: scaffoldKey,
+                      scaffoldKey: null,
                     ),
                     Expanded(
                       child: Container(
@@ -113,10 +139,52 @@ class HomeScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              PrayerCountdownCard(nextTimings: nextTimings),
-                              PrayerTimesList(
-                                timings: prayerTimings,
-                                nextPrayerName: nextPrayerName,
+                              BlocSelector<
+                                HomeCubit,
+                                HomeState,
+                                Map<String, dynamic>
+                              >(
+                                selector: (state) {
+                                  if (state is HomeLoaded) {
+                                    return {
+                                      'remainingTime': state.remainingTime,
+                                      'nextPrayerName': state.nextPrayerName,
+                                      'nextPrayerTime': state.nextPrayerTime,
+                                    };
+                                  }
+                                  return {
+                                    'remainingTime': Duration.zero,
+                                    'nextPrayerName': '',
+                                    'nextPrayerTime': '',
+                                  };
+                                },
+                                builder: (context, countdownData) {
+                                  return PrayerCountdownCard(
+                                    remainingTime:
+                                        countdownData['remainingTime']
+                                            as Duration,
+                                    nextPrayerName:
+                                        countdownData['nextPrayerName']
+                                            as String,
+                                    nextPrayerTime:
+                                        countdownData['nextPrayerTime']
+                                            as String,
+                                  );
+                                },
+                              ),
+                              BlocSelector<HomeCubit, HomeState, String>(
+                                selector: (state) {
+                                  if (state is HomeLoaded) {
+                                    return state.nextPrayerName;
+                                  }
+                                  return '';
+                                },
+                                builder: (context, nextPrayerName) {
+                                  return PrayerTimesList(
+                                    timings: prayerTimings,
+                                    nextPrayerName: nextPrayerName,
+                                  );
+                                },
                               ),
                               const SizedBox(height: 20),
                             ],
@@ -133,55 +201,5 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getNextPrayerName(
-    Timings timings,
-    DateTime now,
-    BuildContext context,
-  ) {
-    final l10nL = AppLocalizations.of(context)!;
-    final currentHour = now.hour;
-    final currentMinute = now.minute;
-
-    bool hasPassed(String? timeStr) {
-      if (timeStr == null) return true;
-      try {
-        final cleanTime = timeStr.split('(').first.trim();
-        final parts = cleanTime.split(':');
-
-        if (parts.length >= 2) {
-          final hour = int.parse(parts[0]);
-          final minute = int.parse(parts[1]);
-
-          if (currentHour > hour) return true;
-          if (currentHour == hour && currentMinute >= minute) return true;
-        }
-      } catch (e) {
-        return false;
-      }
-      return false;
-    }
-
-    if (timings.fajr != null && !hasPassed(timings.fajr)) {
-      return l10nL.fajr;
-    }
-    if (timings.sunrise != null && !hasPassed(timings.sunrise)) {
-      return l10nL.sunrise;
-    }
-    if (timings.dhuhr != null && !hasPassed(timings.dhuhr)) {
-      return l10nL.dhuhr;
-    }
-    if (timings.asr != null && !hasPassed(timings.asr)) {
-      return l10nL.asr;
-    }
-    if (timings.maghrib != null && !hasPassed(timings.maghrib)) {
-      return l10nL.maghrib;
-    }
-    if (timings.isha != null && !hasPassed(timings.isha)) {
-      return l10nL.isha;
-    }
-
-    return l10nL.fajr;
   }
 }

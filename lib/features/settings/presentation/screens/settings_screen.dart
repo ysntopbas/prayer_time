@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -181,8 +182,12 @@ class SettingsScreen extends StatelessWidget {
             Divider(color: appTheme.colorScheme.primary),
             NotificationSwitchListTile(),
             Divider(color: appTheme.colorScheme.primary),
-            SilentModeListTile(),
-            Divider(color: appTheme.colorScheme.primary),
+            //İOS'da sessiz mod ayarı yok çünkü fiziksel anahtarla kontrol ediliyor
+            Platform.isIOS ? const SizedBox.shrink() : SilentModeListTile(),
+            Platform.isIOS
+                ? const SizedBox.shrink()
+                : Divider(color: appTheme.colorScheme.primary),
+
             ElevatedButton(
               onPressed: () {
                 FlutterBackgroundService().invoke('setAsForeground');

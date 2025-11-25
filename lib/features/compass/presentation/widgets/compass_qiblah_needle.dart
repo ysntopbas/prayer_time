@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prayer_time/features/compass/presentation/widgets/triangele_painter.dart';
+import 'package:prayer_time/features/compass/presentation/widgets/compass_triangele_painter.dart';
 
 class QiblahNeedle extends StatelessWidget {
   const QiblahNeedle({super.key});

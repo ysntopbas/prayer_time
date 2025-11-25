@@ -16,12 +16,18 @@ final class HomeLoaded extends HomeState {
   final Timings prayerTimings;
   final String? cityName;
   final String? subAdministrativeArea;
+  final Duration remainingTime;
+  final String nextPrayerName;
+  final String nextPrayerTime;
 
   const HomeLoaded({
     required this.prayerTimings,
     this.cityName,
     required this.nextTimings,
     this.subAdministrativeArea,
+    required this.remainingTime,
+    required this.nextPrayerName,
+    required this.nextPrayerTime,
   });
 
   @override
@@ -29,6 +35,10 @@ final class HomeLoaded extends HomeState {
     prayerTimings,
     cityName ?? '',
     subAdministrativeArea ?? '',
+    nextTimings,
+    remainingTime,
+    nextPrayerName,
+    nextPrayerTime,
   ];
 }
 

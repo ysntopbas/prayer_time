@@ -38,6 +38,8 @@
 		<string>Uygulamanın size özel içerik sunması için konumunuza ihtiyaç duyulmaktadır.</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>Uygulamanın arka planda size özel içerik sunması için konumunuza ihtiyaç duyulmaktadır.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Kıble yönünü kamera ile göstermek için gerekli</string>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

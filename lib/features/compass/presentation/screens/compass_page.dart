@@ -6,8 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/compass/presentation/widgets/compass_widget.dart';
-import 'package:prayer_time/features/compass/presentation/widgets/direction_indicator.dart';
-import 'package:prayer_time/features/compass/presentation/widgets/qiblah_info_card.dart';
+import 'package:prayer_time/features/compass/presentation/widgets/compass_direction_indicator.dart';
+import 'package:prayer_time/features/compass/presentation/widgets/compass_qiblah_info_card.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class CompassPage extends StatefulWidget {
