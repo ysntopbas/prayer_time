@@ -27,7 +27,7 @@ class PrayerHeader extends StatelessWidget {
     return SafeArea(
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -43,37 +43,49 @@ class PrayerHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
+              padding: EdgeInsets.all(12),
               icon: Icon(Icons.menu, color: Colors.white),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  l10nL.headerTitle,
-                  style: appTheme.textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    l10nL.headerTitle,
+                    style: appTheme.textTheme.headlineMedium?.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '$subAdministrativeArea, $cityName',
+                      maxLines: 1,
+                      style: appTheme.textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
 
-                const SizedBox(height: 4),
-                Text(
-                  '$subAdministrativeArea, $cityName',
-                  style: appTheme.textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
+                    child: Text(
+                      dateFormat.format(now),
+                      maxLines: 1,
+                      style: appTheme.textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  dateFormat.format(now),
-                  style: appTheme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
+            SizedBox(width: 10),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
