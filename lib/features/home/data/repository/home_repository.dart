@@ -30,7 +30,7 @@ class HomeRepository {
       } catch (e) {
         log('Konum alınamadı, varsayılan konum kullanılacak: $e');
       }
-      log("atQS2 $locationData");
+      log("$locationData");
     }
 
     final locationChanged = _cacheService.hasLocationChanged(locationData);
@@ -39,6 +39,7 @@ class HomeRepository {
       final cachedTimings = _cacheService.getDailyTimings();
       if (cachedTimings != null) {
         log('Günlük namaz vakitleri cache\'den alındı');
+
         return cachedTimings;
       }
     }
@@ -117,6 +118,7 @@ class HomeRepository {
       final cachedTimings = _cacheService.getNextDayTimings();
       if (cachedTimings != null) {
         log('Yarının namaz vakitleri cache\'den alındı');
+
         return cachedTimings;
       }
     }
@@ -135,7 +137,7 @@ class HomeRepository {
       'calendarMethod': 'DIYANET',
     };
 
-    final String endpoint = '/nextPrayerByAddress/$tomorrowDate';
+    final String endpoint = '/timingsByAddress/$tomorrowDate';
 
     try {
       log('Yarının namaz vakitleri API\'den çekiliyor');

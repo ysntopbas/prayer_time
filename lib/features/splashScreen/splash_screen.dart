@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +51,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    log('Navigating to HomeScreen');
     context.go(AppRoutes.home);
   }
 
@@ -61,8 +58,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return BlocListener<HomeCubit, HomeState>(
       listener: (context, state) {
-        log('Current state: ${state.runtimeType}');
-
         if (state is HomeLoaded && !_dataLoaded) {
           _dataLoaded = true;
           _navigateToHome();
