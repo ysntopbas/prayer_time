@@ -6,6 +6,7 @@ import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.
 import 'package:prayer_time/features/home/presentation/widgets/prayer_countdown_card.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_header.dart';
 import 'package:prayer_time/features/home/presentation/widgets/prayer_time_list.dart';
+import 'package:prayer_time/l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -62,6 +63,28 @@ class _HomeScaffold extends StatelessWidget {
     required this.appTheme,
     required this.onLoadPrayerTimes,
   });
+
+  // Helper metod: Prayer name'i çevir
+  String _getTranslatedPrayerName(BuildContext context, String prayerName) {
+    final l10n = AppLocalizations.of(context)!;
+
+    switch (prayerName.toLowerCase()) {
+      case 'fajr':
+        return l10n.fajr;
+      case 'sunrise':
+        return l10n.sunrise;
+      case 'dhuhr':
+        return l10n.dhuhr;
+      case 'asr':
+        return l10n.asr;
+      case 'maghrib':
+        return l10n.maghrib;
+      case 'isha':
+        return l10n.isha;
+      default:
+        return prayerName;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,13 +182,18 @@ class _HomeScaffold extends StatelessWidget {
                                   };
                                 },
                                 builder: (context, countdownData) {
+                                  final translatedPrayerName =
+                                      _getTranslatedPrayerName(
+                                        context,
+                                        countdownData['nextPrayerName']
+                                            as String,
+                                      );
+
                                   return PrayerCountdownCard(
                                     remainingTime:
                                         countdownData['remainingTime']
                                             as Duration,
-                                    nextPrayerName:
-                                        countdownData['nextPrayerName']
-                                            as String,
+                                    nextPrayerName: translatedPrayerName,
                                     nextPrayerTime:
                                         countdownData['nextPrayerTime']
                                             as String,
@@ -180,9 +208,14 @@ class _HomeScaffold extends StatelessWidget {
                                   return '';
                                 },
                                 builder: (context, nextPrayerName) {
+                                  final translatedPrayerName =
+                                      _getTranslatedPrayerName(
+                                        context,
+                                        nextPrayerName,
+                                      );
                                   return PrayerTimesList(
                                     timings: prayerTimings,
-                                    nextPrayerName: nextPrayerName,
+                                    nextPrayerName: translatedPrayerName,
                                   );
                                 },
                               ),
