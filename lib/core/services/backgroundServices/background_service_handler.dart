@@ -197,17 +197,17 @@ Map<String, String> _calculateNextPrayer(
 String _getPrayerIcon(String prayerName, AppLocalizations? l10n) {
   // Prayer name'e göre emoji icon döndür
   if (prayerName == l10n?.fajr || prayerName == 'Fajr') {
-    return '🌙'; // Nightlight
+    return '🌙'; // Fajr
   } else if (prayerName == l10n?.sunrise || prayerName == 'Sunrise') {
     return '🌅'; // Sunrise
   } else if (prayerName == l10n?.dhuhr || prayerName == 'Dhuhr') {
-    return '☀️'; // Sun
+    return '☀️'; // Dhuhr
   } else if (prayerName == l10n?.asr || prayerName == 'Asr') {
-    return '🌤️'; // Partly cloudy
+    return '🌤️'; // Asr
   } else if (prayerName == l10n?.maghrib || prayerName == 'Maghrib') {
-    return '🌆'; // Sunset
+    return '🌆'; // Maghrib
   } else if (prayerName == l10n?.isha || prayerName == 'Isha') {
-    return '🌃'; // Night
+    return '🌃'; // Isha
   }
   return '🕌'; // Default mosque icon
 }
