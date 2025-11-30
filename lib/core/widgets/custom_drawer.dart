@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prayer_time/features/compass/presentation/screens/compass_page.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/screens/monthly_prayer_time.dart';
 import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
 import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';
@@ -101,20 +100,6 @@ class CustomDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const MonthlyPrayerTimeScreen(),
-                      ),
-                    );
-                  },
-                ),
-                _buildDrawerItem(
-                  context,
-                  icon: Icons.explore,
-                  title: l10nL.compassTile,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CompassPage(),
                       ),
                     );
                   },
