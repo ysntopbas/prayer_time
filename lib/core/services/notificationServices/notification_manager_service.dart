@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/notificationServices/scheduled_notification_service.dart';
@@ -45,86 +46,147 @@ class NotificationManagerService {
 
   Future<void> scheduleAllNotifications() async {
     final baseTimings = getTodayTimings();
-    //Debug logs for timings
-    log(
-      'Scheduling notifications with base timings fajr: ${baseTimings?.fajr}',
-    );
-    log(
-      'Scheduling notifications with base timings sunrise: ${baseTimings?.sunrise}',
-    );
-    log(
-      'Scheduling notifications with base timings dhuhr: ${baseTimings?.dhuhr}',
-    );
-    log('Scheduling notifications with base timings asr: ${baseTimings?.asr}');
-    log(
-      'Scheduling notifications with base timings maghrib: ${baseTimings?.maghrib}',
-    );
-    log(
-      'Scheduling notifications with base timings isha: ${baseTimings?.isha}',
-    );
-    final userSettings = loadAllNotificationSettings();
-    final String langCode = _storageServices.getString('languageCode') ?? 'en';
-    final Locale locale = Locale(langCode);
 
     if (baseTimings == null) {
+      log('⚠️ Base timings null, bildirimler zamanlanamıyor');
       return;
     }
 
     final isMainEnabled =
         _storageServices.getBool('mainNotificationsEnabled') ?? false;
+
     if (!isMainEnabled) {
-      _scheduledNotificationService.cancelAllScheduledNotifications();
+      log('📴 Ana bildirim switch\'i kapalı, tüm bildirimler iptal ediliyor');
+      await cancelAllScheduledNotifications();
       return;
     }
 
+    final userSettings = loadAllNotificationSettings();
+    final String langCode = _storageServices.getString('languageCode') ?? 'en';
+    final Locale locale = Locale(langCode);
     final l10n = await AppLocalizations.delegate.load(locale);
 
-    planPrayer(l10n.fajr, baseTimings.fajr!, userSettings.fajr, l10n);
-    log(
-      'planPrayer LOG Scheduling notification for Fajr at ${l10n.fajr}, ${baseTimings.fajr!},${userSettings.fajr}',
+    // Önce tüm eski bildirimleri iptal et
+    await cancelAllScheduledNotifications();
+    log('🗑️ Eski bildirimler temizlendi');
+
+    log('🔔 Yeni bildirimler zamanlanıyor...');
+
+    // Her namaz vakti için bildirimi zamanla
+    await _schedulePrayerNotification(
+      prayerName: l10n.fajr,
+      baseTimeStr: baseTimings.fajr!,
+      setting: userSettings.fajr,
+      notificationId: 101,
+      l10n: l10n,
     );
-    planPrayer(l10n.sunrise, baseTimings.sunrise!, userSettings.sunrise, l10n);
-    planPrayer(l10n.dhuhr, baseTimings.dhuhr!, userSettings.dhuhr, l10n);
-    planPrayer(l10n.asr, baseTimings.asr!, userSettings.asr, l10n);
-    planPrayer(l10n.maghrib, baseTimings.maghrib!, userSettings.maghrib, l10n);
-    planPrayer(l10n.isha, baseTimings.isha!, userSettings.isha, l10n);
+
+    await _schedulePrayerNotification(
+      prayerName: l10n.sunrise,
+      baseTimeStr: baseTimings.sunrise!,
+      setting: userSettings.sunrise,
+      notificationId: 102,
+      l10n: l10n,
+    );
+
+    await _schedulePrayerNotification(
+      prayerName: l10n.dhuhr,
+      baseTimeStr: baseTimings.dhuhr!,
+      setting: userSettings.dhuhr,
+      notificationId: 103,
+      l10n: l10n,
+    );
+
+    await _schedulePrayerNotification(
+      prayerName: l10n.asr,
+      baseTimeStr: baseTimings.asr!,
+      setting: userSettings.asr,
+      notificationId: 104,
+      l10n: l10n,
+    );
+
+    await _schedulePrayerNotification(
+      prayerName: l10n.maghrib,
+      baseTimeStr: baseTimings.maghrib!,
+      setting: userSettings.maghrib,
+      notificationId: 105,
+      l10n: l10n,
+    );
+
+    await _schedulePrayerNotification(
+      prayerName: l10n.isha,
+      baseTimeStr: baseTimings.isha!,
+      setting: userSettings.isha,
+      notificationId: 106,
+      l10n: l10n,
+    );
+
+    log('✅ Tüm bildirimler başarıyla zamanlandı');
   }
 
-  void planPrayer(
-    String prayerName,
-    String baseTimeStr,
-    NotificationBeforePrays setting,
-    AppLocalizations l10n,
-  ) {
+  Future<void> _schedulePrayerNotification({
+    required String prayerName,
+    required String baseTimeStr,
+    required NotificationBeforePrays setting,
+    required int notificationId,
+    required AppLocalizations l10n,
+  }) async {
+    // Bu namaz için bildirim kapalıysa iptal et
     if (!setting.isEnabled) {
+      await _scheduledNotificationService.cancelScheduledNotification(
+        notificationId,
+      );
+      log('❌ $prayerName bildirimi kapalı, iptal edildi');
       return;
     }
 
     final baseTime = _parseTime(baseTimeStr);
-    final offset = setting.minutesBefore;
+    final minutesBefore = setting.minutesBefore;
+    final scheduledTime = baseTime.subtract(Duration(minutes: minutesBefore));
 
-    final scheduledTime = baseTime.subtract(Duration(minutes: offset));
-
-    if (scheduledTime.isAfter(DateTime.now())) {
-      _scheduledNotificationService.showScheduleNotification(
-        id: 2,
-        title: '$prayerName - ${l10n.prayTime}',
-        body: '$offset ${l10n.leftMinutes}',
-        scheduledTime: scheduledTime,
-        channelId: 'scheduled_prayer_reminders',
-        channelName: 'Scheduled Prayer Reminders',
+    // Geçmiş bir zaman için bildirim zamanlanmasın
+    if (scheduledTime.isBefore(DateTime.now())) {
+      log(
+        '⏰ $prayerName bildirimi geçmiş bir zaman ($scheduledTime), atlanıyor',
       );
+      return;
     }
+
+    await _scheduledNotificationService.showScheduleNotification(
+      id: notificationId,
+      title: '$prayerName - ${l10n.prayTime}',
+      body: '$minutesBefore ${l10n.minutes} ${l10n.leftMinutes}',
+      scheduledTime: scheduledTime,
+      channelId: 'prayer_notifications',
+      channelName: l10n.notificationBeforePrayTime,
+      channelDescription: 'Namaz vakti bildirimleri',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    log(
+      '✅ $prayerName bildirimi zamanlandı: $scheduledTime ($minutesBefore dk önce)',
+    );
+  }
+
+  Future<void> cancelAllScheduledNotifications() async {
+    await _scheduledNotificationService.cancelAllScheduledNotifications();
+    log('🗑️ Tüm bildirimler iptal edildi');
   }
 
   DateTime _parseTime(String timeStr) {
     try {
-      final parts = timeStr.split(':');
+      // "05:30 (EET)" formatından "05:30" çıkar
+      final cleanTime = timeStr.split('(').first.trim();
+      final parts = cleanTime.split(':');
       final hour = int.parse(parts[0]);
       final minute = int.parse(parts[1]);
       final now = DateTime.now();
       return DateTime(now.year, now.month, now.day, hour, minute);
     } catch (e) {
+      log('❌ Time parse hatası: $e');
       return DateTime.now();
     }
   }

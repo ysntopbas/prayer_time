@@ -48,10 +48,49 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
+  // İlk güncelleme flag'ini EN BAŞTA tanımla
   bool isFirstUpdateDone = false;
   int checkAttempts = 0;
   const maxAttempts = 60;
 
+  // Cache güncellendiğinde tetiklenecek event
+  service.on('cacheUpdated').listen((event) async {
+    log('📥 Cache güncelleme eventi alındı, bildirim yenileniyor...');
+
+    if (service is AndroidServiceInstance &&
+        await service.isForegroundService()) {
+      // Reload localization
+      final currentLanguageCode =
+          storageServices.getString('languageCode') ?? 'en';
+      AppLocalizations? currentL10n;
+
+      try {
+        currentL10n = await AppLocalizations.delegate.load(
+          Locale(currentLanguageCode),
+        );
+      } catch (e) {
+        log('Localization reload hatası: $e');
+        currentL10n = l10n;
+      }
+
+      // Yeni cache ile bildirimi güncelle
+      final notificationData = _calculateNextPrayer(cacheService, currentL10n);
+
+      service.setForegroundNotificationInfo(
+        title: notificationData['title'] as String,
+        content: notificationData['content'] as String,
+      );
+
+      log(
+        '✅ Cache güncelleme sonrası bildirim yenilendi: ${notificationData['content']}',
+      );
+
+      // İlk güncelleme flag'ini true yap (eğer false ise)
+      isFirstUpdateDone = true;
+    }
+  });
+
+  // İlk güncellemeyi bekle - cache dolu olana kadar
   Timer.periodic(const Duration(seconds: 5), (timer) async {
     checkAttempts++;
 
@@ -94,6 +133,7 @@ void onStart(ServiceInstance service) async {
     }
   });
 
+  // Dakikalık güncelleme timer'ı
   Timer.periodic(const Duration(minutes: 1), (timer) async {
     if (!isFirstUpdateDone) {
       log('İlk güncelleme henüz yapılmadı, dakikalık güncelleme atlanıyor...');

@@ -39,15 +39,15 @@ class HomeRepository {
       final cachedTimings = _cacheService.getDailyTimings();
       if (cachedTimings != null) {
         log('Günlük namaz vakitleri cache\'den alındı');
-
         return cachedTimings;
       }
     }
 
     if (locationChanged && locationData != null) {
-      log('Konum değişti, cache temizleniyor');
+      log('⚠️ Konum değişti! Cache temizleniyor ve yeniden kaydediliyor...');
       await _cacheService.clearAllCache();
       await _cacheService.saveCachedLocation(locationData);
+      log('✓ Cache temizlendi ve yeni konum kaydedildi');
     }
 
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());

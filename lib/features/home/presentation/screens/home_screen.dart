@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     final savedLocation = settingsCubit.getSavedLocation();
     context.read<HomeCubit>().fetchPrayerTimes(
       savedLocation: savedLocation,
-      context: context,
+      context: context, // context parametresini ekliyoruz
     );
   }
 

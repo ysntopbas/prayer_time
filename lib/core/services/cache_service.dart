@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 
@@ -6,6 +7,9 @@ class CacheService {
   final StorageServices _storageServices;
 
   CacheService(this._storageServices);
+
+  // StorageServices'e erişim için getter
+  StorageServices get storageServices => _storageServices;
 
   // Cache Keys
   static const String _dailyTimingsKey = 'daily_timings';
@@ -159,6 +163,6 @@ class CacheService {
     await _storageServices.remove(_lastDailyUpdateKey);
     await _storageServices.remove(_lastWeeklyUpdateKey);
     await _storageServices.remove(_lastMonthlyUpdateKey);
-    await _storageServices.remove(_cachedLocationKey);
+    log('🗑️ Tüm cache temizlendi');
   }
 }

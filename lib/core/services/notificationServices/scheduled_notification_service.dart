@@ -18,6 +18,8 @@ class ScheduledNotificationService {
     String? channelDescription,
     Importance importance = Importance.high,
     Priority priority = Priority.high,
+    bool playSound = true,
+    bool enableVibration = true,
   }) {
     final androidDetails = AndroidNotificationDetails(
       channelId,
@@ -25,9 +27,20 @@ class ScheduledNotificationService {
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
+      playSound: playSound,
+      enableVibration: enableVibration,
+      // Default sistem sesi kullan
+      sound: playSound
+          ? const RawResourceAndroidNotificationSound('notification')
+          : null,
     );
 
-    const iosDetails = DarwinNotificationDetails();
+    final iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: playSound,
+      sound: playSound ? 'default' : null,
+    );
 
     return NotificationDetails(android: androidDetails, iOS: iosDetails);
   }
@@ -43,26 +56,23 @@ class ScheduledNotificationService {
     String? payload,
     Importance importance = Importance.high,
     Priority priority = Priority.high,
+    bool playSound = true,
+    bool enableVibration = true,
     DateTimeComponents? matchDateTimeComponents,
-    int minutesBefore = 0,
   }) async {
-    final Duration notificationDelay = minutesBefore == 0
-        ? const Duration(seconds: 5)
-        : Duration(minutes: minutesBefore);
-
-    final notificationTime = scheduledTime.subtract(notificationDelay);
-
     await _plugin.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime.from(notificationTime, tz.local),
+      tz.TZDateTime.from(scheduledTime, tz.local),
       _notificationDetails(
         channelId: channelId,
         channelName: channelName,
         channelDescription: channelDescription,
         importance: importance,
         priority: priority,
+        playSound: playSound,
+        enableVibration: enableVibration,
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: matchDateTimeComponents,
