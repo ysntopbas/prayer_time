@@ -43,7 +43,7 @@
   "june": "Haziran",
   "language": "Dil",
   "languageSelect": "Dil Seçiniz",
-  "leftMinutes": "Dakika Kaldı",
+  "leftMinutes": "kaldı",
   "lightMode": "Aydınlık Tema",
   "locationCantUpdated": "Konum Güncellenemedi",
   "locationNotSpecified": "Konum Belirtilmedi",
@@ -51,7 +51,7 @@
   "maghrib": "Akşam",
   "march": "Mart",
   "may": "Mayıs",
-  "minutes": "Dakika",
+  "minutes": "dk",
   "monday": "Pazartesi",
   "monthlyPrayerTimePageTitle": "Takvim Sayfası",
   "muharram": "Muharrem",
@@ -98,5 +98,11 @@
   "version": "Versiyon",
   "wednesday": "Çarşamba",
   "weeklyPrayCalendar": "Haftalık Namaz Vakitleri",
-  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri"
+  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri",
+  "serviceTitle": "Namaz Vakti Servisi",
+  "nextPrayerNotification": "Sonraki Vakit: {prayerName}",
+  "timeRemaining": "{hours}s {minutes}d kaldı",
+  "nextPrayer": "Sonraki Vakit",
+  "leftMinutes": "kaldı",
+  "prayTime": "Namaz Vakti"
 }

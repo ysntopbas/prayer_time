@@ -71,6 +71,8 @@
   "monthlyPrayerTimePageTitle": "Calendar Page",
   "muharram": "Muharram",
   "nextPrayer": "Next Prayer",
+  "leftMinutes": "left",
+  "prayTime": "Prayer Time",
   "nightPrayer": "Night Prayer",
   "noonMiddayPrayer": "Noon/Midday Prayer",
   "notificationBeforePrayTime": "Before Prayer Time Notifications",
@@ -81,7 +83,6 @@
   "november": "November",
   "october": "October",
   "ownerName": "Created by atQs",
-  "prayTime": "Pray Time",
   "prayTimeNotAvailable": "No prayer times available",
   "prayTimes": "Pray Times",
   "rabiAlThani": "Rabi' al-thani\t",
@@ -113,5 +114,29 @@
   "version": "Version",
   "wednesday": "Wednesday",
   "weeklyPrayCalendar": "Weekly Prayers Calendar",
-  "weeklyPrayerTimePageTitle": "Weekly Prayer Times"
+  "weeklyPrayerTimePageTitle": "Weekly Prayer Times",
+  "serviceTitle": "Prayer Time Service",
+  "nextPrayerNotification": "Next Prayer: {prayerName}",
+  "timeRemaining": "{hours}h {minutes}m remaining",
+  "@nextPrayerNotification": {
+    "placeholders": {
+      "prayerName": {
+        "type": "String"
+      }
+    }
+  },
+  "@timeRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPrayer": "Next Prayer",
+  "leftMinutes": "left",
+  "prayTime": "Prayer Time",
+  "minutes": "min"
 }

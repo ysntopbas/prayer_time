@@ -359,7 +359,7 @@ abstract class AppLocalizations {
   /// No description provided for @leftMinutes.
   ///
   /// In en, this message translates to:
-  /// **'Left Minutes'**
+  /// **'left'**
   String get leftMinutes;
 
   /// No description provided for @lightMode.
@@ -407,7 +407,7 @@ abstract class AppLocalizations {
   /// No description provided for @minutes.
   ///
   /// In en, this message translates to:
-  /// **'Minutes'**
+  /// **'min'**
   String get minutes;
 
   /// No description provided for @monday.
@@ -433,6 +433,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next Prayer'**
   String get nextPrayer;
+
+  /// No description provided for @prayTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Time'**
+  String get prayTime;
 
   /// No description provided for @nightPrayer.
   ///
@@ -493,12 +499,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Created by atQs'**
   String get ownerName;
-
-  /// No description provided for @prayTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Pray Time'**
-  String get prayTime;
 
   /// No description provided for @prayTimeNotAvailable.
   ///
@@ -691,6 +691,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly Prayer Times'**
   String get weeklyPrayerTimePageTitle;
+
+  /// No description provided for @serviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Time Service'**
+  String get serviceTitle;
+
+  /// No description provided for @nextPrayerNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Prayer: {prayerName}'**
+  String nextPrayerNotification(String prayerName);
+
+  /// No description provided for @timeRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m remaining'**
+  String timeRemaining(String hours, String minutes);
 }
 
 class _AppLocalizationsDelegate

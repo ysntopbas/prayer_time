@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
@@ -285,5 +286,24 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void clearBatteryDialogFlag() {
     emit(state.copyWith(shouldShowBatteryDialog: false));
+  }
+
+  Future<void> startBackgroundService() async {
+    final service = FlutterBackgroundService();
+    final isRunning = await service.isRunning();
+
+    if (!isRunning) {
+      await service.startService();
+      log('Background service başlatıldı');
+    } else {
+      service.invoke('setAsForeground');
+      log('Background service zaten çalışıyor, foreground mode aktif');
+    }
+  }
+
+  Future<void> stopBackgroundService() async {
+    final service = FlutterBackgroundService();
+    service.invoke('stopService');
+    log('Background service durduruldu');
   }
 }

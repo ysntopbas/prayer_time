@@ -141,7 +141,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageSelect => 'Select Language';
 
   @override
-  String get leftMinutes => 'Left Minutes';
+  String get leftMinutes => 'left';
 
   @override
   String get lightMode => 'Light Theme';
@@ -165,7 +165,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get may => 'May';
 
   @override
-  String get minutes => 'Minutes';
+  String get minutes => 'min';
 
   @override
   String get monday => 'Monday';
@@ -178,6 +178,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nextPrayer => 'Next Prayer';
+
+  @override
+  String get prayTime => 'Prayer Time';
 
   @override
   String get nightPrayer => 'Night Prayer';
@@ -208,9 +211,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ownerName => 'Created by atQs';
-
-  @override
-  String get prayTime => 'Pray Time';
 
   @override
   String get prayTimeNotAvailable => 'No prayer times available';
@@ -308,4 +308,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Weekly Prayer Times';
+
+  @override
+  String get serviceTitle => 'Prayer Time Service';
+
+  @override
+  String nextPrayerNotification(String prayerName) {
+    return 'Next Prayer: $prayerName';
+  }
+
+  @override
+  String timeRemaining(String hours, String minutes) {
+    return '${hours}h ${minutes}m remaining';
+  }
 }

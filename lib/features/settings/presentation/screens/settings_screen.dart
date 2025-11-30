@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
@@ -187,33 +185,6 @@ class SettingsScreen extends StatelessWidget {
             Platform.isIOS
                 ? const SizedBox.shrink()
                 : Divider(color: appTheme.colorScheme.primary),
-
-            ElevatedButton(
-              onPressed: () {
-                FlutterBackgroundService().invoke('setAsForeground');
-              },
-              child: Text("Foreground Service Test"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                FlutterBackgroundService().invoke('setAsBackground');
-              },
-              child: Text("Background Service Test"),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final service = FlutterBackgroundService();
-                final isRunning = await service.isRunning();
-                if (isRunning) {
-                  service.invoke('stopService');
-                  log('Service Stopped');
-                } else {
-                  service.startService();
-                  log('Service Started');
-                }
-              },
-              child: Text("Start/Stop Service Test"),
-            ),
           ],
         ),
       ),

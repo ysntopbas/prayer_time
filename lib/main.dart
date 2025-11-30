@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/core/routing/app_router.dart';
+import 'package:prayer_time/core/services/backgroundServices/background_service_initialization.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/notification_initialization_service.dart';
@@ -28,9 +29,9 @@ void main() async {
     androidIcon: '@mipmap/ic_launcher',
   );
 
-  // final BackgroundServiceInitialization backgroundService =
-  //     BackgroundServiceInitialization();
-  // await backgroundService.initializeBackgroundService();
+  final BackgroundServiceInitialization backgroundService =
+      BackgroundServiceInitialization();
+  await backgroundService.initializeBackgroundService();
 
   runApp(MyApp(sharedPreferences: sharedPreferences));
 }

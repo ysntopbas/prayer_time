@@ -141,7 +141,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get languageSelect => 'Dil Seçiniz';
 
   @override
-  String get leftMinutes => 'Dakika Kaldı';
+  String get leftMinutes => 'kaldı';
 
   @override
   String get lightMode => 'Aydınlık Tema';
@@ -165,7 +165,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get may => 'Mayıs';
 
   @override
-  String get minutes => 'Dakika';
+  String get minutes => 'dk';
 
   @override
   String get monday => 'Pazartesi';
@@ -178,6 +178,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get nextPrayer => 'Sonraki Vakit';
+
+  @override
+  String get prayTime => 'Namaz Vakti';
 
   @override
   String get nightPrayer => ' ';
@@ -208,9 +211,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ownerName => 'Hazırlayan atQs';
-
-  @override
-  String get prayTime => 'Namaz Vakti';
 
   @override
   String get prayTimeNotAvailable => 'Namaz vakitlerine erişilemedi';
@@ -308,4 +308,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Haftalık Namaz Vakitleri';
+
+  @override
+  String get serviceTitle => 'Namaz Vakti Servisi';
+
+  @override
+  String nextPrayerNotification(String prayerName) {
+    return 'Sonraki Vakit: $prayerName';
+  }
+
+  @override
+  String timeRemaining(String hours, String minutes) {
+    return '${hours}s ${minutes}d kaldı';
+  }
 }
