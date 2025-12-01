@@ -24,6 +24,7 @@ class InstantNotificationService {
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
+      sound: const RawResourceAndroidNotificationSound('notification'),
     );
 
     const iosDetails = DarwinNotificationDetails();

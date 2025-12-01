@@ -29,10 +29,7 @@ class ScheduledNotificationService {
       priority: priority,
       playSound: playSound,
       enableVibration: enableVibration,
-      // Default sistem sesi kullan
-      sound: playSound
-          ? const RawResourceAndroidNotificationSound('notification')
-          : null,
+      sound: const RawResourceAndroidNotificationSound('notification'),
     );
 
     final iosDetails = DarwinNotificationDetails(

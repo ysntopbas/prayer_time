@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
+import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/battery_optimization_dialog.dart';
@@ -178,6 +179,52 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             Divider(color: appTheme.colorScheme.primary),
+
+            // Test Notification Sound Button
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    await InstantNotificationService().showNotification(
+                      id: 999,
+                      title: 'Test Notification',
+                      body: 'Testing notification sound',
+                      channelId: 'test_notification',
+                      channelName: 'Test Notifications',
+                      channelDescription: 'Test notification sounds',
+                    );
+
+                    messenger.showSnackBar(
+                      const SnackBar(
+                        content: Text('Test notification sent!'),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  } catch (e) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text('Failed: $e'),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.notifications_active),
+                label: const Text('Test Notification Sound'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                ),
+              ),
+            ),
+            Divider(color: appTheme.colorScheme.primary),
+
             NotificationSwitchListTile(),
             Divider(color: appTheme.colorScheme.primary),
             //İOS'da sessiz mod ayarı yok çünkü fiziksel anahtarla kontrol ediliyor
