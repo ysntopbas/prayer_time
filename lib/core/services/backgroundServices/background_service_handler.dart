@@ -55,7 +55,7 @@ void onStart(ServiceInstance service) async {
 
   // Cache güncellendiğinde tetiklenecek event
   service.on('cacheUpdated').listen((event) async {
-    log('📥 Cache güncelleme eventi alındı, bildirim yenileniyor...');
+    log('Cache güncelleme eventi alındı, bildirim yenileniyor...');
 
     if (service is AndroidServiceInstance &&
         await service.isForegroundService()) {
@@ -82,7 +82,7 @@ void onStart(ServiceInstance service) async {
       );
 
       log(
-        '✅ Cache güncelleme sonrası bildirim yenilendi: ${notificationData['content']}',
+        'Cache güncelleme sonrası bildirim yenilendi: ${notificationData['content']}',
       );
 
       // İlk güncelleme flag'ini true yap (eğer false ise)

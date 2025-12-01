@@ -124,15 +124,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     storageServices.saveBool('mainNotificationsEnabled', newValue);
 
     if (newValue) {
-      // Ana switch açıldığında tüm namazları default olarak aktif et
       await _enableAllNotificationsWithDefaults();
     } else {
-      // Ana switch kapandığında tüm bildirimleri kapat ve iptal et
-      _disableAllNotifications(); // await kaldırıldı çünkü void döndürüyor
+      _disableAllNotifications();
       await notificationManagerService.cancelAllScheduledNotifications();
     }
 
-    // Bildirimleri yeniden zamanla (sadece açıksa)
     if (newValue) {
       await notificationManagerService.scheduleAllNotifications();
     }
@@ -142,9 +139,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     for (final prayer in PrayerType.values) {
       final currentSettings = state.notificationBeforePraysSettings;
       final prayerKey = prayer.key;
-      // currentPrayerSetting değişkenini kaldırdık çünkü kullanılmıyordu
 
-      // Her namaz için default ayarlarla aktif et
       final updated = const NotificationBeforePrays(
         isEnabled: true,
         minutesBefore: 10, // Default 10 dakika
@@ -234,14 +229,13 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       emit(state.copyWith(notificationBeforePraysSettings: newSettings));
 
-      // Her ayar değişikliğinde bildirimleri yeniden zamanla
       await notificationManagerService.scheduleAllNotifications();
 
       log(
-        '✅ $prayerKey bildirimi güncellendi: enabled=${updated.isEnabled}, minutes=${updated.minutesBefore}',
+        '$prayerKey bildirimi güncellendi: enabled=${updated.isEnabled}, minutes=${updated.minutesBefore}',
       );
     } catch (e) {
-      log('❌ Bildirim ayarı güncellenirken hata: $e');
+      log('Bildirim ayarı güncellenirken hata: $e');
     }
   }
 
@@ -311,15 +305,13 @@ class SettingsCubit extends Cubit<SettingsState> {
           ),
         );
 
-        // Konum değiştiğinde bildirimleri yeniden zamanla
-        log('📍 Konum güncellendi, bildirimler yeniden zamanlanıyor...');
+        log('Konum güncellendi, bildirimler yeniden zamanlanıyor...');
         await notificationManagerService.scheduleAllNotifications();
-        log('✅ Konum değişikliği sonrası bildirimler güncellendi');
+        log('Konum değişikliği sonrası bildirimler güncellendi');
 
-        // Background service'i yeniden başlat (yeni cache ile)
-        log('🔄 Background service yeniden başlatılıyor...');
+        log('Background service yeniden başlatılıyor...');
         await _restartBackgroundService();
-        log('✅ Background service yeniden başlatıldı');
+        log('Background service yeniden başlatıldı');
       } else {
         emit(state.copyWith(isLocationLoading: false));
       }
@@ -333,22 +325,19 @@ class SettingsCubit extends Cubit<SettingsState> {
     try {
       final service = FlutterBackgroundService();
 
-      // Önce service'i durdur
       service.invoke('stopService');
       await Future.delayed(const Duration(seconds: 1));
 
-      // Sonra yeniden başlat
       final isRunning = await service.isRunning();
       if (!isRunning) {
         await service.startService();
       }
 
-      // Foreground mode'a geç
       service.invoke('setAsForeground');
 
-      log('✓ Background service cache ile senkronize edildi');
+      log('Background service cache ile senkronize edildi');
     } catch (e) {
-      log('❌ Background service restart hatası: $e');
+      log('Background service restart hatası: $e');
     }
   }
 

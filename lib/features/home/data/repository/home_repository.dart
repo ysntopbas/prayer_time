@@ -44,7 +44,7 @@ class HomeRepository {
     }
 
     if (locationChanged && locationData != null) {
-      log('⚠️ Konum değişti! Cache temizleniyor ve yeniden kaydediliyor...');
+      log('Konum değişti! Cache temizleniyor ve yeniden kaydediliyor...');
       await _cacheService.clearAllCache();
       await _cacheService.saveCachedLocation(locationData);
       log('✓ Cache temizlendi ve yeni konum kaydedildi');

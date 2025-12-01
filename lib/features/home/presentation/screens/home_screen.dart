@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
     final savedLocation = settingsCubit.getSavedLocation();
     context.read<HomeCubit>().fetchPrayerTimes(
       savedLocation: savedLocation,
-      context: context, // context parametresini ekliyoruz
+      context: context,
     );
   }
 
@@ -26,11 +26,8 @@ class HomeScreen extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       buildWhen: (previous, current) {
-        // İlk yükleme için HomeInitial'dan geçişi izin ver
         if (previous is HomeInitial) return true;
-        // Loading ve Error state'leri için izin ver
         if (current is HomeLoading || current is HomeError) return true;
-        // HomeLoaded içinde sadece prayer timings değişirse rebuild et
         if (previous is HomeLoaded && current is HomeLoaded) {
           return previous.prayerTimings != current.prayerTimings ||
               previous.cityName != current.cityName ||
@@ -39,7 +36,6 @@ class HomeScreen extends StatelessWidget {
         return true;
       },
       builder: (context, homeState) {
-        // İlk yükleme kontrolü - sadece bir kez çalışacak
         if (homeState is HomeInitial) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _loadPrayerTimes(context);
@@ -64,7 +60,6 @@ class _HomeScaffold extends StatelessWidget {
     required this.onLoadPrayerTimes,
   });
 
-  // Helper metod: Prayer name'i çevir
   String _getTranslatedPrayerName(BuildContext context, String prayerName) {
     final l10n = AppLocalizations.of(context)!;
 
@@ -109,7 +104,6 @@ class _HomeScaffold extends StatelessWidget {
           },
           child: BlocBuilder<HomeCubit, HomeState>(
             buildWhen: (previous, current) {
-              // HomeLoaded içindeki countdown güncellemelerini ignore et
               if (previous is HomeLoaded && current is HomeLoaded) {
                 return previous.prayerTimings != current.prayerTimings ||
                     previous.cityName != current.cityName ||

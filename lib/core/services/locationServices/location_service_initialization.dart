@@ -10,47 +10,36 @@ class LocationServiceInitialization {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Cihazın Konum Servisi (GPS) Açık mı?
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
-      // Servis Kapalı! Kullanıcıya Dialog göster.
       bool userWantsToOpenSettings = await _showEnableGpsDialog();
 
       if (userWantsToOpenSettings) {
-        // Kullanıcı "Ayarları Aç" dedi.
         await Geolocator.openLocationSettings();
 
-        //Kullanıcının ayarlardan dönmesini bekle
         await Future.delayed(const Duration(milliseconds: 1500));
 
-        //GPS'in açılıp açılmadığını kontrol et
         serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
         if (!serviceEnabled) {
-          // GPS hala kapalı, tekrar dialog göster
           return await initialize();
         }
-        // GPS açıldı, devam et
       } else {
-        // Kullanıcı "Vazgeç" dedi. Varsayılan şehirle devam edilecek.
         return false;
       }
     }
 
-    //  İzin Kontrolü (GPS açıksa buraya geçer)
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // İzin verilmedi
         return false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Kalıcı engellendi
       await _showPermissionDeniedDialog();
       return false;
     }

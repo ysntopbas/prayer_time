@@ -76,17 +76,15 @@ class HomeCubit extends Cubit<HomeState> {
 
       _startCountdown();
 
-      // Prayer times güncellendiğinde bildirimleri yeniden zamanla
-      log('🕌 Prayer times güncellendi, bildirimler yeniden zamanlanıyor...');
+      log('Prayer times güncellendi, bildirimler yeniden zamanlanıyor...');
       final notificationManager = NotificationManagerService(
         cacheService.storageServices,
         ScheduledNotificationService(),
         cacheService,
       );
       await notificationManager.scheduleAllNotifications();
-      log('✅ Prayer times güncellemesi sonrası bildirimler yenilendi');
+      log('Prayer times güncellemesi sonrası bildirimler yenilendi');
 
-      // Background service'e cache güncellendiğini bildir
       _notifyBackgroundServiceCacheUpdated();
     } catch (e) {
       emit(HomeError(message: e.toString()));
@@ -96,11 +94,10 @@ class HomeCubit extends Cubit<HomeState> {
   void _notifyBackgroundServiceCacheUpdated() {
     try {
       final service = FlutterBackgroundService();
-      // Service'e cache güncellendiğini bildir (custom event)
       service.invoke('cacheUpdated');
-      log('📡 Background service\'e cache güncelleme bildirimi gönderildi');
+      log('Background service\'e cache güncelleme bildirimi gönderildi');
     } catch (e) {
-      log('⚠️ Background service bildirim hatası: $e');
+      log('Background service bildirim hatası: $e');
     }
   }
 

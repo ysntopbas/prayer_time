@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prayer_time/core/routing/app_routes.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
@@ -21,9 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _startTime = DateTime.now();
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-    // HomeCubit'i tetikle
     final settingsCubit = context.read<SettingsCubit>();
     final savedLocation = settingsCubit.getSavedLocation();
 
@@ -42,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToHome() async {
     if (_startTime == null) return;
 
+    // Kullanıcı logoyu en az 2 saniye görsün
     final elapsedTime = DateTime.now().difference(_startTime!);
     final remainingTime = const Duration(seconds: 2) - elapsedTime;
 
@@ -64,25 +66,42 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFFFE5C8),
-        body: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/splashScreen/splashScreen.png"),
-                  fit: BoxFit.cover,
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFFFFE5C8), Color(0xFF56987F)],
+            ),
+          ),
+          child: Stack(
+            children: [
+              // Logo Katmanı
+              Center(
+                child: SvgPicture.asset(
+                  "assets/splashScreen/splashScreen.svg",
+
+                  // BoxFit.contain
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
                 ),
               ),
-            ),
-            const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+
+              // Yükleniyor Çubuğu Katmanı
+              const Positioned(
+                bottom: 60,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

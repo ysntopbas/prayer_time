@@ -163,6 +163,6 @@ class CacheService {
     await _storageServices.remove(_lastDailyUpdateKey);
     await _storageServices.remove(_lastWeeklyUpdateKey);
     await _storageServices.remove(_lastMonthlyUpdateKey);
-    log('🗑️ Tüm cache temizlendi');
+    log('Tüm cache temizlendi');
   }
 }

@@ -48,7 +48,7 @@ class NotificationManagerService {
     final baseTimings = getTodayTimings();
 
     if (baseTimings == null) {
-      log('⚠️ Base timings null, bildirimler zamanlanamıyor');
+      log('Base timings null, bildirimler zamanlanamıyor');
       return;
     }
 
@@ -56,7 +56,7 @@ class NotificationManagerService {
         _storageServices.getBool('mainNotificationsEnabled') ?? false;
 
     if (!isMainEnabled) {
-      log('📴 Ana bildirim switch\'i kapalı, tüm bildirimler iptal ediliyor');
+      log('Ana bildirim switch\'i kapalı, tüm bildirimler iptal ediliyor');
       await cancelAllScheduledNotifications();
       return;
     }
@@ -68,11 +68,10 @@ class NotificationManagerService {
 
     // Önce tüm eski bildirimleri iptal et
     await cancelAllScheduledNotifications();
-    log('🗑️ Eski bildirimler temizlendi');
+    log(' Eski bildirimler temizlendi');
 
-    log('🔔 Yeni bildirimler zamanlanıyor...');
+    log(' Yeni bildirimler zamanlanıyor...');
 
-    // Her namaz vakti için bildirimi zamanla
     await _schedulePrayerNotification(
       prayerName: l10n.fajr,
       baseTimeStr: baseTimings.fajr!,
@@ -121,7 +120,7 @@ class NotificationManagerService {
       l10n: l10n,
     );
 
-    log('✅ Tüm bildirimler başarıyla zamanlandı');
+    log(' Tüm bildirimler başarıyla zamanlandı');
   }
 
   Future<void> _schedulePrayerNotification({
@@ -131,12 +130,11 @@ class NotificationManagerService {
     required int notificationId,
     required AppLocalizations l10n,
   }) async {
-    // Bu namaz için bildirim kapalıysa iptal et
     if (!setting.isEnabled) {
       await _scheduledNotificationService.cancelScheduledNotification(
         notificationId,
       );
-      log('❌ $prayerName bildirimi kapalı, iptal edildi');
+      log('$prayerName bildirimi kapalı, iptal edildi');
       return;
     }
 
@@ -144,10 +142,9 @@ class NotificationManagerService {
     final minutesBefore = setting.minutesBefore;
     final scheduledTime = baseTime.subtract(Duration(minutes: minutesBefore));
 
-    // Geçmiş bir zaman için bildirim zamanlanmasın
     if (scheduledTime.isBefore(DateTime.now())) {
       log(
-        '⏰ $prayerName bildirimi geçmiş bir zaman ($scheduledTime), atlanıyor',
+        ' $prayerName bildirimi geçmiş bir zaman ($scheduledTime), atlanıyor',
       );
       return;
     }
@@ -167,13 +164,13 @@ class NotificationManagerService {
     );
 
     log(
-      '✅ $prayerName bildirimi zamanlandı: $scheduledTime ($minutesBefore dk önce)',
+      ' $prayerName bildirimi zamanlandı: $scheduledTime ($minutesBefore dk önce)',
     );
   }
 
   Future<void> cancelAllScheduledNotifications() async {
     await _scheduledNotificationService.cancelAllScheduledNotifications();
-    log('🗑️ Tüm bildirimler iptal edildi');
+    log('Tüm bildirimler iptal edildi');
   }
 
   DateTime _parseTime(String timeStr) {
@@ -186,7 +183,7 @@ class NotificationManagerService {
       final now = DateTime.now();
       return DateTime(now.year, now.month, now.day, hour, minute);
     } catch (e) {
-      log('❌ Time parse hatası: $e');
+      log(' Time parse hatası: $e');
       return DateTime.now();
     }
   }
