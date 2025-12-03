@@ -30,6 +30,7 @@ class ScheduledNotificationService {
       playSound: playSound,
       enableVibration: enableVibration,
       sound: const RawResourceAndroidNotificationSound('notification'),
+      icon: 'prayer_time_icon_notification',
     );
 
     final iosDetails = DarwinNotificationDetails(

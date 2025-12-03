@@ -30,7 +30,7 @@ void main() async {
       NotificationInitializationService();
   await notificationService.init(
     timeZone: 'Europe/Istanbul',
-    androidIcon: '@mipmap/ic_launcher',
+    androidIcon: 'prayer_time_icon_notification',
   );
 
   final BackgroundServiceInitialization backgroundService =

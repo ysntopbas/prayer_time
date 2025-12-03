@@ -28,7 +28,7 @@ class NotificationInitializationService {
     }
 
     final androidSettings = AndroidInitializationSettings(
-      androidIcon ?? '@mipmap/ic_launcher',
+      androidIcon ?? 'prayer_time_icon_notification',
     );
 
     const iosSettings = DarwinInitializationSettings(

@@ -7,7 +7,7 @@ class AppTheme {
   static const String _fontFamily = 'Montserrat';
 
   // 3. Renk paletimizi tanımlıyoruz
-  static const Color _lightPrimaryColor = Color(0xFF308C58);
+  static const Color _lightPrimaryColor = Color.fromARGB(255, 48, 140, 88);
   static const Color _lightSecondaryColor = Color(0xFF0E978B);
   static const Color _lightOnPrimaryColor = Colors.white;
   static const Color _lightBackgroundColor = Colors.white;
