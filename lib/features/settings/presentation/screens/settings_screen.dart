@@ -1,9 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:prayer_time/core/init/locator.dart';
+import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
@@ -21,7 +22,6 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context)!;
     final appTheme = Theme.of(context);
-    final CacheService cacheService = sl<CacheService>();
 
     return BlocListener<SettingsCubit, SettingsState>(
       listenWhen: (previous, current) =>
@@ -239,15 +239,27 @@ class SettingsScreen extends StatelessWidget {
                 : Divider(color: appTheme.colorScheme.primary),
             ElevatedButton(
               onPressed: () async {
-                await cacheService.clearAllCache();
+                try {
+                  await di.sl<CacheService>().clearAllCache();
+                } catch (e) {
+                  log("Cache hatası: $e");
+                }
                 if (context.mounted) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(l10nL.cacheCleared)));
-                  await sl.reset();
-                  if (context.mounted) {
-                    Phoenix.rebirth(context);
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10nL.cacheCleared),
+                      backgroundColor: Colors.green,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
+                await Future.delayed(const Duration(seconds: 2));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                }
+                await di.resetLocator();
+                if (context.mounted) {
+                  Phoenix.rebirth(context);
                 }
               },
               child: Text(l10nL.cleanCache),

@@ -17,3 +17,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => CacheService(sl()));
 }
+
+Future<void> resetLocator() async {
+  await sl.reset(); // Kutuyu tamamen boşalt
+  await init(); // Kutuyu tekrar doldur
+}

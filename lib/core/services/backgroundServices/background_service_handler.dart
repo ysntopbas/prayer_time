@@ -14,9 +14,12 @@ void onStart(ServiceInstance service) async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
 
-  log('Background service başlatılıyor...');
+  log('[BackgroundService] Service starting...');
 
+  // SharedPreferences'i yeniden yukle (disk'ten taze veri)
   final sharedPreferences = await SharedPreferences.getInstance();
+  await sharedPreferences.reload(); // ONEMLI: Disk'ten yeniden oku
+
   final storageServices = StorageServices(sharedPreferences);
   final cacheService = CacheService(storageServices);
 
@@ -26,40 +29,42 @@ void onStart(ServiceInstance service) async {
   AppLocalizations? l10n;
   try {
     l10n = await AppLocalizations.delegate.load(locale);
-    log('Localization yüklendi: $languageCode');
+    log('[BackgroundService] Localization loaded: $languageCode');
   } catch (e) {
-    log('Localization yükleme hatası: $e');
+    log('[BackgroundService] Localization loading error: $e');
   }
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
       service.setAsForegroundService();
-      log('Foreground service olarak ayarlandı');
+      log('[BackgroundService] Foreground service activated');
     });
 
     service.on('setAsBackground').listen((event) {
       service.setAsBackgroundService();
-      log('Background service olarak ayarlandı');
+      log('[BackgroundService] Background service activated');
     });
   }
 
   service.on('stopService').listen((event) {
-    log('Servis durduruluyor');
+    log('[BackgroundService] Service stopping');
     service.stopSelf();
   });
 
-  // İlk güncelleme flag'ini EN BAŞTA tanımla
-  bool isFirstUpdateDone = false;
-  int checkAttempts = 0;
-  const maxAttempts = 60;
-
-  // Cache güncellendiğinde tetiklenecek event
+  // Cache guncellendiginde tetiklenecek event
   service.on('cacheUpdated').listen((event) async {
-    log('Cache güncelleme eventi alındı, bildirim yenileniyor...');
+    log('[BackgroundService] Cache update event received');
+
+    // SharedPreferences'i yeniden yukle (disk'ten taze veri cek)
+    await sharedPreferences.reload();
+    log('[BackgroundService] SharedPreferences reloaded from disk');
+
+    // Kisa bir delay - disk yaziminin tam bitmesini garanti et
+    await Future.delayed(const Duration(milliseconds: 300));
 
     if (service is AndroidServiceInstance &&
         await service.isForegroundService()) {
-      // Reload localization
+      // Yeni cache ile localization'i yukle
       final currentLanguageCode =
           storageServices.getString('languageCode') ?? 'en';
       AppLocalizations? currentL10n;
@@ -69,11 +74,56 @@ void onStart(ServiceInstance service) async {
           Locale(currentLanguageCode),
         );
       } catch (e) {
-        log('Localization reload hatası: $e');
+        log('[BackgroundService] Localization reload error: $e');
         currentL10n = l10n;
       }
 
-      // Yeni cache ile bildirimi güncelle
+      // YENI CACHE ILE bildirimi guncelle
+      final notificationData = _calculateNextPrayer(cacheService, currentL10n);
+
+      // Cache verilerini loglayalim
+      final todayTimings = cacheService.getDailyTimings();
+      final cachedLocation = cacheService.getCachedLocation();
+      log(
+        '[BackgroundService] Cached Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
+      );
+      log('[BackgroundService] Today Fajr: ${todayTimings?.fajr}');
+
+      service.setForegroundNotificationInfo(
+        title: notificationData['title'] as String,
+        content: notificationData['content'] as String,
+      );
+
+      log(
+        '[BackgroundService] Cache updated, notification refreshed: ${notificationData['content']}',
+      );
+    }
+  });
+
+  // ILK YUKLEME - Cache dolana kadar bekle
+  log('[BackgroundService] Waiting for initial cache load...');
+  await _waitForInitialCache(service, cacheService, l10n, sharedPreferences);
+
+  // Dakikalik guncelleme timer'i
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
+    if (service is AndroidServiceInstance &&
+        await service.isForegroundService()) {
+      // Her dakika disk'ten yeniden oku
+      await sharedPreferences.reload();
+
+      final currentLanguageCode =
+          storageServices.getString('languageCode') ?? 'en';
+      AppLocalizations? currentL10n;
+
+      try {
+        currentL10n = await AppLocalizations.delegate.load(
+          Locale(currentLanguageCode),
+        );
+      } catch (e) {
+        log('[BackgroundService] Localization reload error: $e');
+        currentL10n = l10n;
+      }
+
       final notificationData = _calculateNextPrayer(cacheService, currentL10n);
 
       service.setForegroundNotificationInfo(
@@ -82,38 +132,46 @@ void onStart(ServiceInstance service) async {
       );
 
       log(
-        'Cache güncelleme sonrası bildirim yenilendi: ${notificationData['content']}',
+        '[BackgroundService] Periodic update: ${notificationData['content']}',
       );
-
-      // İlk güncelleme flag'ini true yap (eğer false ise)
-      isFirstUpdateDone = true;
     }
   });
+}
 
-  // İlk güncellemeyi bekle - cache dolu olana kadar
-  Timer.periodic(const Duration(seconds: 5), (timer) async {
-    checkAttempts++;
+// Ilk cache yuklemesini bekleyen fonksiyon
+Future<void> _waitForInitialCache(
+  ServiceInstance service,
+  CacheService cacheService,
+  AppLocalizations? l10n,
+  SharedPreferences sharedPreferences,
+) async {
+  int attempts = 0;
+  const maxAttempts = 60; // 5 dakika (5 saniyede bir kontrol)
 
-    if (isFirstUpdateDone) {
-      timer.cancel();
-      return;
-    }
-
-    if (checkAttempts > maxAttempts) {
-      log('Maksimum deneme sayısına ulaşıldı, timer durduruluyor');
-      timer.cancel();
-      return;
-    }
+  while (attempts < maxAttempts) {
+    // Her kontrol oncesi disk'ten yeniden oku
+    await sharedPreferences.reload();
+    await Future.delayed(const Duration(milliseconds: 200));
 
     final todayTimings = cacheService.getDailyTimings();
     final tomorrowTimings = cacheService.getNextDayTimings();
+    final cachedLocation = cacheService.getCachedLocation();
 
-    log('Cache kontrol ediliyor (deneme $checkAttempts/$maxAttempts)...');
-    log('Today timings: ${todayTimings != null ? "VAR" : "YOK"}');
-    log('Tomorrow timings: ${tomorrowTimings != null ? "VAR" : "YOK"}');
+    log(
+      '[BackgroundService] Cache check (attempt ${attempts + 1}/$maxAttempts)',
+    );
+    log(
+      '[BackgroundService]   Today: ${todayTimings != null ? "Available" : "Not available"}',
+    );
+    log(
+      '[BackgroundService]   Tomorrow: ${tomorrowTimings != null ? "Available" : "Not available"}',
+    );
+    log(
+      '[BackgroundService]   Location: ${cachedLocation?['city'] ?? "Not available"}',
+    );
 
     if (todayTimings != null && tomorrowTimings != null) {
-      log('Cache dolu! İlk notification gösteriliyor');
+      log('[BackgroundService] Cache ready! Showing initial notification');
 
       if (service is AndroidServiceInstance &&
           await service.isForegroundService()) {
@@ -124,53 +182,18 @@ void onStart(ServiceInstance service) async {
           content: notificationData['content'] as String,
         );
 
-        log('İlk notification gösterildi: ${notificationData['content']}');
-        isFirstUpdateDone = true;
-        timer.cancel();
+        log(
+          '[BackgroundService] Initial notification displayed: ${notificationData['content']}',
+        );
       }
-    } else {
-      log('Cache henüz boş, bekleniyor...');
-    }
-  });
-
-  // Dakikalık güncelleme timer'ı
-  Timer.periodic(const Duration(minutes: 1), (timer) async {
-    if (!isFirstUpdateDone) {
-      log('İlk güncelleme henüz yapılmadı, dakikalık güncelleme atlanıyor...');
       return;
     }
 
-    if (service is AndroidServiceInstance) {
-      if (await service.isForegroundService()) {
-        final currentLanguageCode =
-            storageServices.getString('languageCode') ?? 'en';
-        AppLocalizations? currentL10n;
+    attempts++;
+    await Future.delayed(const Duration(seconds: 5));
+  }
 
-        try {
-          currentL10n = await AppLocalizations.delegate.load(
-            Locale(currentLanguageCode),
-          );
-        } catch (e) {
-          log('Localization reload hatası: $e');
-          currentL10n = l10n;
-        }
-
-        final notificationData = _calculateNextPrayer(
-          cacheService,
-          currentL10n,
-        );
-
-        service.setForegroundNotificationInfo(
-          title: notificationData['title'] as String,
-          content: notificationData['content'] as String,
-        );
-
-        log(
-          'Foreground notification güncellendi: ${notificationData['content']}',
-        );
-      }
-    }
-  });
+  log('[BackgroundService] Cache could not be loaded, max attempts reached');
 }
 
 Map<String, String> _calculateNextPrayer(
@@ -180,9 +203,17 @@ Map<String, String> _calculateNextPrayer(
   try {
     final todayTimings = cacheService.getDailyTimings();
     final tomorrowTimings = cacheService.getNextDayTimings();
+    final cachedLocation = cacheService.getCachedLocation();
+
+    log('[BackgroundService] _calculateNextPrayer called');
+    log(
+      '[BackgroundService]   Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
+    );
+    log('[BackgroundService]   Fajr: ${todayTimings?.fajr}');
+    log('[BackgroundService]   Dhuhr: ${todayTimings?.dhuhr}');
 
     if (todayTimings == null || tomorrowTimings == null) {
-      log(' Cache boş, bildirim gösterilemiyor');
+      log('[BackgroundService] Cache is empty, cannot display notification');
       return {
         'title': l10n?.prayTime ?? 'Prayer Time',
         'content': l10n?.prayTimeNotAvailable ?? 'Loading prayer times...',
@@ -211,7 +242,6 @@ Map<String, String> _calculateNextPrayer(
     final prayerName = nextPrayerInfo['name'] as String;
     final prayerIcon = _getPrayerIcon(prayerName, l10n);
 
-    // Format: "07:59 left" veya sadece dakika varsa "45 dk kaldı"
     String timeFormat;
     if (hours > 0) {
       timeFormat =
@@ -226,7 +256,7 @@ Map<String, String> _calculateNextPrayer(
       'content': '$prayerIcon $timeFormat',
     };
   } catch (e) {
-    log('Hata oluştu: $e');
+    log('[BackgroundService] Error occurred: $e');
     return {
       'title': l10n?.prayTime ?? 'Prayer Time',
       'content': 'Error: ${e.toString()}',
@@ -235,21 +265,20 @@ Map<String, String> _calculateNextPrayer(
 }
 
 String _getPrayerIcon(String prayerName, AppLocalizations? l10n) {
-  // Prayer name'e göre emoji icon döndür
   if (prayerName == l10n?.fajr || prayerName == 'Fajr') {
-    return '🌙'; // Fajr
+    return '🌙';
   } else if (prayerName == l10n?.sunrise || prayerName == 'Sunrise') {
-    return '🌅'; // Sunrise
+    return '🌅';
   } else if (prayerName == l10n?.dhuhr || prayerName == 'Dhuhr') {
-    return '☀️'; // Dhuhr
+    return '☀️';
   } else if (prayerName == l10n?.asr || prayerName == 'Asr') {
-    return '🌤️'; // Asr
+    return '🌤️';
   } else if (prayerName == l10n?.maghrib || prayerName == 'Maghrib') {
-    return '🌆'; // Maghrib
+    return '🌆';
   } else if (prayerName == l10n?.isha || prayerName == 'Isha') {
-    return '🌃'; // Isha
+    return '🌃';
   }
-  return '🕌'; // Default mosque icon
+  return '🕌';
 }
 
 Map<String, dynamic>? _getNextPrayerInfo(
@@ -269,7 +298,7 @@ Map<String, dynamic>? _getNextPrayerInfo(
         return DateTime(now.year, now.month, now.day, hour, minute);
       }
     } catch (e) {
-      log('Time parse error: $e');
+      log('[BackgroundService] Time parse error: $e');
     }
     return null;
   }
