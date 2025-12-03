@@ -47,6 +47,20 @@ class HomeRepository {
       log('Konum değişti! Cache temizleniyor ve yeniden kaydediliyor...');
       await _cacheService.clearAllCache();
       await _cacheService.saveCachedLocation(locationData);
+
+      await _cacheService.storageServices.saveString(
+        'cityName',
+        locationData['city'] ?? '',
+      );
+      await _cacheService.storageServices.saveString(
+        'countryName',
+        locationData['country'] ?? '',
+      );
+      await _cacheService.storageServices.saveString(
+        'subAdministrativeArea',
+        locationData['subAdministrativeArea'] ?? '',
+      );
+
       log('✓ Cache temizlendi ve yeni konum kaydedildi');
     }
 

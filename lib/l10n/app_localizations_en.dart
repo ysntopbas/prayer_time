@@ -54,7 +54,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get beforeSilentMode => 'Silent Mode Active';
 
   @override
+  String get cacheCleared => 'Memory cleared';
+
+  @override
   String get cancel => 'Cancel';
+
+  @override
+  String get cleanCache => 'Clean Memory';
 
   @override
   String get compassTile => 'Qıblah Compass';
@@ -180,7 +186,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextPrayer => 'Next Prayer';
 
   @override
-  String get prayTime => 'Prayer Time';
+  String nextPrayerNotification(String prayerName) {
+    return 'Next Prayer: $prayerName';
+  }
 
   @override
   String get nightPrayer => 'Night Prayer';
@@ -211,6 +219,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ownerName => 'Created by atQs';
+
+  @override
+  String get prayTime => 'Prayer Time';
 
   @override
   String get prayTimeNotAvailable => 'No prayer times available';
@@ -244,6 +255,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get september => 'September';
+
+  @override
+  String get serviceTitle => 'Prayer Time Service';
 
   @override
   String get setFirstLocation =>
@@ -286,6 +300,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thursday => 'Thursday';
 
   @override
+  String timeRemaining(String hours, String minutes) {
+    return '${hours}h ${minutes}m remaining';
+  }
+
+  @override
   String get todaysPrayerTimes => 'Today\'s Prayer Times';
 
   @override
@@ -308,17 +327,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Weekly Prayer Times';
-
-  @override
-  String get serviceTitle => 'Prayer Time Service';
-
-  @override
-  String nextPrayerNotification(String prayerName) {
-    return 'Next Prayer: $prayerName';
-  }
-
-  @override
-  String timeRemaining(String hours, String minutes) {
-    return '${hours}h ${minutes}m remaining';
-  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/routing/app_router.dart';
 import 'package:prayer_time/core/services/backgroundServices/background_service_initialization.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
@@ -19,6 +21,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await di.init();
+
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
 
@@ -33,7 +37,7 @@ void main() async {
       BackgroundServiceInitialization();
   await backgroundService.initializeBackgroundService();
 
-  runApp(MyApp(sharedPreferences: sharedPreferences));
+  runApp(Phoenix(child: MyApp(sharedPreferences: sharedPreferences)));
 }
 
 class MyApp extends StatelessWidget {

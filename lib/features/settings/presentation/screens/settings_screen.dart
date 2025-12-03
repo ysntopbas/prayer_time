@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:prayer_time/core/init/locator.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
@@ -18,6 +21,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context)!;
     final appTheme = Theme.of(context);
+    final CacheService cacheService = sl<CacheService>();
 
     return BlocListener<SettingsCubit, SettingsState>(
       listenWhen: (previous, current) =>
@@ -227,11 +231,27 @@ class SettingsScreen extends StatelessWidget {
 
             NotificationSwitchListTile(),
             Divider(color: appTheme.colorScheme.primary),
+
             //İOS'da sessiz mod ayarı yok çünkü fiziksel anahtarla kontrol ediliyor
             Platform.isIOS ? const SizedBox.shrink() : SilentModeListTile(),
             Platform.isIOS
                 ? const SizedBox.shrink()
                 : Divider(color: appTheme.colorScheme.primary),
+            ElevatedButton(
+              onPressed: () async {
+                await cacheService.clearAllCache();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(l10nL.cacheCleared)));
+                  await sl.reset();
+                  if (context.mounted) {
+                    Phoenix.rebirth(context);
+                  }
+                }
+              },
+              child: Text(l10nL.cleanCache),
+            ),
           ],
         ),
       ),

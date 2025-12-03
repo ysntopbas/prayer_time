@@ -12,8 +12,25 @@
   "@monthlyPrayerTimePageTitle": {
     "description": "The title of the monthlyPrayerTime page"
   },
+  "@nextPrayerNotification": {
+    "placeholders": {
+      "prayerName": {
+        "type": "String"
+      }
+    }
+  },
   "@settingsPageTitle": {
     "description": "The title of the settings page"
+  },
+  "@timeRemaining": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
   },
   "after": "After",
   "afterSilentMode": "Disable Silent Mode",
@@ -29,7 +46,9 @@
   "batteryOptimizationWhy": "Why is this necessary?",
   "before": "Before",
   "beforeSilentMode": "Silent Mode Active",
+  "cacheCleared": "Memory cleared",
   "cancel": "Cancel",
+  "cleanCache": "Clean Memory",
   "compassTile": "Qıblah Compass",
   "darkMode": "Dark Theme",
   "date": "Date",
@@ -58,7 +77,7 @@
   "june": "June",
   "language": "Language",
   "languageSelect": "Select Language",
-  "leftMinutes": "Left Minutes",
+  "leftMinutes": "left",
   "lightMode": "Light Theme",
   "locationCantUpdated": "Failed to update location",
   "locationNotSpecified": "Location not specified",
@@ -66,13 +85,12 @@
   "maghrib": "Maghrib",
   "march": "March",
   "may": "May",
-  "minutes": "Minutes",
+  "minutes": "min",
   "monday": "Monday",
   "monthlyPrayerTimePageTitle": "Calendar Page",
   "muharram": "Muharram",
   "nextPrayer": "Next Prayer",
-  "leftMinutes": "left",
-  "prayTime": "Prayer Time",
+  "nextPrayerNotification": "Next Prayer: {prayerName}",
   "nightPrayer": "Night Prayer",
   "noonMiddayPrayer": "Noon/Midday Prayer",
   "notificationBeforePrayTime": "Before Prayer Time Notifications",
@@ -83,6 +101,7 @@
   "november": "November",
   "october": "October",
   "ownerName": "Created by atQs",
+  "prayTime": "Prayer Time",
   "prayTimeNotAvailable": "No prayer times available",
   "prayTimes": "Pray Times",
   "rabiAlThani": "Rabi' al-thani\t",
@@ -94,6 +113,7 @@
   "seconds": "Seconds",
   "selectTime": "Select Time",
   "september": "September",
+  "serviceTitle": "Prayer Time Service",
   "setFirstLocation": "Please press refresh button for set first location",
   "settingsPageTitle": "Settings",
   "shaban": "Sha'ban",
@@ -107,6 +127,7 @@
   "sunset": "Sunset",
   "sunsetPrayer": "Sunset Prayer",
   "thursday": "Thursday",
+  "timeRemaining": "{hours}h {minutes}m remaining",
   "todaysPrayerTimes": "Today's Prayer Times",
   "tuesday": "Tuesday",
   "turkish": "Turkish",
@@ -114,29 +135,5 @@
   "version": "Version",
   "wednesday": "Wednesday",
   "weeklyPrayCalendar": "Weekly Prayers Calendar",
-  "weeklyPrayerTimePageTitle": "Weekly Prayer Times",
-  "serviceTitle": "Prayer Time Service",
-  "nextPrayerNotification": "Next Prayer: {prayerName}",
-  "timeRemaining": "{hours}h {minutes}m remaining",
-  "@nextPrayerNotification": {
-    "placeholders": {
-      "prayerName": {
-        "type": "String"
-      }
-    }
-  },
-  "@timeRemaining": {
-    "placeholders": {
-      "hours": {
-        "type": "String"
-      },
-      "minutes": {
-        "type": "String"
-      }
-    }
-  },
-  "nextPrayer": "Next Prayer",
-  "leftMinutes": "left",
-  "prayTime": "Prayer Time",
-  "minutes": "min"
+  "weeklyPrayerTimePageTitle": "Weekly Prayer Times"
 }

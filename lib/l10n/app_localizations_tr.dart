@@ -54,7 +54,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get beforeSilentMode => 'Sessize Al';
 
   @override
+  String get cacheCleared => 'Hafıza Temizlendi';
+
+  @override
   String get cancel => 'İptal';
+
+  @override
+  String get cleanCache => 'Hafızayı Temizle';
 
   @override
   String get compassTile => 'Kıble Pusulası';
@@ -180,7 +186,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nextPrayer => 'Sonraki Vakit';
 
   @override
-  String get prayTime => 'Namaz Vakti';
+  String nextPrayerNotification(String prayerName) {
+    return 'Sonraki Vakit: $prayerName';
+  }
 
   @override
   String get nightPrayer => ' ';
@@ -211,6 +219,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ownerName => 'Hazırlayan atQs';
+
+  @override
+  String get prayTime => 'Namaz Vakti';
 
   @override
   String get prayTimeNotAvailable => 'Namaz vakitlerine erişilemedi';
@@ -244,6 +255,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get september => 'Eylül';
+
+  @override
+  String get serviceTitle => 'Namaz Vakti Servisi';
 
   @override
   String get setFirstLocation =>
@@ -286,6 +300,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get thursday => 'Perşembe';
 
   @override
+  String timeRemaining(String hours, String minutes) {
+    return '${hours}s ${minutes}d kaldı';
+  }
+
+  @override
   String get todaysPrayerTimes => 'Bugünün Namaz Vakitleri';
 
   @override
@@ -308,17 +327,4 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Haftalık Namaz Vakitleri';
-
-  @override
-  String get serviceTitle => 'Namaz Vakti Servisi';
-
-  @override
-  String nextPrayerNotification(String prayerName) {
-    return 'Sonraki Vakit: $prayerName';
-  }
-
-  @override
-  String timeRemaining(String hours, String minutes) {
-    return '${hours}s ${minutes}d kaldı';
-  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:prayer_time/core/init/locator.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 
 class LocationServiceInitialization {
   final BuildContext context;
@@ -12,7 +14,11 @@ class LocationServiceInitialization {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (!serviceEnabled) {
+    final CacheService cacheService = sl<CacheService>();
+    final cachedData = cacheService.getCachedLocation();
+    final bool hasCache = cachedData != null && cachedData.isNotEmpty;
+
+    if (!serviceEnabled && !hasCache) {
       bool userWantsToOpenSettings = await _showEnableGpsDialog();
 
       if (userWantsToOpenSettings) {
@@ -75,7 +81,6 @@ class LocationServiceInitialization {
         false;
   }
 
-  /// Konum izni kalıcı olarak reddedildiğinde gösterilecek dialog
   Future<void> _showPermissionDeniedDialog() async {
     await showDialog(
       context: context,

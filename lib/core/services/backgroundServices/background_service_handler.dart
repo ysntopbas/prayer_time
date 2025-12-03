@@ -113,7 +113,7 @@ void onStart(ServiceInstance service) async {
     log('Tomorrow timings: ${tomorrowTimings != null ? "VAR" : "YOK"}');
 
     if (todayTimings != null && tomorrowTimings != null) {
-      log('✓ Cache dolu! İlk notification gösteriliyor');
+      log('Cache dolu! İlk notification gösteriliyor');
 
       if (service is AndroidServiceInstance &&
           await service.isForegroundService()) {
@@ -124,12 +124,12 @@ void onStart(ServiceInstance service) async {
           content: notificationData['content'] as String,
         );
 
-        log('✓ İlk notification gösterildi: ${notificationData['content']}');
+        log('İlk notification gösterildi: ${notificationData['content']}');
         isFirstUpdateDone = true;
         timer.cancel();
       }
     } else {
-      log('✗ Cache henüz boş, bekleniyor...');
+      log('Cache henüz boş, bekleniyor...');
     }
   });
 
@@ -182,7 +182,7 @@ Map<String, String> _calculateNextPrayer(
     final tomorrowTimings = cacheService.getNextDayTimings();
 
     if (todayTimings == null || tomorrowTimings == null) {
-      log('⚠ Cache boş, bildirim gösterilemiyor');
+      log(' Cache boş, bildirim gösterilemiyor');
       return {
         'title': l10n?.prayTime ?? 'Prayer Time',
         'content': l10n?.prayTimeNotAvailable ?? 'Loading prayer times...',

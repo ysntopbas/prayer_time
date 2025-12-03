@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
@@ -28,11 +29,31 @@ class SettingsCubit extends Cubit<SettingsState> {
   void _loadInitialSettings() {
     final isDarkMode = storageServices.getBool('isDarkMode') ?? false;
     final languageCode = storageServices.getString('languageCode') ?? 'en';
-    final cityName = storageServices.getString('cityName');
-    final countryName = storageServices.getString('countryName');
-    final subAdministrativeArea = storageServices.getString(
+
+    final cacheService = CacheService(storageServices);
+    final cachedLocation = cacheService.getCachedLocation();
+
+    String? cityName = storageServices.getString('cityName');
+    String? countryName = storageServices.getString('countryName');
+    String? subAdministrativeArea = storageServices.getString(
       'subAdministrativeArea',
     );
+
+    if (cityName == null &&
+        cachedLocation != null &&
+        cachedLocation.isNotEmpty) {
+      cityName = cachedLocation['city'];
+      countryName = cachedLocation['country'];
+      subAdministrativeArea = cachedLocation['subAdministrativeArea'];
+
+      storageServices.saveString('cityName', cityName ?? '');
+      storageServices.saveString('countryName', countryName ?? '');
+      storageServices.saveString(
+        'subAdministrativeArea',
+        subAdministrativeArea ?? '',
+      );
+    }
+
     final mainNotificationsEnabled =
         storageServices.getBool('mainNotificationsEnabled') ?? false;
     final mainSilentModeEnabled =
