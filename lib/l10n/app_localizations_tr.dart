@@ -162,6 +162,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get locationUpdated => 'Konum Güncellendi';
 
   @override
+  String get locationServiceDisabled => 'Konum Servisi Kapalı';
+
+  @override
+  String get locationServiceMessage =>
+      'Konumunuzu güncellemek için cihazınızın GPS\'ini açmanız gerekmektedir.';
+
+  @override
+  String get openSettings => 'Ayarları Aç';
+
+  @override
+  String get tryAgain => 'Tekrar Dene';
+
+  @override
   String get maghrib => 'Akşam';
 
   @override

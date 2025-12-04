@@ -66,7 +66,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _loadMonthlyPrayerTimes,
-                      child: const Text('Tekrar Dene'),
+                      child: Text(l10nL.tryAgain),
                     ),
                   ],
                 ),

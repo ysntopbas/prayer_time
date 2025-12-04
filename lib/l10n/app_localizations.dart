@@ -398,6 +398,30 @@ abstract class AppLocalizations {
   /// **'Location Updated'**
   String get locationUpdated;
 
+  /// No description provided for @locationServiceDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Service Disabled'**
+  String get locationServiceDisabled;
+
+  /// No description provided for @locationServiceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to enable your device\'s GPS to update your location.'**
+  String get locationServiceMessage;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
   /// No description provided for @maghrib.
   ///
   /// In en, this message translates to:

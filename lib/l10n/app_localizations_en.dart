@@ -162,6 +162,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationUpdated => 'Location Updated';
 
   @override
+  String get locationServiceDisabled => 'Location Service Disabled';
+
+  @override
+  String get locationServiceMessage =>
+      'You need to enable your device\'s GPS to update your location.';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
   String get maghrib => 'Maghrib';
 
   @override

@@ -328,26 +328,22 @@ class SettingsScreen extends StatelessWidget {
 
   Future<bool> _showLocationServiceDialog(BuildContext context) async {
     final navigator = Navigator.of(context);
+    final l10nL = AppLocalizations.of(context)!;
 
     return await showDialog<bool>(
           context: context,
           barrierDismissible: false,
           builder: (dialogContext) => AlertDialog(
-            title: const Text("Konum Servisi Kapalı"),
-            content: const Text(
-              "Konumunuzu güncellemek için cihazınızın GPS'ini açmanız gerekmektedir.",
-            ),
+            title: Text(l10nL.locationServiceDisabled),
+            content: Text(l10nL.locationServiceMessage),
             actions: [
               TextButton(
                 onPressed: () => navigator.pop(false),
-                child: const Text(
-                  "Vazgeç",
-                  style: TextStyle(color: Colors.grey),
-                ),
+                child: Text(l10nL.cancel, style: TextStyle(color: Colors.grey)),
               ),
               ElevatedButton(
                 onPressed: () => navigator.pop(true),
-                child: const Text("Ayarları Aç"),
+                child: Text(l10nL.openSettings),
               ),
             ],
           ),
