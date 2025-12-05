@@ -33,7 +33,7 @@ class BackgroundServiceInitialization {
       androidConfiguration: AndroidConfiguration(
         onStart: onStart,
         isForegroundMode: true,
-        foregroundServiceTypes: [AndroidForegroundType.dataSync],
+        foregroundServiceTypes: [AndroidForegroundType.specialUse],
         notificationChannelId: _notificationChannelId,
         initialNotificationTitle: l10n?.prayTime ?? 'Prayer Time',
         initialNotificationContent: l10n?.prayTimeNotAvailable ?? 'Loading...',
