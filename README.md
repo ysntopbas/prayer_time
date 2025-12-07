@@ -1,16 +1,303 @@
-# prayer_time
+# 🕌 Prayer Time / Namaz Vakti
 
-A new Flutter project.
+<div align="center">
 
-## Getting Started
+![Version](https://img.shields.io/badge/version-0.5.1-blue.svg)
+![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B.svg?logo=flutter)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-This project is a starting point for a Flutter application.
+**A beautiful and feature-rich prayer times application built with Flutter**
 
-A few resources to get you started if this is your first Flutter project:
+**Flutter ile geliştirilmiş, zengin özelliklere sahip namaz vakitleri uygulaması**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+[English](#english) | [Türkçe](#turkish)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+</div>
+
+---
+
+<a name="english"></a>
+## 📖 English
+
+### Overview
+Prayer Time is a comprehensive mobile application that helps Muslims keep track of their daily prayer times. The app provides accurate prayer times based on your location, with notification support and silent mode automation.
+
+### ✨ Features
+
+#### 🕐 Prayer Times
+- **Accurate Times**: Fetches prayer times based on your current location
+- **Daily View**: Today's complete prayer schedule
+- **Weekly Calendar**: View prayer times for the entire week
+- **Monthly Calendar**: Full month prayer times overview
+- **Automatic Updates**: Prayer times update automatically based on location changes
+
+#### 🔔 Smart Notifications
+- **Before Prayer Notifications**: Get notified before each prayer time (customizable from 5 to 60 minutes)
+- **Individual Control**: Enable/disable notifications for each prayer separately
+- **Persistent Notification**: Always-on notification showing the next prayer time
+- **Background Service**: Runs reliably in the background for timely alerts
+
+#### 🔇 Automatic Silent Mode
+- **Prayer Time Silence**: Automatically silence your phone during prayer times
+- **Customizable Duration**: Set different durations before and after each prayer (5-120 minutes)
+- **Individual Settings**: Configure silent mode for each prayer independently
+- **Smart Automation**: Works seamlessly in the background
+
+#### 🌍 Location Services
+- **Auto-Detection**: Automatically detects your location
+- **Manual Refresh**: Update location whenever needed
+- **Cache System**: Stores prayer times for offline access
+- **Location Change Detection**: Updates prayer times when you move to a new location
+
+#### 🎨 User Interface
+- **Modern Design**: Clean and intuitive material design
+- **Dark Mode**: Eye-friendly dark theme support
+- **Bilingual**: Full support for English and Turkish
+- **Smooth Animations**: Beautiful transitions and animations
+- **Responsive Layout**: Works perfectly on all screen sizes
+
+#### ⚙️ Settings & Customization
+- **Language Selection**: Switch between English and Turkish
+- **Theme Selection**: Choose between light and dark modes
+- **Battery Optimization**: Guidance for ensuring background service reliability
+- **Cache Management**: Clear cached data when needed
+
+### 📱 Screenshots
+
+<div align="center">
+  <img src="assets/screenShots/en/en_splashScreen.png" width="200" />  
+  <img src="assets/screenShots/en/en_homeScreen.png" width="200" />
+  <img src="assets/screenShots/en/en_monthly.png" width="200" /> 
+  <br /> <img src="assets/screenShots/en/en_weekly.png" width="200" />
+  <img src="assets/screenShots/en/en_settings.png" width="200" />    
+  <img src="assets/screenShots/en/en_notification.png" width="200" />
+</div>
+
+### 🚀 Version 0.5.1 - Latest Update
+
+#### What's New
+- **🌐 Auto Language Detection**: App now automatically detects and uses your device's language on first launch
+- **🐛 Bug Fixes**: Various stability improvements
+- **⚡ Performance**: Enhanced background service reliability
+
+#### Previous Updates (v0.5.0)
+- Background service for persistent notifications
+- Automatic silent mode during prayer times
+- Weekly and monthly prayer calendars
+- Battery optimization support
+- Cache system for offline access
+
+### 🛠️ Technical Stack
+
+- **Framework**: Flutter 3.0+
+- **State Management**: Flutter Bloc (Cubit)
+- **Local Storage**: SharedPreferences
+- **HTTP Client**: Dio
+- **Notifications**: flutter_local_notifications
+- **Background Service**: flutter_background_service
+- **Location**: Geolocator
+- **Localization**: flutter_localizations
+- **Timezone**: timezone
+
+### 📦 Project Structure
+
+```
+lib/
+├── core/                          # Core functionality
+│   ├── services/                  # Services (notifications, location, cache)
+│   ├── routing/                   # Navigation
+│   ├── theme/                     # App theme
+│   └── widgets/                   # Shared widgets
+├── features/                      # Feature modules
+│   ├── home/                      # Daily prayer times
+│   ├── weeklyPrayer/             # Weekly calendar
+│   ├── monthlyPrayer/            # Monthly calendar
+│   ├── settings/                 # App settings
+│   └── splashScreen/             # Splash screen
+└── l10n/                         # Localization files
+```
+
+### 🔧 Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/prayer_time.git
+```
+
+2. Install dependencies:
+```bash
+flutter pub get
+```
+
+3. Run the app:
+```bash
+flutter run
+```
+
+### 📝 API Integration
+
+This app uses the [Aladhan Prayer Times API](http://api.aladhan.com/) for fetching accurate prayer times using the Diyanet calculation method.
+
+### 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+### 👨‍💻 Developer
+
+**Created by atQs**
+
+### 📧 Contact
+
+For questions or support, please open an issue on GitHub.
+
+---
+
+<a name="turkish"></a>
+## 📖 Türkçe
+
+### Genel Bakış
+Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardımcı olan kapsamlı bir mobil uygulamadır. Uygulama, konumunuza göre doğru namaz vakitlerini sağlar, bildirim desteği ve sessiz mod otomasyonu sunar.
+
+### ✨ Özellikler
+
+#### 🕐 Namaz Vakitleri
+- **Doğru Vakitler**: Bulunduğunuz konuma göre namaz vakitlerini getirir
+- **Günlük Görünüm**: Bugünün tüm namaz programı
+- **Haftalık Takvim**: Tüm hafta için namaz vakitlerini görüntüleyin
+- **Aylık Takvim**: Tam ay namaz vakitleri görünümü
+- **Otomatik Güncelleme**: Konum değişikliklerine göre namaz vakitleri otomatik güncellenir
+
+#### 🔔 Akıllı Bildirimler
+- **Vakit Öncesi Bildirimler**: Her namaz vaktinden önce bildirim alın (5-60 dakika arası özelleştirilebilir)
+- **Bireysel Kontrol**: Her namaz için bildirimleri ayrı ayrı etkinleştirin/devre dışı bırakın
+- **Kalıcı Bildirim**: Bir sonraki namaz vaktini gösteren sürekli bildirim
+- **Arka Plan Servisi**: Zamanında uyarılar için arka planda güvenilir şekilde çalışır
+
+#### 🔇 Otomatik Sessiz Mod
+- **Namaz Vakti Sessizliği**: Namaz vakitlerinde telefonunuzu otomatik olarak sessize alır
+- **Özelleştirilebilir Süre**: Her namaz için öncesi ve sonrası farklı süreler ayarlayın (5-120 dakika)
+- **Bireysel Ayarlar**: Her namaz için sessiz modu ayrı ayrı yapılandırın
+- **Akıllı Otomasyon**: Arka planda sorunsuz çalışır
+
+#### 🌍 Konum Hizmetleri
+- **Otomatik Algılama**: Konumunuzu otomatik olarak algılar
+- **Manuel Yenileme**: İhtiyaç duyduğunuzda konumu güncelleyin
+- **Önbellek Sistemi**: Çevrimdışı erişim için namaz vakitlerini saklar
+- **Konum Değişikliği Algılama**: Yeni bir konuma taşındığınızda namaz vakitlerini günceller
+
+#### 🎨 Kullanıcı Arayüzü
+- **Modern Tasarım**: Temiz ve sezgisel materyal tasarım
+- **Karanlık Mod**: Göz dostu karanlık tema desteği
+- **Çift Dilli**: Tam İngilizce ve Türkçe desteği
+- **Akıcı Animasyonlar**: Güzel geçişler ve animasyonlar
+- **Duyarlı Düzen**: Tüm ekran boyutlarında mükemmel çalışır
+
+#### ⚙️ Ayarlar ve Özelleştirme
+- **Dil Seçimi**: İngilizce ve Türkçe arasında geçiş yapın
+- **Tema Seçimi**: Açık ve koyu modlar arasında seçim yapın
+- **Pil Optimizasyonu**: Arka plan hizmeti güvenilirliği için rehberlik
+- **Önbellek Yönetimi**: Gerektiğinde önbelleğe alınmış verileri temizleyin
+
+### 📱 Ekran Görüntüleri
+
+<div align="center">
+  <img src="assets/screenShots/tr/tr_splashScreen.png" width="200" />  
+  <img src="assets/screenShots/tr/tr_homeScreen.png" width="200" />
+  <img src="assets/screenShots/tr/tr_weekly.png" width="200" />
+  <br /> <img src="assets/screenShots/tr/tr_settings.png" width="200" />    
+  <img src="assets/screenShots/tr/tr_notification.png" width="200" />
+</div>
+### 🚀 Versiyon 0.5.1 - Son Güncelleme
+
+#### Yenilikler
+- **🌐 Otomatik Dil Algılama**: Uygulama artık ilk açılışta cihazınızın dilini otomatik olarak algılayıp kullanıyor
+- **🐛 Hata Düzeltmeleri**: Çeşitli stabilite iyileştirmeleri
+- **⚡ Performans**: Geliştirilmiş arka plan hizmeti güvenilirliği
+
+#### Önceki Güncellemeler (v0.5.0)
+- Kalıcı bildirimler için arka plan servisi
+- Namaz vakitlerinde otomatik sessiz mod
+- Haftalık ve aylık namaz takvimleri
+- Pil optimizasyonu desteği
+- Çevrimdışı erişim için önbellek sistemi
+
+### 🛠️ Teknoloji Yığını
+
+- **Framework**: Flutter 3.0+
+- **Durum Yönetimi**: Flutter Bloc (Cubit)
+- **Yerel Depolama**: SharedPreferences
+- **HTTP İstemcisi**: Dio
+- **Bildirimler**: flutter_local_notifications
+- **Arka Plan Servisi**: flutter_background_service
+- **Konum**: Geolocator
+- **Yerelleştirme**: flutter_localizations
+- **Saat Dilimi**: timezone
+
+### 📦 Proje Yapısı
+
+```
+lib/
+├── core/                          # Temel işlevsellik
+│   ├── services/                  # Servisler (bildirimler, konum, önbellek)
+│   ├── routing/                   # Navigasyon
+│   ├── theme/                     # Uygulama teması
+│   └── widgets/                   # Paylaşılan widget'lar
+├── features/                      # Özellik modülleri
+│   ├── home/                      # Günlük namaz vakitleri
+│   ├── weeklyPrayer/             # Haftalık takvim
+│   ├── monthlyPrayer/            # Aylık takvim
+│   ├── settings/                 # Uygulama ayarları
+│   └── splashScreen/             # Açılış ekranı
+└── l10n/                         # Yerelleştirme dosyaları
+```
+
+### 🔧 Kurulum
+
+1. Depoyu klonlayın:
+```bash
+git clone https://github.com/yourusername/prayer_time.git
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
+flutter pub get
+```
+
+3. Uygulamayı çalıştırın:
+```bash
+flutter run
+```
+
+### 📝 API Entegrasyonu
+
+Bu uygulama, Diyanet hesaplama yöntemini kullanarak doğru namaz vakitlerini almak için [Aladhan Namaz Vakitleri API](http://api.aladhan.com/)'sini kullanır.
+
+### 🤝 Katkıda Bulunma
+
+Katkılar memnuniyetle karşılanır! Lütfen Pull Request göndermekten çekinmeyin.
+
+### 📄 Lisans
+
+Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için LICENSE dosyasına bakın.
+
+### 👨‍💻 Geliştirici
+
+**atQs tarafından oluşturuldu**
+
+### 📧 İletişim
+
+Sorularınız veya destek için GitHub'da bir issue açın.
+
+---
+
+<div align="center">
+
+**Made with ❤️ and Flutter**
+
+**❤️ ve Flutter ile yapıldı**
+
+</div>

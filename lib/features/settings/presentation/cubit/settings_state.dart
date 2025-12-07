@@ -171,8 +171,8 @@ class SettingsState extends Equatable {
   final SilentModeDuringPraysSettings silentModeDuringPraysSettings;
 
   const SettingsState({
-    this.isDarkMode = false,
-    this.languageCode = 'en',
+    required this.isDarkMode,
+    required this.languageCode,
     this.cityName,
     this.countryName,
     this.subAdministrativeArea,

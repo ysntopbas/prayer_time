@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ui';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,19 +17,27 @@ class SettingsCubit extends Cubit<SettingsState> {
   final LocationService locationService;
   final BatteryOptimizationService batteryOptimizationService;
   final NotificationManagerService notificationManagerService;
+  final String deviceLanguageCode =
+      PlatformDispatcher.instance.locale.languageCode;
 
   SettingsCubit(
     this.storageServices,
     this.locationService,
     this.batteryOptimizationService,
     this.notificationManagerService,
-  ) : super(const SettingsState()) {
+  ) : super(
+        SettingsState(
+          isDarkMode: false,
+          languageCode: PlatformDispatcher.instance.locale.languageCode,
+        ),
+      ) {
     _loadInitialSettings();
   }
 
   void _loadInitialSettings() {
     final isDarkMode = storageServices.getBool('isDarkMode') ?? false;
-    final languageCode = storageServices.getString('languageCode') ?? 'en';
+    final languageCode =
+        storageServices.getString('languageCode') ?? deviceLanguageCode;
 
     final cacheService = CacheService(storageServices);
     final cachedLocation = cacheService.getCachedLocation();
