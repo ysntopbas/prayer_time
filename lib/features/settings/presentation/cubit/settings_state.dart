@@ -163,12 +163,11 @@ class SettingsState extends Equatable {
   final String? cityName;
   final String? countryName;
   final String? subAdministrativeArea;
-  final bool isLocationLoading;
   final bool mainNotificationsEnabled;
   final bool mainSilentModeEnabled;
-  final bool shouldShowBatteryDialog;
   final NotificationBeforePraysSettings notificationBeforePraysSettings;
   final SilentModeDuringPraysSettings silentModeDuringPraysSettings;
+  final bool isLocationLoading;
 
   const SettingsState({
     required this.isDarkMode,
@@ -176,29 +175,13 @@ class SettingsState extends Equatable {
     this.cityName,
     this.countryName,
     this.subAdministrativeArea,
-    this.isLocationLoading = false,
     this.mainNotificationsEnabled = false,
     this.mainSilentModeEnabled = false,
-    this.shouldShowBatteryDialog = false,
     this.notificationBeforePraysSettings =
         const NotificationBeforePraysSettings(),
     this.silentModeDuringPraysSettings = const SilentModeDuringPraysSettings(),
+    this.isLocationLoading = false,
   });
-
-  @override
-  List<Object?> get props => [
-    isDarkMode,
-    languageCode,
-    cityName,
-    countryName,
-    subAdministrativeArea,
-    isLocationLoading,
-    mainNotificationsEnabled,
-    mainSilentModeEnabled,
-    shouldShowBatteryDialog,
-    notificationBeforePraysSettings,
-    silentModeDuringPraysSettings,
-  ];
 
   SettingsState copyWith({
     bool? isDarkMode,
@@ -206,12 +189,11 @@ class SettingsState extends Equatable {
     String? cityName,
     String? countryName,
     String? subAdministrativeArea,
-    bool? isLocationLoading,
     bool? mainNotificationsEnabled,
     bool? mainSilentModeEnabled,
-    bool? shouldShowBatteryDialog,
     NotificationBeforePraysSettings? notificationBeforePraysSettings,
     SilentModeDuringPraysSettings? silentModeDuringPraysSettings,
+    bool? isLocationLoading,
   }) {
     return SettingsState(
       isDarkMode: isDarkMode ?? this.isDarkMode,
@@ -220,18 +202,30 @@ class SettingsState extends Equatable {
       countryName: countryName ?? this.countryName,
       subAdministrativeArea:
           subAdministrativeArea ?? this.subAdministrativeArea,
-      isLocationLoading: isLocationLoading ?? this.isLocationLoading,
       mainNotificationsEnabled:
           mainNotificationsEnabled ?? this.mainNotificationsEnabled,
       mainSilentModeEnabled:
           mainSilentModeEnabled ?? this.mainSilentModeEnabled,
-      shouldShowBatteryDialog:
-          shouldShowBatteryDialog ?? this.shouldShowBatteryDialog,
       notificationBeforePraysSettings:
           notificationBeforePraysSettings ??
           this.notificationBeforePraysSettings,
       silentModeDuringPraysSettings:
           silentModeDuringPraysSettings ?? this.silentModeDuringPraysSettings,
+      isLocationLoading: isLocationLoading ?? this.isLocationLoading,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    isDarkMode,
+    languageCode,
+    cityName,
+    countryName,
+    subAdministrativeArea,
+    mainNotificationsEnabled,
+    mainSilentModeEnabled,
+    notificationBeforePraysSettings,
+    silentModeDuringPraysSettings,
+    isLocationLoading,
+  ];
 }

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.5.1-blue.svg)
+![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -73,19 +73,25 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
   <img src="assets/screenShots/en/en_notification.png" width="200" />
 </div>
 
-### 🚀 Version 0.5.1 - Latest Update
+### 🚀 Version History
 
-#### What's New
-- **🌐 Auto Language Detection**: App now automatically detects and uses your device's language on first launch
+#### Version 0.5.2 (Latest) - Critical Bug Fix 🔧
+- **🔋 Battery Optimization Fix**: Fixed critical issue where devices were killing the app in background
+- **✅ Automatic Permission Dialog**: App now automatically prompts users to disable battery optimization on first launch
+- **📱 Improved Reliability**: Background service now runs more reliably with proper battery optimization settings
+- **🐛 Bug Fixes**: Resolved app termination issues on various Android devices
+
+#### Version 0.5.1 - Language Enhancement
+- **🌐 Auto Language Detection**: App automatically detects and uses device's language on first launch
 - **🐛 Bug Fixes**: Various stability improvements
 - **⚡ Performance**: Enhanced background service reliability
 
-#### Previous Updates (v0.5.0)
-- Background service for persistent notifications
-- Automatic silent mode during prayer times
-- Weekly and monthly prayer calendars
-- Battery optimization support
-- Cache system for offline access
+#### Version 0.5.0 - Major Update
+- **🔔 Background Service**: Persistent notifications for prayer times
+- **🔇 Automatic Silent Mode**: Phone automatically silences during prayer times
+- **📅 Calendar Views**: Weekly and monthly prayer calendars
+- **🔋 Battery Support**: Battery optimization guidance
+- **💾 Cache System**: Offline access to prayer times
 
 ### 🛠️ Technical Stack
 
@@ -144,7 +150,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### 👨‍💻 Developer
 
@@ -211,19 +217,26 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
   <br /> <img src="assets/screenShots/tr/tr_settings.png" width="200" />    
   <img src="assets/screenShots/tr/tr_notification.png" width="200" />
 </div>
-### 🚀 Versiyon 0.5.1 - Son Güncelleme
 
-#### Yenilikler
+### 🚀 Versiyon Geçmişi
+
+#### Versiyon 0.5.2 (Son Güncelleme) - Kritik Hata Düzeltmesi 🔧
+- **🔋 Pil Optimizasyonu Düzeltmesi**: Cihazların uygulamayı arka planda kapatması sorunu çözüldü
+- **✅ Otomatik İzin Diyalogu**: Uygulama artık ilk açılışta otomatik olarak pil optimizasyonunu devre dışı bırakma isteği gösteriyor
+- **📱 Geliştirilmiş Güvenilirlik**: Arka plan servisi, doğru pil optimizasyon ayarlarıyla daha güvenilir çalışıyor
+- **🐛 Hata Düzeltmeleri**: Çeşitli Android cihazlarda uygulama sonlandırma sorunları çözüldü
+
+#### Versiyon 0.5.1 - Dil Geliştirmesi
 - **🌐 Otomatik Dil Algılama**: Uygulama artık ilk açılışta cihazınızın dilini otomatik olarak algılayıp kullanıyor
 - **🐛 Hata Düzeltmeleri**: Çeşitli stabilite iyileştirmeleri
 - **⚡ Performans**: Geliştirilmiş arka plan hizmeti güvenilirliği
 
-#### Önceki Güncellemeler (v0.5.0)
-- Kalıcı bildirimler için arka plan servisi
-- Namaz vakitlerinde otomatik sessiz mod
-- Haftalık ve aylık namaz takvimleri
-- Pil optimizasyonu desteği
-- Çevrimdışı erişim için önbellek sistemi
+#### Versiyon 0.5.0 - Büyük Güncelleme
+- **🔔 Arka Plan Servisi**: Namaz vakitleri için kalıcı bildirimler
+- **🔇 Otomatik Sessiz Mod**: Namaz vakitlerinde telefon otomatik olarak sessizleşiyor
+- **📅 Takvim Görünümleri**: Haftalık ve aylık namaz takvimleri
+- **🔋 Pil Desteği**: Pil optimizasyon rehberliği
+- **💾 Önbellek Sistemi**: Namaz vakitlerine çevrimdışı erişim
 
 ### 🛠️ Teknoloji Yığını
 
@@ -282,7 +295,7 @@ Katkılar memnuniyetle karşılanır! Lütfen Pull Request göndermekten çekinm
 
 ### 📄 Lisans
 
-Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için LICENSE dosyasına bakın.
+Bu proje MIT Lisansı altında lisanslanmıştır - detaylar için [LICENSE](LICENSE) dosyasına bakın.
 
 ### 👨‍💻 Geliştirici
 

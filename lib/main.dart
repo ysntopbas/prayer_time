@@ -4,6 +4,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/routing/app_router.dart';
 import 'package:prayer_time/core/services/backgroundServices/background_service_initialization.dart';
+import 'package:prayer_time/core/services/battery_optimization_service.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/notification_initialization_service.dart';
@@ -25,7 +26,6 @@ void main() async {
 
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
-
   final NotificationInitializationService notificationService =
       NotificationInitializationService();
   await notificationService.init(
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
     final storageServices = StorageServices(sharedPreferences);
     final cacheService = CacheService(storageServices);
     final batteryOptimizationService = BatteryOptimizationService(
-      sharedPreferences,
+      storageServices,
     );
 
     final scheduledNotificationService = ScheduledNotificationService();

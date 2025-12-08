@@ -38,6 +38,7 @@ class BackgroundServiceInitialization {
         initialNotificationTitle: l10n?.prayTime ?? 'Prayer Time',
         initialNotificationContent: l10n?.prayTimeNotAvailable ?? 'Loading...',
         foregroundServiceNotificationId: _foregroundServiceNotificationId,
+        autoStart: true,
       ),
     );
 
