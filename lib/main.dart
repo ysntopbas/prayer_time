@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/routing/app_router.dart';
 import 'package:prayer_time/core/services/backgroundServices/background_service_initialization.dart';
+import 'package:prayer_time/core/services/battery_optimization_service.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/notification_initialization_service.dart';
@@ -15,6 +17,7 @@ import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/cubit/weekly_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:prayer_time/firebase_options.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +28,6 @@ void main() async {
 
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
-
   final NotificationInitializationService notificationService =
       NotificationInitializationService();
   await notificationService.init(
@@ -36,6 +38,7 @@ void main() async {
   final BackgroundServiceInitialization backgroundService =
       BackgroundServiceInitialization();
   await backgroundService.initializeBackgroundService();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(Phoenix(child: MyApp(sharedPreferences: sharedPreferences)));
 }
@@ -51,7 +54,7 @@ class MyApp extends StatelessWidget {
     final storageServices = StorageServices(sharedPreferences);
     final cacheService = CacheService(storageServices);
     final batteryOptimizationService = BatteryOptimizationService(
-      sharedPreferences,
+      storageServices,
     );
 
     final scheduledNotificationService = ScheduledNotificationService();

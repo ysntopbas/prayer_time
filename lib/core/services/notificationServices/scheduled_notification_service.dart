@@ -31,6 +31,7 @@ class ScheduledNotificationService {
       enableVibration: enableVibration,
       sound: const RawResourceAndroidNotificationSound('notification'),
       icon: 'prayer_time_icon_notification',
+      visibility: NotificationVisibility.public,
     );
 
     final iosDetails = DarwinNotificationDetails(
@@ -57,6 +58,7 @@ class ScheduledNotificationService {
     bool playSound = true,
     bool enableVibration = true,
     DateTimeComponents? matchDateTimeComponents,
+    String? icon,
   }) async {
     await _plugin.zonedSchedule(
       id,

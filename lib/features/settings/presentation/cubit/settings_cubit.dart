@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/services/battery_optimization_service.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
@@ -140,16 +141,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void mainToggleNotifications() async {
     final newValue = !state.mainNotificationsEnabled;
 
-    if (newValue && await shouldShowBatteryDialog()) {
-      emit(
-        state.copyWith(
-          mainNotificationsEnabled: newValue,
-          shouldShowBatteryDialog: true,
-        ),
-      );
-    } else {
-      emit(state.copyWith(mainNotificationsEnabled: newValue));
-    }
+    emit(state.copyWith(mainNotificationsEnabled: newValue));
 
     storageServices.saveBool('mainNotificationsEnabled', newValue);
 
@@ -209,16 +201,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void mainToggleSilentMode() async {
     final newValue = !state.mainSilentModeEnabled;
 
-    if (newValue && await shouldShowBatteryDialog()) {
-      emit(
-        state.copyWith(
-          mainSilentModeEnabled: newValue,
-          shouldShowBatteryDialog: true,
-        ),
-      );
-    } else {
-      emit(state.copyWith(mainSilentModeEnabled: newValue));
-    }
+    emit(state.copyWith(mainSilentModeEnabled: newValue));
 
     storageServices.saveBool('mainSilentModeEnabled', newValue);
 
@@ -384,10 +367,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       };
     }
     return null;
-  }
-
-  void clearBatteryDialogFlag() {
-    emit(state.copyWith(shouldShowBatteryDialog: false));
   }
 
   Future<void> startBackgroundService() async {
