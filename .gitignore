@@ -12,6 +12,8 @@
 .swiftpm/
 migrate_working_dir/
 istek sayfası.text
+firebase_options.dart
+firebase.json
 
 # IntelliJ related
 *.iml
