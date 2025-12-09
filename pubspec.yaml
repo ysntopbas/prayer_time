@@ -1,8 +1,8 @@
 name: prayer_time
-description: "A new Flutter project."
+description: "Location based prayer times app. Konuma dayalı namaz vakitleri uygulaması."
 publish_to: 'none'
 
-version: 0.5.2+8
+version: 0.5.3+9
 
 environment:
   sdk: ^3.8.1
@@ -60,7 +60,7 @@ flutter_launcher_icons:
   adaptive_icon_background: "assets/icons/prayer_time_icon_background.png" # Sadece Arka Plan
   adaptive_icon_foreground: "assets/icons/prayer_time_icon_foreground.png" # Sadece Logo (Şeffaf)
 
-  # Bildirim İkonu (BEYAZ VEYA ŞEFFAF OLMASI ŞART)
+  # Bildirim İkonu (BEYAZ VEYA ŞEFFAF OLMALI)
   notification_icon: "assets/icons/prayer_time_icon_notification.png"
 
 flutter:

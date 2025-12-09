@@ -25,6 +25,7 @@ class InstantNotificationService {
       importance: importance,
       priority: priority,
       sound: const RawResourceAndroidNotificationSound('notification'),
+      icon: 'prayer_time_icon_notification',
     );
 
     const iosDetails = DarwinNotificationDetails();

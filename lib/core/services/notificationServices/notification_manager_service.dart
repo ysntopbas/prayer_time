@@ -161,6 +161,7 @@ class NotificationManagerService {
       priority: Priority.high,
       playSound: true,
       enableVibration: true,
+      icon: 'prayer_time_icon_notification',
     );
 
     log(

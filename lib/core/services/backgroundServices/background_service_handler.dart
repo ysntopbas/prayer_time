@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // EKLE
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
@@ -89,9 +90,10 @@ void onStart(ServiceInstance service) async {
       );
       log('[BackgroundService] Today Fajr: ${todayTimings?.fajr}');
 
-      service.setForegroundNotificationInfo(
-        title: notificationData['title'] as String,
-        content: notificationData['content'] as String,
+      // DEGISTI: Ongoing bildirim gonder
+      await _updateForegroundNotification(
+        notificationData['title'] as String,
+        notificationData['content'] as String,
       );
 
       log(
@@ -126,9 +128,10 @@ void onStart(ServiceInstance service) async {
 
       final notificationData = _calculateNextPrayer(cacheService, currentL10n);
 
-      service.setForegroundNotificationInfo(
-        title: notificationData['title'] as String,
-        content: notificationData['content'] as String,
+      // DEGISTI: Ongoing bildirim gonder
+      await _updateForegroundNotification(
+        notificationData['title'] as String,
+        notificationData['content'] as String,
       );
 
       log(
@@ -136,6 +139,41 @@ void onStart(ServiceInstance service) async {
       );
     }
   });
+}
+
+// YENI FONKSIYON: Ongoing foreground notification gonder
+Future<void> _updateForegroundNotification(String title, String content) async {
+  const int notificationId = 888;
+  const String channelId = 'namaz_vakti_servisi';
+
+  final FlutterLocalNotificationsPlugin notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    channelId,
+    'Namaz Vakti Servisi',
+    channelDescription:
+        'Namaz vakti hatırlatmaları ve sessiz mod için kullanılır',
+    importance: Importance.low,
+    priority: Priority.low,
+    ongoing: true, // BU EN ONEMLI: Bildirimi silinemez yap
+    autoCancel: false, // Tıklandığında otomatik silinmesin
+    playSound: false,
+    enableVibration: false,
+    showWhen: false,
+    icon: 'prayer_time_icon_notification', // Kendi icon'unuz varsa
+  );
+
+  const NotificationDetails notificationDetails = NotificationDetails(
+    android: androidDetails,
+  );
+
+  await notificationsPlugin.show(
+    notificationId,
+    title,
+    content,
+    notificationDetails,
+  );
 }
 
 // Ilk cache yuklemesini bekleyen fonksiyon
@@ -177,9 +215,10 @@ Future<void> _waitForInitialCache(
           await service.isForegroundService()) {
         final notificationData = _calculateNextPrayer(cacheService, l10n);
 
-        service.setForegroundNotificationInfo(
-          title: notificationData['title'] as String,
-          content: notificationData['content'] as String,
+        // DEGISTI: Ongoing bildirim gonder
+        await _updateForegroundNotification(
+          notificationData['title'] as String,
+          notificationData['content'] as String,
         );
 
         log(

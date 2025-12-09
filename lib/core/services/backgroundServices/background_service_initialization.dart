@@ -39,6 +39,7 @@ class BackgroundServiceInitialization {
         initialNotificationContent: l10n?.prayTimeNotAvailable ?? 'Loading...',
         foregroundServiceNotificationId: _foregroundServiceNotificationId,
         autoStart: true,
+        autoStartOnBoot: true, // Boot sonrası otomatik başlat
       ),
     );
 
@@ -54,9 +55,10 @@ class BackgroundServiceInitialization {
       _notificationChannelId,
       _notificationChannelName,
       description: 'Namaz vakti hatırlatmaları ve sessiz mod için kullanılır',
-      importance: Importance.low, // Foreground service için LOW yeterli
+      importance: Importance.low,
       playSound: false,
       enableVibration: false,
+      showBadge: false, // Badge gösterme
     );
 
     await notificationsPlugin

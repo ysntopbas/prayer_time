@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.5.2-blue.svg)
+![Version](https://img.shields.io/badge/version-0.5.3-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -34,8 +34,9 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 #### 🔔 Smart Notifications
 - **Before Prayer Notifications**: Get notified before each prayer time (customizable from 5 to 60 minutes)
 - **Individual Control**: Enable/disable notifications for each prayer separately
-- **Persistent Notification**: Always-on notification showing the next prayer time
+- **Persistent Notification**: Always-on notification showing the next prayer time that **cannot be dismissed**
 - **Background Service**: Runs reliably in the background for timely alerts
+- **Non-Dismissible Service**: Foreground service notification stays in the notification panel permanently
 
 #### 🔇 Automatic Silent Mode
 - **Prayer Time Silence**: Automatically silence your phone during prayer times
@@ -75,7 +76,13 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 
 ### 🚀 Version History
 
-#### Version 0.5.2 (Latest) - Critical Bug Fix 🔧
+#### Version 0.5.3 (Latest) - Notification Enhancement 🔔
+- **🔒 Non-Dismissible Notification**: Foreground service notification now stays permanently in the notification panel
+- **✨ Improved Reliability**: Users can no longer accidentally dismiss the prayer time notification
+- **📱 Better User Experience**: Notification remains visible to always show the next prayer time
+- **🎯 Enhanced Background Service**: More stable and reliable background operation
+
+#### Version 0.5.2 - Critical Bug Fix 🔧
 - **🔋 Battery Optimization Fix**: Fixed critical issue where devices were killing the app in background
 - **✅ Automatic Permission Dialog**: App now automatically prompts users to disable battery optimization on first launch
 - **📱 Improved Reliability**: Background service now runs more reliably with proper battery optimization settings
@@ -111,6 +118,9 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 lib/
 ├── core/                          # Core functionality
 │   ├── services/                  # Services (notifications, location, cache)
+│   │   ├── backgroundServices/    # Background service implementation
+│   │   ├── locationServices/      # Location detection and management
+│   │   └── notificationServices/  # Notification handling
 │   ├── routing/                   # Navigation
 │   ├── theme/                     # App theme
 │   └── widgets/                   # Shared widgets
@@ -180,8 +190,9 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 #### 🔔 Akıllı Bildirimler
 - **Vakit Öncesi Bildirimler**: Her namaz vaktinden önce bildirim alın (5-60 dakika arası özelleştirilebilir)
 - **Bireysel Kontrol**: Her namaz için bildirimleri ayrı ayrı etkinleştirin/devre dışı bırakın
-- **Kalıcı Bildirim**: Bir sonraki namaz vaktini gösteren sürekli bildirim
+- **Kalıcı Bildirim**: **Silinemez** şekilde bir sonraki namaz vaktini gösteren sürekli bildirim
 - **Arka Plan Servisi**: Zamanında uyarılar için arka planda güvenilir şekilde çalışır
+- **Silinemez Servis**: Ön plan hizmet bildirimi bildirim panelinde kalıcı olarak kalır
 
 #### 🔇 Otomatik Sessiz Mod
 - **Namaz Vakti Sessizliği**: Namaz vakitlerinde telefonunuzu otomatik olarak sessize alır
@@ -220,7 +231,13 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 
 ### 🚀 Versiyon Geçmişi
 
-#### Versiyon 0.5.2 (Son Güncelleme) - Kritik Hata Düzeltmesi 🔧
+#### Versiyon 0.5.3 (Son Güncelleme) - Bildirim Geliştirmesi 🔔
+- **🔒 Silinemez Bildirim**: Ön plan hizmet bildirimi artık bildirim panelinde kalıcı olarak kalıyor
+- **✨ Geliştirilmiş Güvenilirlik**: Kullanıcılar artık namaz vakti bildirimini yanlışlıkla silemez
+- **📱 Daha İyi Kullanıcı Deneyimi**: Bildirim, bir sonraki namaz vaktini her zaman göstermek için görünür kalır
+- **🎯 Geliştirilmiş Arka Plan Servisi**: Daha kararlı ve güvenilir arka plan çalışması
+
+#### Versiyon 0.5.2 - Kritik Hata Düzeltmesi 🔧
 - **🔋 Pil Optimizasyonu Düzeltmesi**: Cihazların uygulamayı arka planda kapatması sorunu çözüldü
 - **✅ Otomatik İzin Diyalogu**: Uygulama artık ilk açılışta otomatik olarak pil optimizasyonunu devre dışı bırakma isteği gösteriyor
 - **📱 Geliştirilmiş Güvenilirlik**: Arka plan servisi, doğru pil optimizasyon ayarlarıyla daha güvenilir çalışıyor
@@ -256,6 +273,9 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 lib/
 ├── core/                          # Temel işlevsellik
 │   ├── services/                  # Servisler (bildirimler, konum, önbellek)
+│   │   ├── backgroundServices/    # Arka plan servisi implementasyonu
+│   │   ├── locationServices/      # Konum algılama ve yönetimi
+│   │   └── notificationServices/  # Bildirim yönetimi
 │   ├── routing/                   # Navigasyon
 │   ├── theme/                     # Uygulama teması
 │   └── widgets/                   # Paylaşılan widget'lar
