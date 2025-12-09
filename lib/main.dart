@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -16,6 +17,7 @@ import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/monthlyPrayer/presentation/cubit/monthly_cubit.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/cubit/weekly_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:prayer_time/firebase_options.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +38,7 @@ void main() async {
   final BackgroundServiceInitialization backgroundService =
       BackgroundServiceInitialization();
   await backgroundService.initializeBackgroundService();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(Phoenix(child: MyApp(sharedPreferences: sharedPreferences)));
 }

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.5.3-blue.svg)
+![Version](https://img.shields.io/badge/version-0.5.4-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -37,6 +37,7 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **Persistent Notification**: Always-on notification showing the next prayer time that **cannot be dismissed**
 - **Background Service**: Runs reliably in the background for timely alerts
 - **Non-Dismissible Service**: Foreground service notification stays in the notification panel permanently
+- **Universal Compatibility**: Works on all Android devices including Huawei/Honor
 
 #### 🔇 Automatic Silent Mode
 - **Prayer Time Silence**: Automatically silence your phone during prayer times
@@ -76,7 +77,13 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 
 ### 🚀 Version History
 
-#### Version 0.5.3 (Latest) - Notification Enhancement 🔔
+#### Version 0.5.4 (Latest) - Huawei Device Fix 🔧
+- **🔧 Critical Fix**: Resolved crash issue on Huawei and Honor devices
+- **📱 Notification Icon Fix**: Fixed notification icon compatibility problem that caused crashes
+- **✅ Universal Compatibility**: App now works smoothly on all Android devices including Huawei/Honor
+- **🛡️ Enhanced Stability**: Improved error handling and device compatibility
+
+#### Version 0.5.3 - Notification Enhancement 🔔
 - **🔒 Non-Dismissible Notification**: Foreground service notification now stays permanently in the notification panel
 - **✨ Improved Reliability**: Users can no longer accidentally dismiss the prayer time notification
 - **📱 Better User Experience**: Notification remains visible to always show the next prayer time
@@ -231,7 +238,13 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 
 ### 🚀 Versiyon Geçmişi
 
-#### Versiyon 0.5.3 (Son Güncelleme) - Bildirim Geliştirmesi 🔔
+#### Versiyon 0.5.4 (Son Güncelleme) - Huawei Cihaz Düzeltmesi 🔧
+- **🔧 Kritik Düzeltme**: Huawei ve Honor cihazlardaki çökme sorunu çözüldü
+- **📱 Bildirim İkonu Düzeltmesi**: Çökme sorununa yol açan bildirim ikonu uyumluluk problemi düzeltildi
+- **✅ Evrensel Uyumluluk**: Uygulama artık Huawei/Honor dahil tüm Android cihazlarda sorunsuz çalışıyor
+- **🛡️ Geliştirilmiş Stabilite**: Hata ayıklama ve cihaz uyumluluğu iyileştirildi
+
+#### Versiyon 0.5.3 - Bildirim Geliştirmesi 🔔
 - **🔒 Silinemez Bildirim**: Ön plan hizmet bildirimi artık bildirim panelinde kalıcı olarak kalıyor
 - **✨ Geliştirilmiş Güvenilirlik**: Kullanıcılar artık namaz vakti bildirimini yanlışlıkla silemez
 - **📱 Daha İyi Kullanıcı Deneyimi**: Bildirim, bir sonraki namaz vaktini her zaman göstermek için görünür kalır
