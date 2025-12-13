@@ -48,7 +48,8 @@ class NotificationManagerService {
     final baseTimings = getTodayTimings();
 
     if (baseTimings == null) {
-      log('Base timings null, bildirimler zamanlanamıyor');
+      //Logs Created by COPILOT
+      log('[Notifications]  Cache\'de namaz vakti bulunamadı');
       return;
     }
 
@@ -56,7 +57,9 @@ class NotificationManagerService {
         _storageServices.getBool('mainNotificationsEnabled') ?? false;
 
     if (!isMainEnabled) {
-      log('Ana bildirim switch\'i kapalı, tüm bildirimler iptal ediliyor');
+      log(
+        '[Notifications]  Ana bildirim switch\'i kapalı, tüm bildirimler iptal ediliyor',
+      );
       await cancelAllScheduledNotifications();
       return;
     }
@@ -68,59 +71,83 @@ class NotificationManagerService {
 
     // Önce tüm eski bildirimleri iptal et
     await cancelAllScheduledNotifications();
-    log(' Eski bildirimler temizlendi');
+    //Logs Created by COPILOT
+    log('[Notifications] 🗑️ Eski bildirimler temizlendi');
+    log('[Notifications] ═══════════════════════════════════════');
+    log('[Notifications] 📅 YENİ BİLDİRİMLER ZAMANLANIYOR...');
+    log('[Notifications] ═══════════════════════════════════════');
 
-    log(' Yeni bildirimler zamanlanıyor...');
+    int scheduledCount = 0;
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.fajr,
-      baseTimeStr: baseTimings.fajr!,
-      setting: userSettings.fajr,
-      notificationId: 101,
-      l10n: l10n,
-    );
+    if (userSettings.fajr.isEnabled && baseTimings.fajr != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.fajr,
+        baseTimeStr: baseTimings.fajr!,
+        setting: userSettings.fajr,
+        notificationId: 101,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.sunrise,
-      baseTimeStr: baseTimings.sunrise!,
-      setting: userSettings.sunrise,
-      notificationId: 102,
-      l10n: l10n,
-    );
+    if (userSettings.sunrise.isEnabled && baseTimings.sunrise != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.sunrise,
+        baseTimeStr: baseTimings.sunrise!,
+        setting: userSettings.sunrise,
+        notificationId: 102,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.dhuhr,
-      baseTimeStr: baseTimings.dhuhr!,
-      setting: userSettings.dhuhr,
-      notificationId: 103,
-      l10n: l10n,
-    );
+    if (userSettings.dhuhr.isEnabled && baseTimings.dhuhr != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.dhuhr,
+        baseTimeStr: baseTimings.dhuhr!,
+        setting: userSettings.dhuhr,
+        notificationId: 103,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.asr,
-      baseTimeStr: baseTimings.asr!,
-      setting: userSettings.asr,
-      notificationId: 104,
-      l10n: l10n,
-    );
+    if (userSettings.asr.isEnabled && baseTimings.asr != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.asr,
+        baseTimeStr: baseTimings.asr!,
+        setting: userSettings.asr,
+        notificationId: 104,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.maghrib,
-      baseTimeStr: baseTimings.maghrib!,
-      setting: userSettings.maghrib,
-      notificationId: 105,
-      l10n: l10n,
-    );
+    if (userSettings.maghrib.isEnabled && baseTimings.maghrib != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.maghrib,
+        baseTimeStr: baseTimings.maghrib!,
+        setting: userSettings.maghrib,
+        notificationId: 105,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
 
-    await _schedulePrayerNotification(
-      prayerName: l10n.isha,
-      baseTimeStr: baseTimings.isha!,
-      setting: userSettings.isha,
-      notificationId: 106,
-      l10n: l10n,
-    );
-
-    log(' Tüm bildirimler başarıyla zamanlandı');
+    if (userSettings.isha.isEnabled && baseTimings.isha != null) {
+      await _schedulePrayerNotification(
+        prayerName: l10n.isha,
+        baseTimeStr: baseTimings.isha!,
+        setting: userSettings.isha,
+        notificationId: 106,
+        l10n: l10n,
+      );
+      scheduledCount++;
+    }
+    //Logs Created by COPILOT
+    log('[Notifications] ═══════════════════════════════════════');
+    log('[Notifications] ✅ Toplam $scheduledCount bildirim zamanlandı');
+    log('[Notifications] ═══════════════════════════════════════');
   }
 
   Future<void> _schedulePrayerNotification({
@@ -134,7 +161,7 @@ class NotificationManagerService {
       await _scheduledNotificationService.cancelScheduledNotification(
         notificationId,
       );
-      log('$prayerName bildirimi kapalı, iptal edildi');
+      log('[Notifications]  $prayerName bildirimi kapalı');
       return;
     }
 
@@ -143,9 +170,7 @@ class NotificationManagerService {
     final scheduledTime = baseTime.subtract(Duration(minutes: minutesBefore));
 
     if (scheduledTime.isBefore(DateTime.now())) {
-      log(
-        ' $prayerName bildirimi geçmiş bir zaman ($scheduledTime), atlanıyor',
-      );
+      log('[Notifications]  $prayerName bildirimi geçmiş ($scheduledTime)');
       return;
     }
 
@@ -164,14 +189,20 @@ class NotificationManagerService {
       icon: 'prayer_time_icon_notification',
     );
 
+    final baseTimeFormatted =
+        '${baseTime.hour.toString().padLeft(2, '0')}:${baseTime.minute.toString().padLeft(2, '0')}';
+    final scheduledTimeFormatted =
+        '${scheduledTime.hour.toString().padLeft(2, '0')}:${scheduledTime.minute.toString().padLeft(2, '0')}';
+
     log(
-      ' $prayerName bildirimi zamanlandı: $scheduledTime ($minutesBefore dk önce)',
+      '[Notifications]  $prayerName → Vakit: $baseTimeFormatted | Bildirim: $scheduledTimeFormatted ($minutesBefore dk önce)',
     );
   }
 
   Future<void> cancelAllScheduledNotifications() async {
     await _scheduledNotificationService.cancelAllScheduledNotifications();
-    log('Tüm bildirimler iptal edildi');
+    //Logs Created by COPILOT
+    log('[Notifications] 🔕 Tüm zamanlanmış bildirimler iptal edildi');
   }
 
   DateTime _parseTime(String timeStr) {

@@ -24,7 +24,9 @@ class InstantNotificationService {
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      sound: const RawResourceAndroidNotificationSound(
+        'notification',
+      ), //ATQS SES DOSYASI
       icon: 'prayer_time_icon_notification',
     );
 

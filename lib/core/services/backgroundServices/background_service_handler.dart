@@ -3,10 +3,11 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // EKLE
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
+import 'package:prayer_time/core/services/silentModeServices/silent_mode_manager_service.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,12 +18,15 @@ void onStart(ServiceInstance service) async {
 
   log('[BackgroundService] Service starting...');
 
-  // SharedPreferences'i yeniden yukle (disk'ten taze veri)
   final sharedPreferences = await SharedPreferences.getInstance();
-  await sharedPreferences.reload(); // ONEMLI: Disk'ten yeniden oku
+  await sharedPreferences.reload();
 
   final storageServices = StorageServices(sharedPreferences);
   final cacheService = CacheService(storageServices);
+  final silentModeService = SilentModeManagerService(
+    storageServices,
+    cacheService,
+  );
 
   final languageCode = storageServices.getString('languageCode') ?? 'en';
   final locale = Locale(languageCode);
@@ -52,20 +56,16 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-  // Cache guncellendiginde tetiklenecek event
   service.on('cacheUpdated').listen((event) async {
     log('[BackgroundService] Cache update event received');
 
-    // SharedPreferences'i yeniden yukle (disk'ten taze veri cek)
     await sharedPreferences.reload();
     log('[BackgroundService] SharedPreferences reloaded from disk');
 
-    // Kisa bir delay - disk yaziminin tam bitmesini garanti et
     await Future.delayed(const Duration(milliseconds: 300));
 
     if (service is AndroidServiceInstance &&
         await service.isForegroundService()) {
-      // Yeni cache ile localization'i yukle
       final currentLanguageCode =
           storageServices.getString('languageCode') ?? 'en';
       AppLocalizations? currentL10n;
@@ -79,18 +79,15 @@ void onStart(ServiceInstance service) async {
         currentL10n = l10n;
       }
 
-      // YENI CACHE ILE bildirimi guncelle
       final notificationData = _calculateNextPrayer(cacheService, currentL10n);
 
-      // Cache verilerini loglayalim
-      final todayTimings = cacheService.getDailyTimings();
-      final cachedLocation = cacheService.getCachedLocation();
-      log(
-        '[BackgroundService] Cached Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
-      );
-      log('[BackgroundService] Today Fajr: ${todayTimings?.fajr}');
+      // final todayTimings = cacheService.getDailyTimings();
+      // final cachedLocation = cacheService.getCachedLocation();
+      // log(
+      //   '[BackgroundService] Cached Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
+      // );
+      // log('[BackgroundService] Today Fajr: ${todayTimings?.fajr}');
 
-      // DEGISTI: Ongoing bildirim gonder
       await _updateForegroundNotification(
         notificationData['title'] as String,
         notificationData['content'] as String,
@@ -99,6 +96,9 @@ void onStart(ServiceInstance service) async {
       log(
         '[BackgroundService] Cache updated, notification refreshed: ${notificationData['content']}',
       );
+
+      // Sessiz mod kontrolü
+      await silentModeService.checkAndToggleSilentMode();
     }
   });
 
@@ -106,11 +106,10 @@ void onStart(ServiceInstance service) async {
   log('[BackgroundService] Waiting for initial cache load...');
   await _waitForInitialCache(service, cacheService, l10n, sharedPreferences);
 
-  // Dakikalik guncelleme timer'i
+  // Dakikalik bildirim guncelleme timer'i
   Timer.periodic(const Duration(minutes: 1), (timer) async {
     if (service is AndroidServiceInstance &&
         await service.isForegroundService()) {
-      // Her dakika disk'ten yeniden oku
       await sharedPreferences.reload();
 
       final currentLanguageCode =
@@ -128,7 +127,6 @@ void onStart(ServiceInstance service) async {
 
       final notificationData = _calculateNextPrayer(cacheService, currentL10n);
 
-      // DEGISTI: Ongoing bildirim gonder
       await _updateForegroundNotification(
         notificationData['title'] as String,
         notificationData['content'] as String,
@@ -137,11 +135,87 @@ void onStart(ServiceInstance service) async {
       log(
         '[BackgroundService] Periodic update: ${notificationData['content']}',
       );
+
+      // Sessiz mod kontrolü
+      await silentModeService.checkAndToggleSilentMode();
     }
   });
+
+  // 2 saatte bir namaz vakti güncelleme kontrolü
+  Timer.periodic(const Duration(hours: 24), (timer) async {
+    log('[BackgroundService] Checking for prayer times update...');
+    await _updatePrayerTimesIfNeeded(cacheService, sharedPreferences, service);
+  });
+
+  // İlk başlangıçta da kontrol et
+  await _updatePrayerTimesIfNeeded(cacheService, sharedPreferences, service);
 }
 
-// YENI FONKSIYON: Ongoing foreground notification gonder
+// Namaz vakitlerini güncelle
+Future<void> _updatePrayerTimesIfNeeded(
+  CacheService cacheService,
+  SharedPreferences sharedPreferences,
+  ServiceInstance service,
+) async {
+  try {
+    // Cache güncelleme gerekli mi kontrol et
+    if (!cacheService.shouldUpdatePrayerTimes()) {
+      log('[BackgroundService] Prayer times are up to date, skipping update');
+      return;
+    }
+
+    log('[BackgroundService] Prayer times need update, fetching...');
+
+    // Kaydedilmiş konumu al
+    final cachedLocation = cacheService.getCachedLocation();
+    if (cachedLocation == null) {
+      log('[BackgroundService] No cached location, cannot update prayer times');
+      return;
+    }
+
+    // final homeRepository = HomeRepository(cacheService);
+
+    // Bugünün vakitlerini çek
+    // final todayTimings = await homeRepository.getPrayerTimes(
+    //   savedLocation: cachedLocation,
+    // );
+
+    // Yarının vakitlerini çek
+    // final tomorrowTimings = await homeRepository.getNextPrayerTimes(
+    //   savedLocation: cachedLocation,
+    // );
+
+    // Güncelleme zamanını kaydet
+    await cacheService.updateLastUpdateTime();
+
+    log('[BackgroundService] Prayer times updated successfully');
+    // log('[BackgroundService]   Today Fajr: ${todayTimings.fajr}');
+    // log('[BackgroundService]   Tomorrow Fajr: ${tomorrowTimings.fajr}');
+
+    // Bildirimi güncelle
+    if (service is AndroidServiceInstance &&
+        await service.isForegroundService()) {
+      await sharedPreferences.reload();
+
+      final languageCode =
+          cacheService.storageServices.getString('languageCode') ?? 'en';
+      final l10n = await AppLocalizations.delegate.load(Locale(languageCode));
+
+      final notificationData = _calculateNextPrayer(cacheService, l10n);
+
+      await _updateForegroundNotification(
+        notificationData['title'] as String,
+        notificationData['content'] as String,
+      );
+
+      log('[BackgroundService] Notification updated with new prayer times');
+    }
+  } catch (e) {
+    log('[BackgroundService] Error updating prayer times: $e');
+  }
+}
+
+// Ongoing foreground notification gonder
 Future<void> _updateForegroundNotification(String title, String content) async {
   const int notificationId = 888;
   const String channelId = 'namaz_vakti_servisi';
@@ -215,7 +289,7 @@ Future<void> _waitForInitialCache(
           await service.isForegroundService()) {
         final notificationData = _calculateNextPrayer(cacheService, l10n);
 
-        // DEGISTI: Ongoing bildirim gonder
+        // Ongoing bildirim gonder
         await _updateForegroundNotification(
           notificationData['title'] as String,
           notificationData['content'] as String,
@@ -242,14 +316,14 @@ Map<String, String> _calculateNextPrayer(
   try {
     final todayTimings = cacheService.getDailyTimings();
     final tomorrowTimings = cacheService.getNextDayTimings();
-    final cachedLocation = cacheService.getCachedLocation();
+    // final cachedLocation = cacheService.getCachedLocation();
 
     log('[BackgroundService] _calculateNextPrayer called');
-    log(
-      '[BackgroundService]   Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
-    );
-    log('[BackgroundService]   Fajr: ${todayTimings?.fajr}');
-    log('[BackgroundService]   Dhuhr: ${todayTimings?.dhuhr}');
+    // log(
+    //   '[BackgroundService]   Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
+    // );
+    // log('[BackgroundService]   Fajr: ${todayTimings?.fajr}');
+    // log('[BackgroundService]   Dhuhr: ${todayTimings?.dhuhr}');
 
     if (todayTimings == null || tomorrowTimings == null) {
       log('[BackgroundService] Cache is empty, cannot display notification');

@@ -2,8 +2,9 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/services/cache_service.dart';
+import 'package:prayer_time/core/services/silentModeServices/silent_mode_manager_service.dart';
 
-// Bu 'sl' (Service Locator) bizim sihirli kutumuz
+//  (Service Locator)
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -16,6 +17,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StorageServices(sl()));
 
   sl.registerLazySingleton(() => CacheService(sl()));
+
+  // YENI: Silent Mode Service
+  sl.registerLazySingleton(() => SilentModeManagerService(sl(), sl()));
 }
 
 Future<void> resetLocator() async {

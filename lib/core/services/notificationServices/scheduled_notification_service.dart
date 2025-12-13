@@ -29,7 +29,9 @@ class ScheduledNotificationService {
       priority: priority,
       playSound: playSound,
       enableVibration: enableVibration,
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      sound: const RawResourceAndroidNotificationSound(
+        'notification',
+      ), //ATQS SES DOSYASI
       icon: 'prayer_time_icon_notification',
       visibility: NotificationVisibility.public,
     );

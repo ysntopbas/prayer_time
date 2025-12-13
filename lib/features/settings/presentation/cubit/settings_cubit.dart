@@ -146,36 +146,143 @@ class SettingsCubit extends Cubit<SettingsState> {
     storageServices.saveBool('mainNotificationsEnabled', newValue);
 
     if (newValue) {
+      log('[Notifications]  ANA BİLDİRİM AÇILDI');
       await _enableAllNotificationsWithDefaults();
+      log(
+        '[Notifications]  Tüm bildirimler varsayılan ayarlarla aktif edildi (10 dk önce)',
+      );
     } else {
+      log('[Notifications]  ANA BİLDİRİM KAPATILDI');
       _disableAllNotifications();
       await notificationManagerService.cancelAllScheduledNotifications();
+      log('[Notifications]  Tüm bildirimler iptal edildi');
     }
 
     if (newValue) {
       await notificationManagerService.scheduleAllNotifications();
+      _logAllNotificationSettings();
+    }
+  }
+
+  void mainToggleSilentMode() async {
+    final newValue = !state.mainSilentModeEnabled;
+
+    emit(state.copyWith(mainSilentModeEnabled: newValue));
+
+    storageServices.saveBool('mainSilentModeEnabled', newValue);
+
+    if (newValue) {
+      log('[SilentMode]  ANA SESSİZ MOD AÇILDI');
+      _logAllSilentModeSettings();
+    } else {
+      log('[SilentMode]  ANA SESSİZ MOD KAPATILDI');
+      _disableAllSilentModes();
+      log('[SilentMode] Tüm sessiz mod ayarları devre dışı bırakıldı');
     }
   }
 
   Future<void> _enableAllNotificationsWithDefaults() async {
     for (final prayer in PrayerType.values) {
-      final currentSettings = state.notificationBeforePraysSettings;
-      final prayerKey = prayer.key;
-
-      final updated = const NotificationBeforePrays(
+      await updateNotificationSetting(
+        prayerType: prayer,
         isEnabled: true,
-        minutesBefore: 10, // Default 10 dakika
+        minutesBefore: 10,
       );
-
-      final newSettings = currentSettings.updateByKey(prayerKey, updated);
-
-      await storageServices.saveString(
-        '${prayerKey}_notification',
-        jsonEncode(updated.toJson()),
-      );
-
-      emit(state.copyWith(notificationBeforePraysSettings: newSettings));
     }
+  }
+
+  //  Tüm bildirim ayarlarını logla (CREATED BY COPILOT)
+  void _logAllNotificationSettings() {
+    log('[Notifications] ═══════════════════════════════════════');
+    log('[Notifications]  AKTİF BİLDİRİM AYARLARI:');
+    log('[Notifications] ═══════════════════════════════════════');
+
+    final settings = state.notificationBeforePraysSettings;
+    int activeCount = 0;
+
+    if (settings.fajr.isEnabled) {
+      activeCount++;
+      log('[Notifications]  SABAH: ${settings.fajr.minutesBefore} dakika önce');
+    }
+    if (settings.sunrise.isEnabled) {
+      activeCount++;
+      log(
+        '[Notifications]  GÜNEŞ: ${settings.sunrise.minutesBefore} dakika önce',
+      );
+    }
+    if (settings.dhuhr.isEnabled) {
+      activeCount++;
+      log('[Notifications]  ÖĞLE: ${settings.dhuhr.minutesBefore} dakika önce');
+    }
+    if (settings.asr.isEnabled) {
+      activeCount++;
+      log('[Notifications]  İKİNDİ: ${settings.asr.minutesBefore} dakika önce');
+    }
+    if (settings.maghrib.isEnabled) {
+      activeCount++;
+      log(
+        '[Notifications]  AKŞAM: ${settings.maghrib.minutesBefore} dakika önce',
+      );
+    }
+    if (settings.isha.isEnabled) {
+      activeCount++;
+      log('[Notifications]  YATSI: ${settings.isha.minutesBefore} dakika önce');
+    }
+
+    log('[Notifications] ═══════════════════════════════════════');
+    log('[Notifications]  Toplam $activeCount vakit için bildirim aktif');
+    log('[Notifications] ═══════════════════════════════════════');
+  }
+
+  //  Tüm sessiz mod ayarlarını logla (CREATED BY COPILOT)
+  void _logAllSilentModeSettings() {
+    log('[SilentMode] ═══════════════════════════════════════');
+    log('[SilentMode]  AKTİF SESSİZ MOD AYARLARI:');
+    log('[SilentMode] ═══════════════════════════════════════');
+
+    final settings = state.silentModeDuringPraysSettings;
+    int activeCount = 0;
+
+    if (settings.fajr.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode]  SABAH: ${settings.fajr.minutesBefore} dk önce → ${settings.fajr.minutesAfter} dk sonra',
+      );
+    }
+    if (settings.sunrise.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode] GÜNEŞ: ${settings.sunrise.minutesBefore} dk önce → ${settings.sunrise.minutesAfter} dk sonra',
+      );
+    }
+    if (settings.dhuhr.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode]  ÖĞLE: ${settings.dhuhr.minutesBefore} dk önce → ${settings.dhuhr.minutesAfter} dk sonra',
+      );
+    }
+    if (settings.asr.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode]  İKİNDİ: ${settings.asr.minutesBefore} dk önce → ${settings.asr.minutesAfter} dk sonra',
+      );
+    }
+    if (settings.maghrib.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode]  AKŞAM: ${settings.maghrib.minutesBefore} dk önce → ${settings.maghrib.minutesAfter} dk sonra',
+      );
+    }
+    if (settings.isha.isEnabled) {
+      activeCount++;
+      log(
+        '[SilentMode]  YATSI: ${settings.isha.minutesBefore} dk önce → ${settings.isha.minutesAfter} dk sonra',
+      );
+    }
+
+    log('[SilentMode] ═══════════════════════════════════════');
+    log('[SilentMode]  Toplam $activeCount vakit için sessiz mod aktif');
+    log('[SilentMode] ═══════════════════════════════════════');
   }
 
   void _disableAllNotifications() {
@@ -195,18 +302,6 @@ class SettingsCubit extends Cubit<SettingsState> {
 
         emit(state.copyWith(notificationBeforePraysSettings: newSettings));
       }
-    }
-  }
-
-  void mainToggleSilentMode() async {
-    final newValue = !state.mainSilentModeEnabled;
-
-    emit(state.copyWith(mainSilentModeEnabled: newValue));
-
-    storageServices.saveBool('mainSilentModeEnabled', newValue);
-
-    if (!newValue) {
-      _disableAllSilentModes();
     }
   }
 
@@ -244,11 +339,27 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       await notificationManagerService.scheduleAllNotifications();
 
-      log(
-        '$prayerKey bildirimi güncellendi: enabled=${updated.isEnabled}, minutes=${updated.minutesBefore}',
-      );
+      // GÜNCELLEME: Daha detaylı log
+      final prayerNameMap = {
+        'fajr': 'SABAH',
+        'sunrise': 'GÜNEŞ',
+        'dhuhr': 'ÖĞLE',
+        'asr': 'İKİNDİ',
+        'maghrib': 'AKŞAM',
+        'isha': 'YATSI',
+      };
+
+      final prayerName = prayerNameMap[prayerKey] ?? prayerKey.toUpperCase();
+
+      if (updated.isEnabled) {
+        log(
+          '[Notifications]  $prayerName bildirimi AÇILDI: ${updated.minutesBefore} dakika önce',
+        );
+      } else {
+        log('[Notifications]  $prayerName bildirimi KAPATILDI');
+      }
     } catch (e) {
-      log('Bildirim ayarı güncellenirken hata: $e');
+      log('[Notifications]  Bildirim ayarı güncellenirken hata: $e');
     }
   }
 
@@ -279,8 +390,28 @@ class SettingsCubit extends Cubit<SettingsState> {
       );
 
       emit(state.copyWith(silentModeDuringPraysSettings: newSettings));
+
+      // GÜNCELLEME: Daha detaylı log
+      final prayerNameMap = {
+        'fajr': 'SABAH',
+        'sunrise': 'GÜNEŞ',
+        'dhuhr': 'ÖĞLE',
+        'asr': 'İKİNDİ',
+        'maghrib': 'AKŞAM',
+        'isha': 'YATSI',
+      };
+
+      final prayerName = prayerNameMap[prayerKey] ?? prayerKey.toUpperCase();
+
+      if (updated.isEnabled) {
+        log(
+          '[SilentMode]  $prayerName sessiz modu AÇILDI: ${updated.minutesBefore} dk önce → ${updated.minutesAfter} dk sonra',
+        );
+      } else {
+        log('[SilentMode]  $prayerName sessiz modu KAPATILDI');
+      }
     } catch (e) {
-      log('Sessiz mod ayarı güncellenirken hata: $e');
+      log('[SilentMode]  Sessiz mod ayarı güncellenirken hata: $e');
     }
   }
 

@@ -21,7 +21,6 @@ class CacheService {
   static const String _lastMonthlyUpdateKey = 'last_monthly_update';
   static const String _cachedLocationKey = 'cached_location';
 
-  // Günlük namaz vakitlerini kaydet
   Future<void> saveDailyTimings(Timings timings) async {
     final json = jsonEncode(timings.toJson());
     await _storageServices.saveString(_dailyTimingsKey, json);
@@ -152,6 +151,28 @@ class CacheService {
         cachedLocation['country'] != newLocation['country'] ||
         cachedLocation['subAdministrativeArea'] !=
             newLocation['subAdministrativeArea'];
+  }
+
+  // 2 günde bir güncelleme gerekli mi?
+  bool shouldUpdatePrayerTimes() {
+    final lastUpdate = _storageServices.getString(_lastDailyUpdateKey);
+    if (lastUpdate == null) return true;
+
+    final lastUpdateDate = DateTime.parse(lastUpdate);
+    final now = DateTime.now();
+
+    // Son güncellemeden bu yana 2 gün geçtiyse veya bugün farklı bir gün ise
+    final daysDifference = now.difference(lastUpdateDate).inDays;
+    return daysDifference >=
+        1; // Her gün güncelle ki yarının verisi de güncel olsun
+  }
+
+  // Son güncelleme zamanını kaydet
+  Future<void> updateLastUpdateTime() async {
+    await _storageServices.saveString(
+      _lastDailyUpdateKey,
+      DateTime.now().toIso8601String(),
+    );
   }
 
   // Tüm cache'i temizle

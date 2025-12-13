@@ -33,6 +33,7 @@ class HomeRepository {
       log("$locationData");
     }
 
+    // Background service için: Konum değişmediyse ve aynı gün ise cache'den dön
     final locationChanged = _cacheService.hasLocationChanged(locationData);
 
     if (!locationChanged && !_cacheService.shouldUpdateDaily()) {
@@ -43,6 +44,7 @@ class HomeRepository {
       }
     }
 
+    // Konum değiştiyse cache'i temizle
     if (locationChanged && locationData != null) {
       log('Konum değişti! Cache temizleniyor ve yeniden kaydediliyor...');
       await _cacheService.clearAllCache();
@@ -61,7 +63,7 @@ class HomeRepository {
         locationData['subAdministrativeArea'] ?? '',
       );
 
-      log('✓ Cache temizlendi ve yeni konum kaydedildi');
+      log('Cache temizlendi ve yeni konum kaydedildi');
     }
 
     final String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -89,6 +91,8 @@ class HomeRepository {
 
       if (prayerResponse.data.timings != null) {
         await _cacheService.saveDailyTimings(prayerResponse.data.timings!);
+        // Güncelleme zamanını kaydet
+        await _cacheService.updateLastUpdateTime();
         log('Günlük namaz vakitleri cache\'e kaydedildi');
         return prayerResponse.data.timings!;
       } else {
