@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prayer_time/features/monthlyPrayer/presentation/screens/monthly_prayer_time.dart';
-import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
-import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';
-import 'package:prayer_time/features/weeklyPrayer/presentation/screens/weekly_prayer_time.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -67,13 +64,8 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.home_rounded,
                   title: l10nL.drawerHomePageTile,
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    );
+                    context.pop();
+                    context.push('/home');
                   },
                 ),
                 _buildDrawerItem(
@@ -81,13 +73,8 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.view_week,
                   title: l10nL.weeklyPrayCalendar,
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WeeklyPrayerTimeScreen(),
-                      ),
-                    );
+                    context.pop();
+                    context.push('/weekly-prayer-time');
                   },
                 ),
                 _buildDrawerItem(
@@ -95,13 +82,8 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.calendar_month_rounded,
                   title: l10nL.drawermonthlyPrayerTimePageTile,
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MonthlyPrayerTimeScreen(),
-                      ),
-                    );
+                    context.pop();
+                    context.push('/monthly-prayer-time');
                   },
                 ),
 
@@ -111,13 +93,8 @@ class CustomDrawer extends StatelessWidget {
                   icon: Icons.settings_rounded,
                   title: l10nL.drawerSettingsPageTile,
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SettingsScreen(),
-                      ),
-                    );
+                    context.pop();
+                    context.push('/settings');
                   },
                 ),
               ],

@@ -3,6 +3,7 @@ import 'package:prayer_time/features/monthlyPrayer/presentation/screens/monthly_
 import 'package:prayer_time/core/routing/app_routes.dart';
 import 'package:prayer_time/features/home/presentation/screens/home_screen.dart';
 import 'package:prayer_time/features/settings/presentation/screens/settings_screen.dart';
+import 'package:prayer_time/features/settings/presentation/screens/sound_mode_change_test_screen.dart';
 import 'package:prayer_time/features/splashScreen/splash_screen.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/screens/weekly_prayer_time.dart';
 
@@ -30,6 +31,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.splash,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.soundModeChangeTest,
+        builder: (context, state) => const SoundModeChangeTestScreen(),
       ),
     ],
   );

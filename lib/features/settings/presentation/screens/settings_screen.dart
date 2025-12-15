@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
@@ -247,6 +248,12 @@ class SettingsScreen extends StatelessWidget {
               }
             },
             child: Text(l10nL.cleanCache),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.push('/sound-mode-change-test');
+            },
+            child: Text('Sound Mode Change Test Screen'),
           ),
         ],
       ),
