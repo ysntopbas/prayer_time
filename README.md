@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.5.5-blue.svg)
+![Version](https://img.shields.io/badge/version-0.5.6-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.5-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -91,7 +91,14 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 
 ### 🚀 Version History
 
-#### Version 0.5.5 (Current) - Performance & Stability Update 🚀
+#### Version 0.5.6 - Silent Mode Permission Fix 🔧
+- **🔧 Critical Fix**: Resolved missing permission request for silent mode activation
+- **🔐 Permission Handling**: App now properly requests Do Not Disturb permission before enabling silent mode
+- **✨ Improved UX**: Users are now prompted to grant necessary permissions when enabling automatic silent mode
+- **🐛 Bug Fix**: Fixed issue where silent mode couldn't activate due to missing permission request
+- **📱 Better Error Handling**: Enhanced permission flow with clear user guidance
+
+#### Version 0.5.5 - Performance & Stability Update 🚀
 - **⚡ Performance Improvements**: Enhanced app performance and reduced loading times
 - **🐛 Bug Fixes**: Fixed various stability issues and edge cases
 - **🔧 Code Optimization**: Improved code quality and maintainability
@@ -426,7 +433,14 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 
 ### 🚀 Versiyon Geçmişi
 
-#### Versiyon 0.5.5 (Mevcut) - Performans & Stabilite Güncellemesi 🚀
+#### Versiyon 0.5.6 - Sessiz Mod İzin Düzeltmesi 🔧
+- **🔧 Kritik Düzeltme**: Sessiz mod aktivasyonu için eksik izin isteği sorunu çözüldü
+- **🔐 İzin Yönetimi**: Uygulama artık sessiz modu etkinleştirmeden önce Rahatsız Etme iznini düzgün şekilde istiyor
+- **✨ İyileştirilmiş Kullanıcı Deneyimi**: Kullanıcılar otomatik sessiz modu etkinleştirirken gerekli izinleri vermeleri için bilgilendiriliyor
+- **🐛 Hata Düzeltmesi**: Eksik izin isteği nedeniyle sessiz modun aktif olamaması sorunu giderildi
+- **📱 Daha İyi Hata Yönetimi**: Net kullanıcı rehberliği ile geliştirilmiş izin akışı
+
+#### Versiyon 0.5.5 - Performans & Stabilite Güncellemesi 🚀
 - **⚡ Performans İyileştirmeleri**: Geliştirilmiş uygulama performansı ve azaltılmış yükleme süreleri
 - **🐛 Hata Düzeltmeleri**: Çeşitli stabilite sorunları ve uç durumlar düzeltildi
 - **🔧 Kod Optimizasyonu**: İyileştirilmiş kod kalitesi ve sürdürülebilirlik
@@ -460,7 +474,7 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **🔔 Arka Plan Servisi**: Ön plan servisi ile namaz vakitleri için kalıcı bildirimler
 - **🔇 Otomatik Sessiz Mod**: Namaz vakitlerinde telefon otomatik olarak sessizleşiyor
 - **📅 Takvim Görünümleri**: Haftalık ve aylık namaz takvimleri
-- **🔋 Pil Desteği**: Otomatik istem ile pil optimizasyon rehberliği
+- **🔋 Pil Desteği**: Otomatik istem ile pil optimizasyonu rehberliği
 - **💾 Önbellek Sistemi**: Akıllı önbellekleme ile namaz vakitlerine çevrimdışı erişim
 
 ### 🛠️ Teknoloji Yığını
