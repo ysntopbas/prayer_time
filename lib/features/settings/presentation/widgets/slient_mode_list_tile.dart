@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
+import 'package:sound_mode/permission_handler.dart';
 
 class SilentModeListTile extends StatelessWidget {
   const SilentModeListTile({super.key});
@@ -13,49 +14,61 @@ class SilentModeListTile extends StatelessWidget {
     final l10nL = AppLocalizations.of(context);
     final appTheme = Theme.of(context);
 
-    return BlocBuilder<SettingsCubit, SettingsState>(
-      builder: (context, state) {
-        final mainSilentModeEnabled = state.mainSilentModeEnabled;
-
-        return Column(
-          children: [
-            // Ana Switch
-            ListTile(
-              leading: Icon(
-                Icons.volume_off,
-                color: appTheme.colorScheme.primary,
-              ),
-              title: Text(l10nL!.silentMode),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Switch(
-                    value: mainSilentModeEnabled,
-                    onChanged: (value) {
-                      context.read<SettingsCubit>().mainToggleSilentMode();
-                    },
-                  ),
-                  Icon(
-                    mainSilentModeEnabled
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                  ),
-                ],
-              ),
-            ),
-
-            // Alt Ayarlar
-            if (mainSilentModeEnabled)
-              _buildPrayerSilentModeSettings(
-                context,
-                state,
-                mainSilentModeEnabled,
-                l10nL,
-                appTheme,
-              ),
-          ],
-        );
+    return BlocListener<SettingsCubit, SettingsState>(
+      listenWhen: (previous, current) =>
+          previous.needsPermissionDialog != current.needsPermissionDialog,
+      listener: (context, state) {
+        if (state.needsPermissionDialog) {
+          // Dialog göster
+          _showPermissionDialog(context);
+          // Flag'i temizle
+          context.read<SettingsCubit>().clearPermissionDialogFlag();
+        }
       },
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, state) {
+          final mainSilentModeEnabled = state.mainSilentModeEnabled;
+
+          return Column(
+            children: [
+              // Ana Switch
+              ListTile(
+                leading: Icon(
+                  Icons.volume_off,
+                  color: appTheme.colorScheme.primary,
+                ),
+                title: Text(l10nL!.silentMode),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Switch(
+                      value: mainSilentModeEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsCubit>().mainToggleSilentMode();
+                      },
+                    ),
+                    Icon(
+                      mainSilentModeEnabled
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                    ),
+                  ],
+                ),
+              ),
+
+              // Alt Ayarlar
+              if (mainSilentModeEnabled)
+                _buildPrayerSilentModeSettings(
+                  context,
+                  state,
+                  mainSilentModeEnabled,
+                  l10nL,
+                  appTheme,
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -335,6 +348,83 @@ class SilentModeListTile extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  /// Kullanıcıya izin vermesi gerektiğini anlatan pencere
+  void _showPermissionDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.notifications_off_outlined,
+              color: theme.colorScheme.primary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: Text(l10n.permissionRequired)),
+          ],
+        ),
+        content: Text(l10n.silentModePermissionMessage),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+            },
+            child: Text(
+              l10n.cancel,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+
+              // Do Not Disturb ayarlarını aç
+              await PermissionHandler.openDoNotDisturbSetting();
+
+              // Kullanıcı ayarlardan geri döndüğünde izni kontrol et
+              await Future.delayed(const Duration(seconds: 1));
+
+              if (!context.mounted) return;
+
+              final permissionGranted =
+                  await PermissionHandler.permissionsGranted;
+
+              if (!context.mounted) return;
+
+              if (permissionGranted == true) {
+                // İzin verildi, sessiz modu aç
+                context.read<SettingsCubit>().enableSilentModeAfterPermission();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.silentModePermissionGranted),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                // İzin verilmedi
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.silentModePermissionRequired),
+                    backgroundColor: Colors.orange,
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              }
+            },
+            icon: const Icon(Icons.settings),
+            label: Text(l10n.openSettings),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -139,5 +139,25 @@
   "version": "Version",
   "wednesday": "Wednesday",
   "weeklyPrayCalendar": "Weekly Prayers Calendar",
-  "weeklyPrayerTimePageTitle": "Weekly Prayer Times"
+  "weeklyPrayerTimePageTitle": "Weekly Prayer Times",
+  "permissionRequired": "Permission Required",
+  "@permissionRequired": {
+    "description": "Title for permission dialog"
+  },
+  "silentModePermissionMessage": "To automatically silence your phone during prayer times, we need 'Do Not Disturb' access permission.\n\nPlease open Settings, find this app, and enable 'Do Not Disturb Access' permission.",
+  "@silentModePermissionMessage": {
+    "description": "Message explaining why silent mode permission is needed"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Button to open settings"
+  },
+  "silentModePermissionGranted": "Silent mode permission granted and activated",
+  "@silentModePermissionGranted": {
+    "description": "Success message when permission is granted"
+  },
+  "silentModePermissionRequired": "Silent mode requires permission. Please grant it from settings.",
+  "@silentModePermissionRequired": {
+    "description": "Warning message when permission is not granted"
+  }
 }

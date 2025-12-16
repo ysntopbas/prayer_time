@@ -340,4 +340,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Weekly Prayer Times';
+
+  @override
+  String get permissionRequired => 'Permission Required';
+
+  @override
+  String get silentModePermissionMessage =>
+      'To automatically silence your phone during prayer times, we need \'Do Not Disturb\' access permission.\n\nPlease open Settings, find this app, and enable \'Do Not Disturb Access\' permission.';
+
+  @override
+  String get silentModePermissionGranted =>
+      'Silent mode permission granted and activated';
+
+  @override
+  String get silentModePermissionRequired =>
+      'Silent mode requires permission. Please grant it from settings.';
 }

@@ -168,6 +168,7 @@ class SettingsState extends Equatable {
   final NotificationBeforePraysSettings notificationBeforePraysSettings;
   final SilentModeDuringPraysSettings silentModeDuringPraysSettings;
   final bool isLocationLoading;
+  final bool needsPermissionDialog;
 
   const SettingsState({
     required this.isDarkMode,
@@ -181,6 +182,7 @@ class SettingsState extends Equatable {
         const NotificationBeforePraysSettings(),
     this.silentModeDuringPraysSettings = const SilentModeDuringPraysSettings(),
     this.isLocationLoading = false,
+    this.needsPermissionDialog = false,
   });
 
   SettingsState copyWith({
@@ -194,6 +196,7 @@ class SettingsState extends Equatable {
     NotificationBeforePraysSettings? notificationBeforePraysSettings,
     SilentModeDuringPraysSettings? silentModeDuringPraysSettings,
     bool? isLocationLoading,
+    bool? needsPermissionDialog,
   }) {
     return SettingsState(
       isDarkMode: isDarkMode ?? this.isDarkMode,
@@ -212,6 +215,8 @@ class SettingsState extends Equatable {
       silentModeDuringPraysSettings:
           silentModeDuringPraysSettings ?? this.silentModeDuringPraysSettings,
       isLocationLoading: isLocationLoading ?? this.isLocationLoading,
+      needsPermissionDialog:
+          needsPermissionDialog ?? this.needsPermissionDialog,
     );
   }
 
@@ -227,5 +232,6 @@ class SettingsState extends Equatable {
     notificationBeforePraysSettings,
     silentModeDuringPraysSettings,
     isLocationLoading,
+    needsPermissionDialog,
   ];
 }

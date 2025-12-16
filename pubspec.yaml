@@ -2,7 +2,7 @@ name: prayer_time
 description: "Location based prayer times app. Konuma dayalı namaz vakitleri uygulaması."
 publish_to: 'none'
 
-version: 0.5.5+11
+version: 0.5.6+12
 
 environment:
   sdk: ^3.8.1

@@ -107,5 +107,25 @@
   "version": "Versiyon",
   "wednesday": "Çarşamba",
   "weeklyPrayCalendar": "Haftalık Namaz Vakitleri",
-  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri"
+  "weeklyPrayerTimePageTitle": "Haftalık Namaz Vakitleri",
+  "permissionRequired": "İzin Gerekiyor",
+  "@permissionRequired": {
+    "description": "Title for permission dialog"
+  },
+  "silentModePermissionMessage": "Namaz vakitlerinde telefonun tamamen sessize alınabilmesi için 'Rahatsız Etme' erişimine izin vermeniz gerekmektedir.\n\nAyarları açıp uygulamanızı bulun ve 'Rahatsız Etme Erişimi' iznini aktif edin.",
+  "@silentModePermissionMessage": {
+    "description": "Message explaining why silent mode permission is needed"
+  },
+  "openSettings": "Ayarları Aç",
+  "@openSettings": {
+    "description": "Button to open settings"
+  },
+  "silentModePermissionGranted": "Sessiz mod izni verildi ve aktif edildi",
+  "@silentModePermissionGranted": {
+    "description": "Success message when permission is granted"
+  },
+  "silentModePermissionRequired": "Sessiz mod için izin gereklidir. Lütfen ayarlardan izin verin.",
+  "@silentModePermissionRequired": {
+    "description": "Warning message when permission is not granted"
+  }
 }

@@ -10,6 +10,7 @@ import 'package:prayer_time/features/settings/extensions/settings_cubit_extensio
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/services/notificationServices/notification_manager_service.dart';
+import 'package:sound_mode/permission_handler.dart';
 
 part 'settings_state.dart';
 
@@ -167,8 +168,21 @@ class SettingsCubit extends Cubit<SettingsState> {
   void mainToggleSilentMode() async {
     final newValue = !state.mainSilentModeEnabled;
 
-    emit(state.copyWith(mainSilentModeEnabled: newValue));
+    if (newValue) {
+      final permissionStatus = await PermissionHandler.permissionsGranted;
 
+      if (permissionStatus != true) {
+        emit(
+          state.copyWith(
+            mainSilentModeEnabled: false,
+            needsPermissionDialog: true,
+          ),
+        );
+        return;
+      }
+    }
+
+    emit(state.copyWith(mainSilentModeEnabled: newValue));
     storageServices.saveBool('mainSilentModeEnabled', newValue);
 
     if (newValue) {
@@ -179,6 +193,20 @@ class SettingsCubit extends Cubit<SettingsState> {
       _disableAllSilentModes();
       log('[SilentMode] Tüm sessiz mod ayarları devre dışı bırakıldı');
     }
+  }
+
+  // İzin dialog'u gösterildikten sonra çağrılacak
+  void clearPermissionDialogFlag() {
+    emit(state.copyWith(needsPermissionDialog: false));
+  }
+
+  // İzin verildikten sonra sessiz modu açmak için
+  Future<void> enableSilentModeAfterPermission() async {
+    emit(state.copyWith(mainSilentModeEnabled: true));
+    await storageServices.saveBool('mainSilentModeEnabled', true);
+
+    log('[SilentMode]  ANA SESSİZ MOD AÇILDI (İzin verildikten sonra)');
+    _logAllSilentModeSettings();
   }
 
   Future<void> _enableAllNotificationsWithDefaults() async {

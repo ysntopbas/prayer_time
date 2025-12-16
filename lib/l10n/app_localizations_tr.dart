@@ -340,4 +340,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get weeklyPrayerTimePageTitle => 'Haftalık Namaz Vakitleri';
+
+  @override
+  String get permissionRequired => 'İzin Gerekiyor';
+
+  @override
+  String get silentModePermissionMessage =>
+      'Namaz vakitlerinde telefonun tamamen sessize alınabilmesi için \'Rahatsız Etme\' erişimine izin vermeniz gerekmektedir.\n\nAyarları açıp uygulamanızı bulun ve \'Rahatsız Etme Erişimi\' iznini aktif edin.';
+
+  @override
+  String get silentModePermissionGranted =>
+      'Sessiz mod izni verildi ve aktif edildi';
+
+  @override
+  String get silentModePermissionRequired =>
+      'Sessiz mod için izin gereklidir. Lütfen ayarlardan izin verin.';
 }

@@ -410,7 +410,7 @@ abstract class AppLocalizations {
   /// **'You need to enable your device\'s GPS to update your location.'**
   String get locationServiceMessage;
 
-  /// No description provided for @openSettings.
+  /// Button to open settings
   ///
   /// In en, this message translates to:
   /// **'Open Settings'**
@@ -745,6 +745,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly Prayer Times'**
   String get weeklyPrayerTimePageTitle;
+
+  /// Title for permission dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Permission Required'**
+  String get permissionRequired;
+
+  /// Message explaining why silent mode permission is needed
+  ///
+  /// In en, this message translates to:
+  /// **'To automatically silence your phone during prayer times, we need \'Do Not Disturb\' access permission.\n\nPlease open Settings, find this app, and enable \'Do Not Disturb Access\' permission.'**
+  String get silentModePermissionMessage;
+
+  /// Success message when permission is granted
+  ///
+  /// In en, this message translates to:
+  /// **'Silent mode permission granted and activated'**
+  String get silentModePermissionGranted;
+
+  /// Warning message when permission is not granted
+  ///
+  /// In en, this message translates to:
+  /// **'Silent mode requires permission. Please grant it from settings.'**
+  String get silentModePermissionRequired;
 }
 
 class _AppLocalizationsDelegate
