@@ -769,6 +769,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Silent mode requires permission. Please grant it from settings.'**
   String get silentModePermissionRequired;
+
+  /// Button text for playing notification sound
+  ///
+  /// In en, this message translates to:
+  /// **'Play Sound'**
+  String get playSound;
+
+  /// Notification sound name - Flute
+  ///
+  /// In en, this message translates to:
+  /// **'Flute'**
+  String get soundFlute;
+
+  /// Notification sound name - Flute 2
+  ///
+  /// In en, this message translates to:
+  /// **'Flute 2'**
+  String get soundFlute2;
+
+  /// Notification sound name - Bicycle Ring
+  ///
+  /// In en, this message translates to:
+  /// **'Bicycle Ring'**
+  String get soundBicycleRing;
+
+  /// Notification sound name - Wolf Howling
+  ///
+  /// In en, this message translates to:
+  /// **'Wolf Howling'**
+  String get soundWolfHowling;
+
+  /// Notification sound name - Clear Tone
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Tone'**
+  String get soundClearTone;
+
+  /// Notification sound name - Fire
+  ///
+  /// In en, this message translates to:
+  /// **'Fire'**
+  String get soundFire;
+
+  /// Notification sound name - Flute 3
+  ///
+  /// In en, this message translates to:
+  /// **'Flute 3'**
+  String get soundFlute3;
+
+  /// Notification sound name - Harp
+  ///
+  /// In en, this message translates to:
+  /// **'Harp'**
+  String get soundHarp;
+
+  /// Notification sound name - Hawk
+  ///
+  /// In en, this message translates to:
+  /// **'Hawk'**
+  String get soundHawk;
+
+  /// Notification sound name - Positive Sound
+  ///
+  /// In en, this message translates to:
+  /// **'Positive Sound'**
+  String get soundPositiveSound;
+
+  /// Notification sound name - Tick Tock Alarm
+  ///
+  /// In en, this message translates to:
+  /// **'Tick Tock Alarm'**
+  String get soundTickTockAlarm;
+
+  /// Notification sound name - Tick Tock Alarm 2
+  ///
+  /// In en, this message translates to:
+  /// **'Tick Tock Alarm 2'**
+  String get soundTickTockAlarm2;
+
+  /// Notification sound name - Wolf Pack Howling
+  ///
+  /// In en, this message translates to:
+  /// **'Wolf Pack Howling'**
+  String get soundWolfPackHowling;
 }
 
 class _AppLocalizationsDelegate

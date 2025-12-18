@@ -355,4 +355,46 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get silentModePermissionRequired =>
       'Sessiz mod için izin gereklidir. Lütfen ayarlardan izin verin.';
+
+  @override
+  String get playSound => 'Sesi Çal';
+
+  @override
+  String get soundFlute => 'Flüt';
+
+  @override
+  String get soundFlute2 => 'Flüt 2';
+
+  @override
+  String get soundBicycleRing => 'Bisiklet Zili';
+
+  @override
+  String get soundWolfHowling => 'Kurt Uluması';
+
+  @override
+  String get soundClearTone => 'Berrak Ton';
+
+  @override
+  String get soundFire => 'Ateş';
+
+  @override
+  String get soundFlute3 => 'Flüt 3';
+
+  @override
+  String get soundHarp => 'Arp';
+
+  @override
+  String get soundHawk => 'Şahin';
+
+  @override
+  String get soundPositiveSound => 'Pozitif Ses';
+
+  @override
+  String get soundTickTockAlarm => 'Tik Tak Alarm';
+
+  @override
+  String get soundTickTockAlarm2 => 'Tik Tak Alarm 2';
+
+  @override
+  String get soundWolfPackHowling => 'Kurt Sürüsü Uluması';
 }

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.5.6-blue.svg)
+![Version](https://img.shields.io/badge/version-0.6.0-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.5-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -40,6 +40,8 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **Background Service**: Runs reliably in the background for timely alerts with foreground service
 - **Non-Dismissible Service**: Foreground service notification stays in the notification panel permanently
 - **Universal Compatibility**: Works on all Android devices including Huawei/Honor
+- **Customizable Notification Sounds**: Choose from 13 different notification sounds with localized names
+- **Sound Preview**: Test notification sounds before applying them
 
 #### 🔇 Automatic Silent Mode
 - **Prayer Time Silence**: Automatically silence your phone during prayer times
@@ -63,6 +65,7 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **Smooth Animations**: Beautiful transitions and animations
 - **Responsive Layout**: Works perfectly on all screen sizes
 - **Custom Fonts**: Uses Montserrat font family for better readability
+- **Localized Sound Names**: Notification sound names displayed in user's language
 
 #### ⚙️ Settings & Customization
 - **Language Selection**: Switch between English and Turkish
@@ -71,6 +74,7 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **Cache Management**: Clear cached data when needed
 - **Notification Settings**: Granular control over all notification preferences
 - **Silent Mode Settings**: Detailed configuration for automatic silent mode
+- **Sound Customization**: Select and preview from 13 different notification sounds
 
 #### 🧭 Additional Features
 - **Qibla Compass**: Find the direction to Kaaba with accurate compass
@@ -90,6 +94,29 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 </div>
 
 ### 🚀 Version History
+
+#### Version 0.6.0 - Localization & Sound Enhancement 🔊
+- **🌐 Localized Notification Sounds**: All 13 notification sound names now display in your selected language (English/Turkish)
+- **🎵 Sound Preview Feature**: New "Play Sound" button allows you to test notification sounds before applying
+- **🔊 Enhanced Sound Selection**: Improved dropdown menu with localized sound names for better user experience
+- **🌍 Complete Localization**: Sound names automatically switch between English and Turkish based on app language
+- **✨ Better UX**: More intuitive sound selection process with preview functionality
+- **📱 Improved Settings**: Reorganized settings screen with better sound customization options
+
+**Available Notification Sounds:**
+- Flute / Flüt
+- Flute 2 / Flüt 2
+- Bicycle Ring / Bisiklet Zili
+- Wolf Howling / Kurt Uluması
+- Clear Tone / Berrak Ton
+- Fire / Ateş
+- Flute 3 / Flüt 3
+- Harp / Arp
+- Hawk / Şahin
+- Positive Sound / Pozitif Ses
+- Tick Tock Alarm / Tik Tak Alarm
+- Tick Tock Alarm 2 / Tik Tak Alarm 2
+- Wolf Pack Howling / Kurt Sürüsü Uluması
 
 #### Version 0.5.6 - Silent Mode Permission Fix 🔧
 - **🔧 Critical Fix**: Resolved missing permission request for silent mode activation
@@ -141,38 +168,42 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **State Management**: Flutter Bloc (Cubit) ^9.1.1
 - **Local Storage**: SharedPreferences ^2.5.3
 - **HTTP Client**: Dio ^5.9.0
-- **Notifications**: flutter_local_notifications ^18.0.2
-- **Background Service**: flutter_background_service ^5.0.14
+- **Notifications**: flutter_local_notifications ^19.5.0
+- **Background Service**: flutter_background_service ^5.1.0
 - **Location**: Geolocator ^13.0.2, Geocoding ^4.0.0
 - **Localization**: flutter_localizations with ARB files
 - **Timezone**: timezone ^0.10.1
 - **Silent Mode**: sound_mode ^3.1.1
+- **Audio Player**: audioplayers ^6.5.1
 - **UI Components**: 
   - table_calendar ^3.2.0
   - flutter_qiblah ^3.1.0+1
   - flutter_compass_v2 ^1.0.3
-  - flutter_svg ^2.0.16
+  - flutter_svg ^2.2.3
 - **Firebase**: 
-  - firebase_core ^3.11.0
-  - firebase_analytics ^11.5.0
+  - firebase_core ^4.2.1
+  - firebase_analytics ^12.0.4
 - **Routing**: go_router ^16.3.0
-- **Dependency Injection**: get_it ^8.0.4
+- **Dependency Injection**: get_it ^9.1.1
 - **Others**: 
   - equatable ^2.0.7
   - intl ^0.20.2
   - permission_handler ^12.0.1
-  - app_settings ^5.2.1
+  - app_settings ^6.1.1
+  - flutter_phoenix ^1.1.1
 
 ### 📦 Project Structure
 
 ```
 lib/
 ├── core/                          # Core functionality
+│   ├── constants/                 # App constants
+│   │   └── notification_sounds.dart # Notification sound enum with localization
 │   ├── services/                  # Services (notifications, location, cache)
 │   │   ├── backgroundServices/    # Background service implementation
 │   │   │   ├── background_service_handler.dart
 │   │   │   └── background_service_initialization.dart
-│   │   ├── locationServices/      # Location detection and management
+│   │   ├── locationServices      # Location detection and management
 │   │   │   ├── location_service.dart
 │   │   │   └── location_service_initialization.dart
 │   │   ├── notificationServices/  # Notification handling
@@ -321,6 +352,8 @@ Comprehensive notification management:
 - Scheduled notifications for prayer reminders
 - Persistent notification showing next prayer (cannot be dismissed)
 - Individual control for each prayer time
+- 13 customizable notification sounds with localized names
+- Sound preview functionality before selection
 
 #### Silent Mode
 Automatic phone silencing during prayers:
@@ -328,6 +361,14 @@ Automatic phone silencing during prayers:
 - After prayer notification (customizable 5-120 minutes)
 - Uses Android's Do Not Disturb (DND) mode
 - Requires special permissions (automatically requested)
+
+#### Localization
+Full bilingual support with automatic detection:
+- English and Turkish languages
+- Automatic device language detection
+- Localized notification sound names
+- All UI elements translated
+- ARB-based translation system
 
 ### 🤝 Contributing
 
@@ -383,6 +424,8 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **Arka Plan Servisi**: Ön plan servisi ile zamanında uyarılar için arka planda güvenilir şekilde çalışır
 - **Silinemez Servis**: Ön plan hizmet bildirimi bildirim panelinde kalıcı olarak kalır
 - **Evrensel Uyumluluk**: Huawei/Honor dahil tüm Android cihazlarda çalışır
+- **Özelleştirilebilir Bildirim Sesleri**: Yerelleştirilmiş isimlerle 13 farklı bildirim sesi arasından seçim yapın
+- **Ses Önizleme**: Bildirim seslerini uygulamadan önce test edin
 
 #### 🔇 Otomatik Sessiz Mod
 - **Namaz Vakti Sessizliği**: Namaz vakitlerinde telefonunuzu otomatik olarak sessize alır
@@ -406,6 +449,7 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **Akıcı Animasyonlar**: Güzel geçişler ve animasyonlar
 - **Duyarlı Düzen**: Tüm ekran boyutlarında mükemmel çalışır
 - **Özel Fontlar**: Daha iyi okunabilirlik için Montserrat font ailesi kullanır
+- **Yerelleştirilmiş Ses İsimleri**: Bildirim ses isimleri kullanıcının dilinde görüntülenir
 
 #### ⚙️ Ayarlar ve Özelleştirme
 - **Dil Seçimi**: İngilizce ve Türkçe arasında geçiş yapın
@@ -414,6 +458,7 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **Önbellek Yönetimi**: Gerektiğinde önbelleğe alınmış verileri temizleyin
 - **Bildirim Ayarları**: Tüm bildirim tercihleri üzerinde ayrıntılı kontrol
 - **Sessiz Mod Ayarları**: Otomatik sessiz mod için detaylı yapılandırma
+- **Ses Özelleştirme**: 13 farklı bildirim sesi arasından seçim yapın ve önizleyin
 
 #### 🧭 Ek Özellikler
 - **Kıble Pusulası**: Doğru pusula ile Kabe yönünü bulun
@@ -432,6 +477,29 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 </div>
 
 ### 🚀 Versiyon Geçmişi
+
+#### Versiyon 0.6.0 - Yerelleştirme ve Ses Geliştirmesi 🔊
+- **🌐 Yerelleştirilmiş Bildirim Sesleri**: Tüm 13 bildirim sesi artık seçtiğiniz dilde (İngilizce/Türkçe) görüntüleniyor
+- **🎵 Ses Önizleme Özelliği**: Yeni "Sesi Çal" butonu ile bildirim seslerini uygulamadan önce test edebilirsiniz
+- **🔊 Geliştirilmiş Ses Seçimi**: Daha iyi kullanıcı deneyimi için yerelleştirilmiş ses isimleriyle geliştirilmiş açılır menü
+- **🌍 Tam Yerelleştirme**: Ses isimleri uygulama diline göre otomatik olarak İngilizce ve Türkçe arasında değişiyor
+- **✨ Daha İyi UX**: Önizleme işleviyle daha sezgisel ses seçim süreci
+- **📱 Geliştirilmiş Ayarlar**: Daha iyi ses özelleştirme seçenekleriyle yeniden düzenlenmiş ayarlar ekranı
+
+**Mevcut Bildirim Sesleri:**
+- Flute / Flüt
+- Flute 2 / Flüt 2
+- Bicycle Ring / Bisiklet Zili
+- Wolf Howling / Kurt Uluması
+- Clear Tone / Berrak Ton
+- Fire / Ateş
+- Flute 3 / Flüt 3
+- Harp / Arp
+- Hawk / Şahin
+- Positive Sound / Pozitif Ses
+- Tick Tock Alarm / Tik Tak Alarm
+- Tick Tock Alarm 2 / Tik Tak Alarm 2
+- Wolf Pack Howling / Kurt Sürüsü Uluması
 
 #### Versiyon 0.5.6 - Sessiz Mod İzin Düzeltmesi 🔧
 - **🔧 Kritik Düzeltme**: Sessiz mod aktivasyonu için eksik izin isteği sorunu çözüldü
@@ -483,33 +551,37 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **Durum Yönetimi**: Flutter Bloc (Cubit) ^9.1.1
 - **Yerel Depolama**: SharedPreferences ^2.5.3
 - **HTTP İstemcisi**: Dio ^5.9.0
-- **Bildirimler**: flutter_local_notifications ^18.0.2
-- **Arka Plan Servisi**: flutter_background_service ^5.0.14
+- **Bildirimler**: flutter_local_notifications ^19.5.0
+- **Arka Plan Servisi**: flutter_background_service ^5.1.0
 - **Konum**: Geolocator ^13.0.2, Geocoding ^4.0.0
 - **Yerelleştirme**: ARB dosyaları ile flutter_localizations
 - **Saat Dilimi**: timezone ^0.10.1
 - **Sessiz Mod**: sound_mode ^3.1.1
+- **Ses Oynatıcı**: audioplayers ^6.5.1
 - **UI Bileşenleri**: 
   - table_calendar ^3.2.0
   - flutter_qiblah ^3.1.0+1
   - flutter_compass_v2 ^1.0.3
-  - flutter_svg ^2.0.16
+  - flutter_svg ^2.2.3
 - **Firebase**: 
-  - firebase_core ^3.11.0
-  - firebase_analytics ^11.5.0
+  - firebase_core ^4.2.1
+  - firebase_analytics ^12.0.4
 - **Yönlendirme**: go_router ^16.3.0
-- **Bağımlılık Enjeksiyonu**: get_it ^8.0.4
+- **Bağımlılık Enjeksiyonu**: get_it ^9.1.1
 - **Diğerleri**: 
   - equatable ^2.0.7
   - intl ^0.20.2
   - permission_handler ^12.0.1
-  - app_settings ^5.2.1
+  - app_settings ^6.1.1
+  - flutter_phoenix ^1.1.1
 
 ### 📦 Proje Yapısı
 
 ```
 lib/
 ├── core/                          # Temel işlevsellik
+│   ├── constants/                 # Uygulama sabitleri
+│   │   └── notification_sounds.dart # Yerelleştirme ile bildirim sesi enum
 │   ├── services/                  # Servisler (bildirimler, konum, önbellek)
 │   │   ├── backgroundServices/    # Arka plan servisi implementasyonu
 │   │   │   ├── background_service_handler.dart
@@ -663,6 +735,8 @@ Kapsamlı bildirim yönetimi:
 - Namaz hatırlatıcıları için zamanlanmış bildirimler
 - Bir sonraki namazı gösteren kalıcı bildirim (silinemez)
 - Her namaz vakti için bireysel kontrol
+- Yerelleştirilmiş isimlerle 13 özelleştirilebilir bildirim sesi
+- Seçimden önce ses önizleme işlevi
 
 #### Sessiz Mod
 Namazlar sırasında otomatik telefon sessize alma:
@@ -670,6 +744,14 @@ Namazlar sırasında otomatik telefon sessize alma:
 - Namaz sonrası bildirim (özelleştirilebilir 5-120 dakika)
 - Android'in Rahatsız Etme (DND) modunu kullanır
 - Özel izinler gerektirir (otomatik olarak istenir)
+
+#### Yerelleştirme
+Otomatik algılama ile tam çift dilli destek:
+- İngilizce ve Türkçe diller
+- Otomatik cihaz dili algılama
+- Yerelleştirilmiş bildirim ses isimleri
+- Tüm UI öğeleri çevrilmiş
+- ARB tabanlı çeviri sistemi
 
 ### 🤝 Katkıda Bulunma
 

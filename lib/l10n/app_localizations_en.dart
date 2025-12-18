@@ -355,4 +355,46 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get silentModePermissionRequired =>
       'Silent mode requires permission. Please grant it from settings.';
+
+  @override
+  String get playSound => 'Play Sound';
+
+  @override
+  String get soundFlute => 'Flute';
+
+  @override
+  String get soundFlute2 => 'Flute 2';
+
+  @override
+  String get soundBicycleRing => 'Bicycle Ring';
+
+  @override
+  String get soundWolfHowling => 'Wolf Howling';
+
+  @override
+  String get soundClearTone => 'Clear Tone';
+
+  @override
+  String get soundFire => 'Fire';
+
+  @override
+  String get soundFlute3 => 'Flute 3';
+
+  @override
+  String get soundHarp => 'Harp';
+
+  @override
+  String get soundHawk => 'Hawk';
+
+  @override
+  String get soundPositiveSound => 'Positive Sound';
+
+  @override
+  String get soundTickTockAlarm => 'Tick Tock Alarm';
+
+  @override
+  String get soundTickTockAlarm2 => 'Tick Tock Alarm 2';
+
+  @override
+  String get soundWolfPackHowling => 'Wolf Pack Howling';
 }

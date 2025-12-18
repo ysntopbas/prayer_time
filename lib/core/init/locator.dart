@@ -18,7 +18,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => CacheService(sl()));
 
-  // YENI: Silent Mode Service
+  // Silent Mode Service
   sl.registerLazySingleton(() => SilentModeManagerService(sl(), sl()));
 }
 

@@ -159,5 +159,61 @@
   "silentModePermissionRequired": "Silent mode requires permission. Please grant it from settings.",
   "@silentModePermissionRequired": {
     "description": "Warning message when permission is not granted"
+  },
+  "playSound": "Play Sound",
+  "@playSound": {
+    "description": "Button text for playing notification sound"
+  },
+  "soundFlute": "Flute",
+  "@soundFlute": {
+    "description": "Notification sound name - Flute"
+  },
+  "soundFlute2": "Flute 2",
+  "@soundFlute2": {
+    "description": "Notification sound name - Flute 2"
+  },
+  "soundBicycleRing": "Bicycle Ring",
+  "@soundBicycleRing": {
+    "description": "Notification sound name - Bicycle Ring"
+  },
+  "soundWolfHowling": "Wolf Howling",
+  "@soundWolfHowling": {
+    "description": "Notification sound name - Wolf Howling"
+  },
+  "soundClearTone": "Clear Tone",
+  "@soundClearTone": {
+    "description": "Notification sound name - Clear Tone"
+  },
+  "soundFire": "Fire",
+  "@soundFire": {
+    "description": "Notification sound name - Fire"
+  },
+  "soundFlute3": "Flute 3",
+  "@soundFlute3": {
+    "description": "Notification sound name - Flute 3"
+  },
+  "soundHarp": "Harp",
+  "@soundHarp": {
+    "description": "Notification sound name - Harp"
+  },
+  "soundHawk": "Hawk",
+  "@soundHawk": {
+    "description": "Notification sound name - Hawk"
+  },
+  "soundPositiveSound": "Positive Sound",
+  "@soundPositiveSound": {
+    "description": "Notification sound name - Positive Sound"
+  },
+  "soundTickTockAlarm": "Tick Tock Alarm",
+  "@soundTickTockAlarm": {
+    "description": "Notification sound name - Tick Tock Alarm"
+  },
+  "soundTickTockAlarm2": "Tick Tock Alarm 2",
+  "@soundTickTockAlarm2": {
+    "description": "Notification sound name - Tick Tock Alarm 2"
+  },
+  "soundWolfPackHowling": "Wolf Pack Howling",
+  "@soundWolfPackHowling": {
+    "description": "Notification sound name - Wolf Pack Howling"
   }
 }

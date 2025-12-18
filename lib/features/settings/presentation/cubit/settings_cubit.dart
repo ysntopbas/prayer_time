@@ -71,6 +71,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         storageServices.getBool('mainSilentModeEnabled') ?? false;
     final notificationSettings = _loadNotificationSettings();
     final silentModeSettings = _loadSilentModeSettings();
+    final notificationSound =
+        storageServices.getString('notificationSound') ?? "flute";
 
     emit(
       SettingsState(
@@ -83,6 +85,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         mainSilentModeEnabled: mainSilentModeEnabled,
         notificationBeforePraysSettings: notificationSettings,
         silentModeDuringPraysSettings: silentModeSettings,
+        notificationSound: notificationSound,
       ),
     );
   }
@@ -125,6 +128,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     storageServices.saveString('languageCode', languageCode);
 
     notificationManagerService.scheduleAllNotifications();
+  }
+
+  void changeNotificationSound(String notificationSound) {
+    emit(state.copyWith(notificationSound: notificationSound));
+    storageServices.saveString('notificationSound', notificationSound);
   }
 
   Future<bool> shouldShowBatteryDialog() async {

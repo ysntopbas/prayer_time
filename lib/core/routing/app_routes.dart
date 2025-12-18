@@ -7,5 +7,5 @@ class AppRoutes {
   static const String compassPage = '/compass';
   static const String weeklyPrayerTime = '/weekly-prayer-time';
   static const String splash = '/splash';
-  static const String soundModeChangeTest = '/sound-mode-change-test';
+  // static const String soundModeChangeTest = '/sound-mode-change-test';
 }

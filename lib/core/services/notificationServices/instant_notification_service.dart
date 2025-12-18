@@ -1,12 +1,18 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:prayer_time/core/services/storage_services.dart';
+import 'package:prayer_time/core/init/locator.dart' as di;
 
 class InstantNotificationService {
+  final StorageServices storageServices;
+
   static final InstantNotificationService _instance =
-      InstantNotificationService._internal();
+      InstantNotificationService._internal(
+        storageServices: di.sl<StorageServices>(),
+      );
 
   factory InstantNotificationService() => _instance;
 
-  InstantNotificationService._internal();
+  InstantNotificationService._internal({required this.storageServices});
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -24,9 +30,9 @@ class InstantNotificationService {
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
-      sound: const RawResourceAndroidNotificationSound(
-        'notification',
-      ), //ATQS SES DOSYASI
+      sound: RawResourceAndroidNotificationSound(
+        storageServices.getString('notificationSound') ?? 'flute',
+      ),
       icon: 'prayer_time_icon_notification',
     );
 

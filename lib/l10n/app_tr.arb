@@ -127,5 +127,74 @@
   "silentModePermissionRequired": "Sessiz mod için izin gereklidir. Lütfen ayarlardan izin verin.",
   "@silentModePermissionRequired": {
     "description": "Warning message when permission is not granted"
+  },
+  "playSound": "Sesi Çal",
+  "@playSound": {
+    "description": "Bildirim sesini oynatma butonu metni"
+  },
+  
+  "soundFlute": "Flüt",
+  "@soundFlute": {
+    "description": "Bildirim sesi adı - Flüt"
+  },
+  
+  "soundFlute2": "Flüt 2",
+  "@soundFlute2": {
+    "description": "Bildirim sesi adı - Flüt 2"
+  },
+  
+  "soundBicycleRing": "Bisiklet Zili",
+  "@soundBicycleRing": {
+    "description": "Bildirim sesi adı - Bisiklet Zili"
+  },
+  
+  "soundWolfHowling": "Kurt Uluması",
+  "@soundWolfHowling": {
+    "description": "Bildirim sesi adı - Kurt Uluması"
+  },
+  
+  "soundClearTone": "Berrak Ton",
+  "@soundClearTone": {
+    "description": "Bildirim sesi adı - Berrak Ton"
+  },
+  
+  "soundFire": "Ateş",
+  "@soundFire": {
+    "description": "Bildirim sesi adı - Ateş"
+  },
+  
+  "soundFlute3": "Flüt 3",
+  "@soundFlute3": {
+    "description": "Bildirim sesi adı - Flüt 3"
+  },
+  
+  "soundHarp": "Arp",
+  "@soundHarp": {
+    "description": "Bildirim sesi adı - Arp"
+  },
+  
+  "soundHawk": "Şahin",
+  "@soundHawk": {
+    "description": "Bildirim sesi adı - Şahin"
+  },
+  
+  "soundPositiveSound": "Pozitif Ses",
+  "@soundPositiveSound": {
+    "description": "Bildirim sesi adı - Pozitif Ses"
+  },
+  
+  "soundTickTockAlarm": "Tik Tak Alarm",
+  "@soundTickTockAlarm": {
+    "description": "Bildirim sesi adı - Tik Tak Alarm"
+  },
+  
+  "soundTickTockAlarm2": "Tik Tak Alarm 2",
+  "@soundTickTockAlarm2": {
+    "description": "Bildirim sesi adı - Tik Tak Alarm 2"
+  },
+  
+  "soundWolfPackHowling": "Kurt Sürüsü Uluması",
+  "@soundWolfPackHowling": {
+    "description": "Bildirim sesi adı - Kurt Sürüsü Uluması"
   }
 }

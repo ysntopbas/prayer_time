@@ -1,13 +1,19 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:prayer_time/core/services/storage_services.dart';
+import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:timezone/timezone.dart' as tz;
 
 class ScheduledNotificationService {
+  final StorageServices storageServices;
+
   static final ScheduledNotificationService _instance =
-      ScheduledNotificationService._internal();
+      ScheduledNotificationService._internal(
+        storageServices: di.sl<StorageServices>(),
+      );
 
   factory ScheduledNotificationService() => _instance;
 
-  ScheduledNotificationService._internal();
+  ScheduledNotificationService._internal({required this.storageServices});
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -29,9 +35,9 @@ class ScheduledNotificationService {
       priority: priority,
       playSound: playSound,
       enableVibration: enableVibration,
-      sound: const RawResourceAndroidNotificationSound(
-        'notification',
-      ), //ATQS SES DOSYASI
+      sound: RawResourceAndroidNotificationSound(
+        storageServices.getString('notificationSound') ?? 'flute',
+      ),
       icon: 'prayer_time_icon_notification',
       visibility: NotificationVisibility.public,
     );

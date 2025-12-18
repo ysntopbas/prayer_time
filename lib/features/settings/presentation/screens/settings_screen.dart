@@ -1,14 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
+import 'package:prayer_time/core/constants/notification_sounds.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
-import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/notification_switch_list_tile.dart';
@@ -167,9 +167,48 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          Divider(color: appTheme.colorScheme.primary),
 
-          // Test Notification Sound Button
+          Divider(color: appTheme.colorScheme.primary),
+          BlocSelector<SettingsCubit, SettingsState, String>(
+            selector: (state) => state.notificationSound,
+
+            builder: (context, notificationSound) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: DropdownMenu<AppSound>(
+                  leadingIcon: Icon(
+                    Icons.music_note,
+                    color: appTheme.colorScheme.primary,
+                  ),
+                  initialSelection: AppSound.values.firstWhere(
+                    (sound) => sound.filename == notificationSound,
+                    orElse: () => AppSound.flute,
+                  ),
+                  width: double.infinity,
+                  dropdownMenuEntries: AppSound.values
+                      .map<DropdownMenuEntry<AppSound>>((AppSound sound) {
+                        return DropdownMenuEntry(
+                          value: sound,
+                          label: sound.getLocalizedLabel(context),
+                        );
+                      })
+                      .toList(),
+                  onSelected: (AppSound? sound) {
+                    if (sound != null) {
+                      context.read<SettingsCubit>().changeNotificationSound(
+                        sound.filename,
+                      );
+                    }
+                  },
+                ),
+              );
+            },
+          ),
+
+          // Play Sound Button
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
@@ -177,41 +216,32 @@ class SettingsScreen extends StatelessWidget {
             ),
             child: ElevatedButton.icon(
               onPressed: () async {
-                final messenger = ScaffoldMessenger.of(context);
-                try {
-                  await InstantNotificationService().showNotification(
-                    id: 999,
-                    title: 'Test Notification',
-                    body: 'Testing notification sound',
-                    channelId: 'test_notification',
-                    channelName: 'Test Notifications',
-                    channelDescription: 'Test notification sounds',
-                  );
+                final currentSoundString = context
+                    .read<SettingsCubit>()
+                    .state
+                    .notificationSound;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Test notification sent!'),
-                      backgroundColor: Colors.green,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                final currentSoundEnum = AppSound.values.firstWhere(
+                  (e) => e.filename == currentSoundString,
+                  orElse: () => AppSound.flute,
+                );
+
+                final player = AudioPlayer();
+                try {
+                  await player.stop();
+                  await player.play(AssetSource(currentSoundEnum.assetPath));
                 } catch (e) {
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Text('Failed: $e'),
-                      backgroundColor: Colors.red,
-                      duration: const Duration(seconds: 3),
-                    ),
-                  );
+                  log("Hata: $e");
                 }
               },
-              icon: const Icon(Icons.notifications_active),
-              label: const Text('Test Notification Sound'),
+              icon: const Icon(Icons.play_arrow),
+              label: Text(l10nL.playSound),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
               ),
             ),
           ),
+
           Divider(color: appTheme.colorScheme.primary),
 
           NotificationSwitchListTile(),
@@ -249,12 +279,14 @@ class SettingsScreen extends StatelessWidget {
             },
             child: Text(l10nL.cleanCache),
           ),
-          ElevatedButton(
-            onPressed: () {
-              context.push('/sound-mode-change-test');
-            },
-            child: Text('Sound Mode Change Test Screen'),
-          ),
+
+          //TEST SCREEN BUTTON
+          // ElevatedButton(
+          //   onPressed: () {
+          //     context.push('/sound-mode-change-test');
+          //   },
+          //   child: Text('Sound Mode Change Test Screen'),
+          // ),
         ],
       ),
     );
