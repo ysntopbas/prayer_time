@@ -38,9 +38,7 @@ class ScheduledNotificationService {
       priority: priority,
       playSound: playSound,
       sound: playSound
-          ? UriAndroidNotificationSound(
-              'asset:///assets/sounds/$soundFileName.wav',
-            )
+          ? RawResourceAndroidNotificationSound(soundFileName)
           : null,
       icon: 'prayer_time_icon_notification',
       enableVibration: enableVibration,

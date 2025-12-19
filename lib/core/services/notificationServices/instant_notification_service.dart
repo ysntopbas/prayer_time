@@ -33,9 +33,7 @@ class InstantNotificationService {
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
-      sound: UriAndroidNotificationSound(
-        'asset:///assets/sounds/$soundFileName.wav',
-      ),
+      sound: RawResourceAndroidNotificationSound(soundFileName),
       icon: 'prayer_time_icon_notification',
     );
 
