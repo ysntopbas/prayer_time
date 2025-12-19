@@ -27,6 +27,9 @@ class ScheduledNotificationService {
     bool playSound = true,
     bool enableVibration = true,
   }) {
+    final soundFileName =
+        storageServices.getString('notificationSound') ?? 'flute';
+
     final androidDetails = AndroidNotificationDetails(
       channelId,
       channelName,
@@ -34,12 +37,13 @@ class ScheduledNotificationService {
       importance: importance,
       priority: priority,
       playSound: playSound,
-      enableVibration: enableVibration,
-      sound: RawResourceAndroidNotificationSound(
-        storageServices.getString('notificationSound') ?? 'flute',
-      ),
+      sound: playSound
+          ? UriAndroidNotificationSound(
+              'asset:///assets/sounds/$soundFileName.wav',
+            )
+          : null,
       icon: 'prayer_time_icon_notification',
-      visibility: NotificationVisibility.public,
+      enableVibration: enableVibration,
     );
 
     final iosDetails = DarwinNotificationDetails(

@@ -24,14 +24,17 @@ class InstantNotificationService {
     Importance importance = Importance.high,
     Priority priority = Priority.high,
   }) {
+    final soundFileName =
+        storageServices.getString('notificationSound') ?? 'flute';
+
     final androidDetails = AndroidNotificationDetails(
       channelId,
       channelName,
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
-      sound: RawResourceAndroidNotificationSound(
-        storageServices.getString('notificationSound') ?? 'flute',
+      sound: UriAndroidNotificationSound(
+        'asset:///assets/sounds/$soundFileName.wav',
       ),
       icon: 'prayer_time_icon_notification',
     );
