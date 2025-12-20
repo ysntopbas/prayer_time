@@ -9,6 +9,7 @@ import 'package:prayer_time/core/constants/notification_sounds.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
+import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/notification_switch_list_tile.dart';
@@ -206,6 +207,69 @@ class SettingsScreen extends StatelessWidget {
                 ),
               );
             },
+          ),
+          // Test Notification butonu için bu kodu kullanın:
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                // Güncel sesi async işlemlerden ÖNCE al
+                final currentSound = context
+                    .read<SettingsCubit>()
+                    .state
+                    .notificationSound;
+
+                try {
+                  // Önce önceki test bildirimini iptal et
+                  await InstantNotificationService().cancelNotification(999);
+
+                  // Kısa bekleme
+                  await Future.delayed(const Duration(milliseconds: 300));
+
+                  log('🎵 Testing notification with sound: $currentSound');
+
+                  // Her test için benzersiz channel ID (timestamp ile)
+                  final timestamp = DateTime.now().millisecondsSinceEpoch;
+                  final channelId = 'test_channel_$timestamp';
+
+                  // Test bildirimi gönder
+                  await InstantNotificationService().showNotification(
+                    id: 999,
+                    title: 'Test Notification',
+                    body: 'Sound: $currentSound',
+                    channelId: channelId, // Her seferinde YENİ channel!
+                    channelName: 'Test Notifications',
+                    channelDescription: 'Testing notification sounds',
+                  );
+
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text('✅ Test sent with sound: $currentSound'),
+                      backgroundColor: Colors.green,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                } catch (e) {
+                  log('❌ Test notification error: $e');
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text('❌ Error: $e'),
+                      backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(Icons.notifications_active),
+              label: const Text('Test Notification Sound'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+              ),
+            ),
           ),
 
           // Play Sound Button

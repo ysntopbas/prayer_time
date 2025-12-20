@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
@@ -30,6 +31,8 @@ class ScheduledNotificationService {
     final soundFileName =
         storageServices.getString('notificationSound') ?? 'flute';
 
+    log('[ScheduledNotification] Channel: $channelId, Sound: $soundFileName');
+
     final androidDetails = AndroidNotificationDetails(
       channelId,
       channelName,
@@ -48,7 +51,7 @@ class ScheduledNotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: playSound,
-      sound: playSound ? 'default' : null,
+      sound: playSound ? '$soundFileName.wav' : null,
     );
 
     return NotificationDetails(android: androidDetails, iOS: iosDetails);
@@ -70,35 +73,62 @@ class ScheduledNotificationService {
     DateTimeComponents? matchDateTimeComponents,
     String? icon,
   }) async {
-    await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledTime, tz.local),
-      _notificationDetails(
-        channelId: channelId,
-        channelName: channelName,
-        channelDescription: channelDescription,
-        importance: importance,
-        priority: priority,
-        playSound: playSound,
-        enableVibration: enableVibration,
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: matchDateTimeComponents,
-      payload: payload,
-    );
+    try {
+      await _plugin.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.from(scheduledTime, tz.local),
+        _notificationDetails(
+          channelId: channelId,
+          channelName: channelName,
+          channelDescription: channelDescription,
+          importance: importance,
+          priority: priority,
+          playSound: playSound,
+          enableVibration: enableVibration,
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        matchDateTimeComponents: matchDateTimeComponents,
+        payload: payload,
+      );
+      log(
+        ' Scheduled notification - ID: $id, Time: $scheduledTime, Channel: $channelId',
+      );
+    } catch (e) {
+      log('Scheduled notification error: $e');
+      rethrow;
+    }
   }
 
   Future<void> cancelScheduledNotification(int id) async {
     await _plugin.cancel(id);
+    log(' Cancelled scheduled notification - ID: $id');
   }
 
   Future<void> cancelAllScheduledNotifications() async {
     await _plugin.cancelAll();
+    log(' All scheduled notifications cancelled');
   }
 
   Future<List<PendingNotificationRequest>> getPendingNotifications() async {
     return await _plugin.pendingNotificationRequests();
+  }
+
+  // Android notification channel'ı sil
+  Future<void> deleteNotificationChannel(String channelId) async {
+    final androidImplementation = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    if (androidImplementation != null) {
+      try {
+        await androidImplementation.deleteNotificationChannel(channelId);
+        log(' Deleted notification channel: $channelId');
+      } catch (e) {
+        log(' Error deleting channel: $e');
+      }
+    }
   }
 }

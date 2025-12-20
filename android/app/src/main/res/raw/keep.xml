@@ -1,3 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/ic_notification,@drawable/prayer_time_icon_notification" />
+    tools:keep="@raw/bicyclering,@raw/cleartone,@raw/fire,@raw/flute,@raw/flute2,@raw/flute3,@raw/harp,@raw/hawk,@raw/positivesound,@raw/ticktockalarm,@raw/tictockalarm2,@raw/wolfhowling,@raw/wolfpackhowling" />

@@ -162,6 +162,13 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **🔋 Battery Support**: Battery optimization guidance with automatic prompt
 - **💾 Cache System**: Offline access to prayer times with smart caching
 
+#### Version 0.6.3 - Notification Sound Testing Update 🧪
+- **🧪 Test Button Added**: New notification test button added to troubleshoot sound playback issues on certain devices
+- **🔧 Bug Investigation**: Temporary testing feature to identify and resolve notification sound errors reported by users
+- **📱 Device Compatibility Testing**: Test functionality across different device models to ensure reliable notification sounds
+- **⚠️ Temporary Feature**: Test button will be removed in the next update once notification sound issues are fully resolved
+- **🐛 Bug Fixes**: Addressing notification sound playback problems that occurred in previous versions (0.6.1 and 0.6.2)
+
 ### 🛠️ Technical Stack
 
 - **Framework**: Flutter 3.32.5 (Dart 3.8.1)
@@ -544,6 +551,13 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **📅 Takvim Görünümleri**: Haftalık ve aylık namaz takvimleri
 - **🔋 Pil Desteği**: Otomatik istem ile pil optimizasyonu rehberliği
 - **💾 Önbellek Sistemi**: Akıllı önbellekleme ile namaz vakitlerine çevrimdışı erişim
+
+#### Versiyon 0.6.3 - Bildirim Sesi Testi Güncellemesi 🧪
+- **🧪 Test Butonu Eklendi**: Belirli cihazlarda ses çalma sorunlarını gidermek için yeni bildirim test butonu eklendi
+- **🔧 Hata Soruşturması**: Kullanıcılar tarafından bildirilen bildirim sesi hatalarını tanımlamak ve çözmek için geçici test özelliği
+- **📱 Cihaz Uyumluluğu Testi**: Farklı cihaz modellerinde test işlevselliğini sağlamak için testler yapıldı
+- **⚠️ Geçici Özellik**: Bildirim sesi sorunları tamamen çözüldüğünde test butonu bir sonraki güncellemede kaldırılacaktır
+- **🐛 Hata Düzeltmeleri**: Önceki versiyonlarda (0.6.1 ve 0.6.2) meydana gelen bildirim sesi çalma sorunlarının giderilmesi
 
 ### 🛠️ Teknoloji Yığını
 
