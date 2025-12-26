@@ -46,53 +46,55 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         title: l10nL.weeklyPrayerTimePageTitle,
         leading: const BackButton(),
       ),
-      body: BlocListener<SettingsCubit, SettingsState>(
-        listenWhen: (previous, current) =>
-            previous.cityName != current.cityName,
-        listener: (context, state) {
-          // Konum güncellendiğinde namaz vakitlerini yeniden yükle
-          _loadWeeklyPrayerTimes();
-        },
-        child: BlocBuilder<WeeklyCubit, WeeklyState>(
-          builder: (context, state) {
-            if (state is WeeklyInitial || state is WeeklyLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is WeeklyError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.message),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _loadWeeklyPrayerTimes,
-                      child: const Text('Tekrar Dene'),
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is WeeklyLoaded) {
-              final weeklyTimings = state.weeklyTimings ?? [];
-              final cityName = state.cityName ?? 'Istanbul';
-
-              if (weeklyTimings.isEmpty) {
-                return Center(child: Text(l10nL.prayTimeNotAvailable));
-              }
-
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: weeklyTimings.length,
-                itemBuilder: (context, index) {
-                  final prayerTime = weeklyTimings[index];
-                  return WeeklyPrayerDayCard(
-                    prayerTime: prayerTime,
-                    cityName: cityName,
-                  );
-                },
-              );
-            }
-            return const SizedBox.shrink();
+      body: SafeArea(
+        child: BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (previous, current) =>
+              previous.cityName != current.cityName,
+          listener: (context, state) {
+            // Konum güncellendiğinde namaz vakitlerini yeniden yükle
+            _loadWeeklyPrayerTimes();
           },
+          child: BlocBuilder<WeeklyCubit, WeeklyState>(
+            builder: (context, state) {
+              if (state is WeeklyInitial || state is WeeklyLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is WeeklyError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loadWeeklyPrayerTimes,
+                        child: const Text('Tekrar Dene'),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is WeeklyLoaded) {
+                final weeklyTimings = state.weeklyTimings ?? [];
+                final cityName = state.cityName ?? 'Istanbul';
+
+                if (weeklyTimings.isEmpty) {
+                  return Center(child: Text(l10nL.prayTimeNotAvailable));
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: weeklyTimings.length,
+                  itemBuilder: (context, index) {
+                    final prayerTime = weeklyTimings[index];
+                    return WeeklyPrayerDayCard(
+                      prayerTime: prayerTime,
+                      cityName: cityName,
+                    );
+                  },
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

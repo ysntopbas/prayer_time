@@ -137,89 +137,91 @@ class _HomeScaffold extends StatelessWidget {
                 final subAdministrativeArea =
                     state.subAdministrativeArea ?? 'Fatih';
 
-                return Column(
-                  children: [
-                    PrayerHeader(
-                      subAdministrativeArea: subAdministrativeArea,
-                      cityName: cityName,
-                      scaffoldKey: null,
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
+                return SafeArea(
+                  child: Column(
+                    children: [
+                      PrayerHeader(
+                        subAdministrativeArea: subAdministrativeArea,
+                        cityName: cityName,
+                        scaffoldKey: null,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
                           ),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              BlocSelector<
-                                HomeCubit,
-                                HomeState,
-                                Map<String, dynamic>
-                              >(
-                                selector: (state) {
-                                  if (state is HomeLoaded) {
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                BlocSelector<
+                                  HomeCubit,
+                                  HomeState,
+                                  Map<String, dynamic>
+                                >(
+                                  selector: (state) {
+                                    if (state is HomeLoaded) {
+                                      return {
+                                        'remainingTime': state.remainingTime,
+                                        'nextPrayerName': state.nextPrayerName,
+                                        'nextPrayerTime': state.nextPrayerTime,
+                                      };
+                                    }
                                     return {
-                                      'remainingTime': state.remainingTime,
-                                      'nextPrayerName': state.nextPrayerName,
-                                      'nextPrayerTime': state.nextPrayerTime,
+                                      'remainingTime': Duration.zero,
+                                      'nextPrayerName': '',
+                                      'nextPrayerTime': '',
                                     };
-                                  }
-                                  return {
-                                    'remainingTime': Duration.zero,
-                                    'nextPrayerName': '',
-                                    'nextPrayerTime': '',
-                                  };
-                                },
-                                builder: (context, countdownData) {
-                                  final translatedPrayerName =
-                                      _getTranslatedPrayerName(
-                                        context,
-                                        countdownData['nextPrayerName']
-                                            as String,
-                                      );
+                                  },
+                                  builder: (context, countdownData) {
+                                    final translatedPrayerName =
+                                        _getTranslatedPrayerName(
+                                          context,
+                                          countdownData['nextPrayerName']
+                                              as String,
+                                        );
 
-                                  return PrayerCountdownCard(
-                                    remainingTime:
-                                        countdownData['remainingTime']
-                                            as Duration,
-                                    nextPrayerName: translatedPrayerName,
-                                    nextPrayerTime:
-                                        countdownData['nextPrayerTime']
-                                            as String,
-                                  );
-                                },
-                              ),
-                              BlocSelector<HomeCubit, HomeState, String>(
-                                selector: (state) {
-                                  if (state is HomeLoaded) {
-                                    return state.nextPrayerName;
-                                  }
-                                  return '';
-                                },
-                                builder: (context, nextPrayerName) {
-                                  final translatedPrayerName =
-                                      _getTranslatedPrayerName(
-                                        context,
-                                        nextPrayerName,
-                                      );
-                                  return PrayerTimesList(
-                                    timings: prayerTimings,
-                                    nextPrayerName: translatedPrayerName,
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                            ],
+                                    return PrayerCountdownCard(
+                                      remainingTime:
+                                          countdownData['remainingTime']
+                                              as Duration,
+                                      nextPrayerName: translatedPrayerName,
+                                      nextPrayerTime:
+                                          countdownData['nextPrayerTime']
+                                              as String,
+                                    );
+                                  },
+                                ),
+                                BlocSelector<HomeCubit, HomeState, String>(
+                                  selector: (state) {
+                                    if (state is HomeLoaded) {
+                                      return state.nextPrayerName;
+                                    }
+                                    return '';
+                                  },
+                                  builder: (context, nextPrayerName) {
+                                    final translatedPrayerName =
+                                        _getTranslatedPrayerName(
+                                          context,
+                                          nextPrayerName,
+                                        );
+                                    return PrayerTimesList(
+                                      timings: prayerTimings,
+                                      nextPrayerName: translatedPrayerName,
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               }
               return const SizedBox.shrink();

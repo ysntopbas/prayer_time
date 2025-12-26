@@ -105,7 +105,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get english => 'İngilizce';
 
   @override
-  String get fajr => 'Sabah';
+  String get fajr => 'İmsak';
 
   @override
   String get february => 'Şubat';

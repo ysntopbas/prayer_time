@@ -238,7 +238,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     if (settings.fajr.isEnabled) {
       activeCount++;
-      log('[Notifications]  SABAH: ${settings.fajr.minutesBefore} dakika önce');
+      log('[Notifications]  İmsak: ${settings.fajr.minutesBefore} dakika önce');
     }
     if (settings.sunrise.isEnabled) {
       activeCount++;
@@ -282,7 +282,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (settings.fajr.isEnabled) {
       activeCount++;
       log(
-        '[SilentMode]  SABAH: ${settings.fajr.minutesBefore} dk önce → ${settings.fajr.minutesAfter} dk sonra',
+        '[SilentMode]  İmsak: ${settings.fajr.minutesBefore} dk önce → ${settings.fajr.minutesAfter} dk sonra',
       );
     }
     if (settings.sunrise.isEnabled) {
@@ -377,7 +377,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // GÜNCELLEME: Daha detaylı log
       final prayerNameMap = {
-        'fajr': 'SABAH',
+        'fajr': 'İmsak',
         'sunrise': 'GÜNEŞ',
         'dhuhr': 'ÖĞLE',
         'asr': 'İKİNDİ',
@@ -429,7 +429,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // GÜNCELLEME: Daha detaylı log
       final prayerNameMap = {
-        'fajr': 'SABAH',
+        'fajr': 'İmsak',
         'sunrise': 'GÜNEŞ',
         'dhuhr': 'ÖĞLE',
         'asr': 'İKİNDİ',
