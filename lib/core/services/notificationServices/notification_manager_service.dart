@@ -219,4 +219,16 @@ class NotificationManagerService {
       return DateTime.now();
     }
   }
+
+  /// Bildirim sesini değiştirirken çağrılır
+  /// Eski channel'ları siler ve bildirimleri yeniden zamanlar
+  Future<void> onNotificationSoundChanged() async {
+    log(
+      '[Notifications] 🔊 Bildirim sesi değişti, channel\'lar güncelleniyor...',
+    );
+
+    await scheduleAllNotifications();
+
+    log('[Notifications] ✅ Bildirimler yeni ses ile güncellendi');
+  }
 }

@@ -136,6 +136,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeNotificationSound(String notificationSound) {
     emit(state.copyWith(notificationSound: notificationSound));
     storageServices.saveString('notificationSound', notificationSound);
+
+    notificationManagerService.scheduleAllNotifications();
+
+    log('[Settings] 🔊 Notification sound changed to: $notificationSound');
   }
 
   Future<bool> shouldShowBatteryDialog() async {
