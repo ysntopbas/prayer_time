@@ -171,6 +171,12 @@ class SettingsState extends Equatable {
   final bool needsPermissionDialog;
   final String notificationSound;
 
+  final List<CityModel> cities;
+  final bool isCitiesLoading;
+  final String? citiesError;
+  final CityModel? selectedCity;
+  final String? selectedCounty;
+
   const SettingsState({
     required this.isDarkMode,
     required this.languageCode,
@@ -185,6 +191,11 @@ class SettingsState extends Equatable {
     this.isLocationLoading = false,
     this.needsPermissionDialog = false,
     this.notificationSound = 'flute',
+    this.cities = const [],
+    this.isCitiesLoading = false,
+    this.citiesError,
+    this.selectedCity,
+    this.selectedCounty,
   });
 
   SettingsState copyWith({
@@ -200,6 +211,13 @@ class SettingsState extends Equatable {
     bool? isLocationLoading,
     bool? needsPermissionDialog,
     String? notificationSound,
+    List<CityModel>? cities,
+    bool? isCitiesLoading,
+    String? citiesError,
+    CityModel? selectedCity,
+    String? selectedCounty,
+    bool clearSelectedCity = false,
+    bool clearSelectedCounty = false,
   }) {
     return SettingsState(
       isDarkMode: isDarkMode ?? this.isDarkMode,
@@ -221,6 +239,15 @@ class SettingsState extends Equatable {
       needsPermissionDialog:
           needsPermissionDialog ?? this.needsPermissionDialog,
       notificationSound: notificationSound ?? this.notificationSound,
+      cities: cities ?? this.cities,
+      isCitiesLoading: isCitiesLoading ?? this.isCitiesLoading,
+      citiesError: citiesError ?? this.citiesError,
+      selectedCity: clearSelectedCity
+          ? null
+          : (selectedCity ?? this.selectedCity),
+      selectedCounty: clearSelectedCounty
+          ? null
+          : (selectedCounty ?? this.selectedCounty),
     );
   }
 
@@ -238,5 +265,10 @@ class SettingsState extends Equatable {
     isLocationLoading,
     needsPermissionDialog,
     notificationSound,
+    cities,
+    isCitiesLoading,
+    citiesError,
+    selectedCity,
+    selectedCounty,
   ];
 }

@@ -397,4 +397,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get soundWolfPackHowling => 'Wolf Pack Howling';
+
+  @override
+  String get manualLocationSelection => 'Manual Location Selection';
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get turkey => 'Turkey';
+
+  @override
+  String get city => 'City';
+
+  @override
+  String get district => 'District';
+
+  @override
+  String get districts => 'Districts';
+
+  @override
+  String get selectCity => 'Select City';
+
+  @override
+  String get selectDistrict => 'Select District';
+
+  @override
+  String get searchCity => 'Search city...';
+
+  @override
+  String get searchDistrict => 'Search district...';
+
+  @override
+  String get pleaseSelectCityFirst => 'Please select a city first';
+
+  @override
+  String get selectedLocation => 'Selected Location';
+
+  @override
+  String get saveLocation => 'Save Location';
+
+  @override
+  String get locationSaved => 'Location saved successfully';
+
+  @override
+  String get locationSaveError => 'Failed to save location';
 }

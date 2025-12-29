@@ -12,6 +12,7 @@ import 'package:prayer_time/core/services/locationServices/location_service.dart
 import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:prayer_time/features/settings/presentation/widgets/city_selection.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/notification_switch_list_tile.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/slient_mode_list_tile.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
@@ -177,6 +178,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
 
+            CitySelection(),
             Divider(color: appTheme.colorScheme.primary),
             BlocSelector<SettingsCubit, SettingsState, String>(
               selector: (state) => state.notificationSound,
