@@ -215,5 +215,65 @@
   "soundWolfPackHowling": "Wolf Pack Howling",
   "@soundWolfPackHowling": {
     "description": "Notification sound name - Wolf Pack Howling"
+  },
+  "manualLocationSelection": "Manual Location Selection",
+  "@manualLocationSelection": {
+    "description": "Title for manual location selection section"
+  },
+  "country": "Country",
+  "@country": {
+    "description": "Label for country field"
+  },
+  "turkey": "Turkey",
+  "@turkey": {
+    "description": "Country name - Turkey"
+  },
+  "city": "City",
+  "@city": {
+    "description": "Label for city field"
+  },
+  "district": "District",
+  "@district": {
+    "description": "Label for district field"
+  },
+  "districts": "Districts",
+  "@districts": {
+    "description": "Label for districts count"
+  },
+  "selectCity": "Select City",
+  "@selectCity": {
+    "description": "Placeholder for city selection"
+  },
+  "selectDistrict": "Select District",
+  "@selectDistrict": {
+    "description": "Placeholder for district selection"
+  },
+  "searchCity": "Search city...",
+  "@searchCity": {
+    "description": "Placeholder for city search"
+  },
+  "searchDistrict": "Search district...",
+  "@searchDistrict": {
+    "description": "Placeholder for district search"
+  },
+  "pleaseSelectCityFirst": "Please select a city first",
+  "@pleaseSelectCityFirst": {
+    "description": "Warning message when trying to select district before city"
+  },
+  "selectedLocation": "Selected Location",
+  "@selectedLocation": {
+    "description": "Label for selected location display"
+  },
+  "saveLocation": "Save Location",
+  "@saveLocation": {
+    "description": "Button text for saving location"
+  },
+  "locationSaved": "Location saved successfully",
+  "@locationSaved": {
+    "description": "Success message when location is saved"
+  },
+  "locationSaveError": "Failed to save location",
+  "@locationSaveError": {
+    "description": "Error message when location save fails"
   }
 }

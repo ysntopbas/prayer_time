@@ -147,7 +147,7 @@ class SilentModeManagerService {
       },
     ];
 
-    // Yarının sabah namazını da ekle (gece yarısından sonra için)
+    // Yarının İmsak namazını da ekle (gece yarısından sonra için)
     if (tomorrowTimings != null && tomorrowTimings.fajr != null) {
       prayers.add({
         'name': 'Fajr',

@@ -853,6 +853,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wolf Pack Howling'**
   String get soundWolfPackHowling;
+
+  /// Title for manual location selection section
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Location Selection'**
+  String get manualLocationSelection;
+
+  /// Label for country field
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// Country name - Turkey
+  ///
+  /// In en, this message translates to:
+  /// **'Turkey'**
+  String get turkey;
+
+  /// Label for city field
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get city;
+
+  /// Label for district field
+  ///
+  /// In en, this message translates to:
+  /// **'District'**
+  String get district;
+
+  /// Label for districts count
+  ///
+  /// In en, this message translates to:
+  /// **'Districts'**
+  String get districts;
+
+  /// Placeholder for city selection
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get selectCity;
+
+  /// Placeholder for district selection
+  ///
+  /// In en, this message translates to:
+  /// **'Select District'**
+  String get selectDistrict;
+
+  /// Placeholder for city search
+  ///
+  /// In en, this message translates to:
+  /// **'Search city...'**
+  String get searchCity;
+
+  /// Placeholder for district search
+  ///
+  /// In en, this message translates to:
+  /// **'Search district...'**
+  String get searchDistrict;
+
+  /// Warning message when trying to select district before city
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a city first'**
+  String get pleaseSelectCityFirst;
+
+  /// Label for selected location display
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Location'**
+  String get selectedLocation;
+
+  /// Button text for saving location
+  ///
+  /// In en, this message translates to:
+  /// **'Save Location'**
+  String get saveLocation;
+
+  /// Success message when location is saved
+  ///
+  /// In en, this message translates to:
+  /// **'Location saved successfully'**
+  String get locationSaved;
+
+  /// Error message when location save fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save location'**
+  String get locationSaveError;
 }
 
 class _AppLocalizationsDelegate

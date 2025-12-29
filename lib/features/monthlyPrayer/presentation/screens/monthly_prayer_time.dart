@@ -47,52 +47,54 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         title: l10nL.monthlyPrayerTimePageTitle,
         leading: const BackButton(),
       ),
-      body: BlocListener<SettingsCubit, SettingsState>(
-        listenWhen: (previous, current) =>
-            previous.cityName != current.cityName,
-        listener: (context, state) {
-          _loadMonthlyPrayerTimes();
-        },
-        child: BlocBuilder<MonthlyCubit, MonthlyState>(
-          builder: (context, state) {
-            if (state is MonthlyInitial || state is MonthlyLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MonthlyError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.message),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _loadMonthlyPrayerTimes,
-                      child: Text(l10nL.tryAgain),
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is MonthlyLoaded) {
-              final monthlyTimings = state.monthlyTimings ?? [];
-              final cityName = state.cityName ?? 'Istanbul';
-
-              if (monthlyTimings.isEmpty) {
-                return Center(child: Text(l10nL.prayTimeNotAvailable));
-              }
-
-              return ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: monthlyTimings.length,
-                itemBuilder: (context, index) {
-                  final prayerTime = monthlyTimings[index];
-                  return MonthlyPrayerDayCard(
-                    prayerTime: prayerTime,
-                    cityName: cityName,
-                  );
-                },
-              );
-            }
-            return const SizedBox.shrink();
+      body: SafeArea(
+        child: BlocListener<SettingsCubit, SettingsState>(
+          listenWhen: (previous, current) =>
+              previous.cityName != current.cityName,
+          listener: (context, state) {
+            _loadMonthlyPrayerTimes();
           },
+          child: BlocBuilder<MonthlyCubit, MonthlyState>(
+            builder: (context, state) {
+              if (state is MonthlyInitial || state is MonthlyLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is MonthlyError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(state.message),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: _loadMonthlyPrayerTimes,
+                        child: Text(l10nL.tryAgain),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state is MonthlyLoaded) {
+                final monthlyTimings = state.monthlyTimings ?? [];
+                final cityName = state.cityName ?? 'Istanbul';
+
+                if (monthlyTimings.isEmpty) {
+                  return Center(child: Text(l10nL.prayTimeNotAvailable));
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: monthlyTimings.length,
+                  itemBuilder: (context, index) {
+                    final prayerTime = monthlyTimings[index];
+                    return MonthlyPrayerDayCard(
+                      prayerTime: prayerTime,
+                      cityName: cityName,
+                    );
+                  },
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

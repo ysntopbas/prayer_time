@@ -31,7 +31,7 @@
   "drawerTitle": "Namaz Vakitleri",
   "drawermonthlyPrayerTimePageTile": "Aylık Namaz Takvimi",
   "english": "İngilizce",
-  "fajr": "Sabah",
+  "fajr": "İmsak",
   "february": "Şubat",
   "friday": "Cuma",
   "headerTitle": "Namaz Vakitleri",
@@ -196,5 +196,65 @@
   "soundWolfPackHowling": "Kurt Sürüsü Uluması",
   "@soundWolfPackHowling": {
     "description": "Bildirim sesi adı - Kurt Sürüsü Uluması"
+  },
+  "manualLocationSelection": "Manuel Konum Seçimi",
+  "@manualLocationSelection": {
+    "description": "Manuel konum seçimi bölümü başlığı"
+  },
+  "country": "Ülke",
+  "@country": {
+    "description": "Ülke alanı etiketi"
+  },
+  "turkey": "Türkiye",
+  "@turkey": {
+    "description": "Ülke adı - Türkiye"
+  },
+  "city": "İl",
+  "@city": {
+    "description": "İl alanı etiketi"
+  },
+  "district": "İlçe",
+  "@district": {
+    "description": "İlçe alanı etiketi"
+  },
+  "districts": "İlçe",
+  "@districts": {
+    "description": "İlçe sayısı etiketi"
+  },
+  "selectCity": "Şehir Seçiniz",
+  "@selectCity": {
+    "description": "Şehir seçimi için placeholder"
+  },
+  "selectDistrict": "İlçe Seçiniz",
+  "@selectDistrict": {
+    "description": "İlçe seçimi için placeholder"
+  },
+  "searchCity": "Şehir ara...",
+  "@searchCity": {
+    "description": "Şehir arama için placeholder"
+  },
+  "searchDistrict": "İlçe ara...",
+  "@searchDistrict": {
+    "description": "İlçe arama için placeholder"
+  },
+  "pleaseSelectCityFirst": "Lütfen önce şehir seçiniz",
+  "@pleaseSelectCityFirst": {
+    "description": "Şehir seçmeden ilçe seçmeye çalışınca gösterilen uyarı"
+  },
+  "selectedLocation": "Seçilen Konum",
+  "@selectedLocation": {
+    "description": "Seçilen konum gösterimi etiketi"
+  },
+  "saveLocation": "Konumu Kaydet",
+  "@saveLocation": {
+    "description": "Konum kaydetme butonu metni"
+  },
+  "locationSaved": "Konum başarıyla kaydedildi",
+  "@locationSaved": {
+    "description": "Konum kaydedildiğinde gösterilen başarı mesajı"
+  },
+  "locationSaveError": "Konum kaydedilemedi",
+  "@locationSaveError": {
+    "description": "Konum kaydetme başarısız olduğunda gösterilen hata mesajı"
   }
 }

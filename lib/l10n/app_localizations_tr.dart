@@ -105,7 +105,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get english => 'İngilizce';
 
   @override
-  String get fajr => 'Sabah';
+  String get fajr => 'İmsak';
 
   @override
   String get february => 'Şubat';
@@ -397,4 +397,49 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get soundWolfPackHowling => 'Kurt Sürüsü Uluması';
+
+  @override
+  String get manualLocationSelection => 'Manuel Konum Seçimi';
+
+  @override
+  String get country => 'Ülke';
+
+  @override
+  String get turkey => 'Türkiye';
+
+  @override
+  String get city => 'İl';
+
+  @override
+  String get district => 'İlçe';
+
+  @override
+  String get districts => 'İlçe';
+
+  @override
+  String get selectCity => 'Şehir Seçiniz';
+
+  @override
+  String get selectDistrict => 'İlçe Seçiniz';
+
+  @override
+  String get searchCity => 'Şehir ara...';
+
+  @override
+  String get searchDistrict => 'İlçe ara...';
+
+  @override
+  String get pleaseSelectCityFirst => 'Lütfen önce şehir seçiniz';
+
+  @override
+  String get selectedLocation => 'Seçilen Konum';
+
+  @override
+  String get saveLocation => 'Konumu Kaydet';
+
+  @override
+  String get locationSaved => 'Konum başarıyla kaydedildi';
+
+  @override
+  String get locationSaveError => 'Konum kaydedilemedi';
 }

@@ -19,6 +19,12 @@ class ScheduledNotificationService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
+  String _getChannelIdWithSound(String baseChannelId) {
+    final soundFileName =
+        storageServices.getString('notificationSound') ?? 'flute';
+    return '${baseChannelId}_$soundFileName';
+  }
+
   NotificationDetails _notificationDetails({
     required String channelId,
     required String channelName,
@@ -31,11 +37,15 @@ class ScheduledNotificationService {
     final soundFileName =
         storageServices.getString('notificationSound') ?? 'flute';
 
-    log('[ScheduledNotification] Channel: $channelId, Sound: $soundFileName');
+    final dynamicChannelId = _getChannelIdWithSound(channelId);
+
+    log(
+      '[ScheduledNotification] Channel: $dynamicChannelId, Sound: $soundFileName',
+    );
 
     final androidDetails = AndroidNotificationDetails(
-      channelId,
-      channelName,
+      dynamicChannelId,
+      '$channelName ($soundFileName)',
       channelDescription: channelDescription,
       importance: importance,
       priority: priority,
@@ -92,8 +102,10 @@ class ScheduledNotificationService {
         matchDateTimeComponents: matchDateTimeComponents,
         payload: payload,
       );
+
+      final dynamicChannelId = _getChannelIdWithSound(channelId);
       log(
-        ' Scheduled notification - ID: $id, Time: $scheduledTime, Channel: $channelId',
+        ' Scheduled notification - ID: $id, Time: $scheduledTime, Channel: $dynamicChannelId',
       );
     } catch (e) {
       log('Scheduled notification error: $e');
@@ -115,7 +127,7 @@ class ScheduledNotificationService {
     return await _plugin.pendingNotificationRequests();
   }
 
-  // Android notification channel'ı sil
+  /// Android notification channel'ı sil
   Future<void> deleteNotificationChannel(String channelId) async {
     final androidImplementation = _plugin
         .resolvePlatformSpecificImplementation<
@@ -128,6 +140,43 @@ class ScheduledNotificationService {
         log(' Deleted notification channel: $channelId');
       } catch (e) {
         log(' Error deleting channel: $e');
+      }
+    }
+  }
+
+  /// Belirli bir base channel ID için tüm ses varyantlarını siler
+  Future<void> deleteAllSoundChannelVariants(String baseChannelId) async {
+    final androidImplementation = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    if (androidImplementation == null) return;
+
+    // Bilinen tüm ses dosyaları için channel'ları sil
+    final soundFiles = [
+      'flute',
+      'flute2',
+      'bicycle_ring',
+      'wolf_howling',
+      'clear_tone',
+      'fire',
+      'flute3',
+      'harp',
+      'hawk',
+      'positive_sound',
+      'tick_tock_alarm',
+      'tick_tock_alarm2',
+      'wolf_pack_howling',
+    ];
+
+    for (final sound in soundFiles) {
+      final channelId = '${baseChannelId}_$sound';
+      try {
+        await androidImplementation.deleteNotificationChannel(channelId);
+        log(' Deleted channel variant: $channelId');
+      } catch (e) {
+        // Channel yoksa hata vermez, sessizce devam et
       }
     }
   }

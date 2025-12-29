@@ -10,6 +10,8 @@ import 'package:prayer_time/features/settings/extensions/settings_cubit_extensio
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/services/notificationServices/notification_manager_service.dart';
+import 'package:prayer_time/features/settings/data/models/city_model.dart';
+import 'package:prayer_time/features/settings/data/repository/cities_repository.dart';
 import 'package:sound_mode/permission_handler.dart';
 
 part 'settings_state.dart';
@@ -19,6 +21,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   final LocationService locationService;
   final BatteryOptimizationService batteryOptimizationService;
   final NotificationManagerService notificationManagerService;
+  final CitiesRepository _citiesRepository = CitiesRepository();
   final String deviceLanguageCode =
       PlatformDispatcher.instance.locale.languageCode;
 
@@ -133,6 +136,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   void changeNotificationSound(String notificationSound) {
     emit(state.copyWith(notificationSound: notificationSound));
     storageServices.saveString('notificationSound', notificationSound);
+
+    notificationManagerService.scheduleAllNotifications();
+
+    log('[Settings] 🔊 Notification sound changed to: $notificationSound');
   }
 
   Future<bool> shouldShowBatteryDialog() async {
@@ -203,12 +210,10 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  // İzin dialog'u gösterildikten sonra çağrılacak
   void clearPermissionDialogFlag() {
     emit(state.copyWith(needsPermissionDialog: false));
   }
 
-  // İzin verildikten sonra sessiz modu açmak için
   Future<void> enableSilentModeAfterPermission() async {
     emit(state.copyWith(mainSilentModeEnabled: true));
     await storageServices.saveBool('mainSilentModeEnabled', true);
@@ -238,7 +243,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
     if (settings.fajr.isEnabled) {
       activeCount++;
-      log('[Notifications]  SABAH: ${settings.fajr.minutesBefore} dakika önce');
+      log('[Notifications]  İmsak: ${settings.fajr.minutesBefore} dakika önce');
     }
     if (settings.sunrise.isEnabled) {
       activeCount++;
@@ -282,7 +287,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     if (settings.fajr.isEnabled) {
       activeCount++;
       log(
-        '[SilentMode]  SABAH: ${settings.fajr.minutesBefore} dk önce → ${settings.fajr.minutesAfter} dk sonra',
+        '[SilentMode]  İmsak: ${settings.fajr.minutesBefore} dk önce → ${settings.fajr.minutesAfter} dk sonra',
       );
     }
     if (settings.sunrise.isEnabled) {
@@ -377,7 +382,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // GÜNCELLEME: Daha detaylı log
       final prayerNameMap = {
-        'fajr': 'SABAH',
+        'fajr': 'İmsak',
         'sunrise': 'GÜNEŞ',
         'dhuhr': 'ÖĞLE',
         'asr': 'İKİNDİ',
@@ -429,7 +434,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // GÜNCELLEME: Daha detaylı log
       final prayerNameMap = {
-        'fajr': 'SABAH',
+        'fajr': 'İmsak',
         'sunrise': 'GÜNEŞ',
         'dhuhr': 'ÖĞLE',
         'asr': 'İKİNDİ',
@@ -501,6 +506,75 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  /// Manuel konum kaydeder (şehir seçimi ile)
+  Future<void> saveManualLocation({
+    required String cityName,
+    required String countryName,
+    required String subAdministrativeArea,
+    required double latitude,
+    required double longitude,
+  }) async {
+    emit(state.copyWith(isLocationLoading: true));
+
+    try {
+      // Storage'a kaydet
+      await storageServices.saveString('cityName', cityName);
+      await storageServices.saveString('countryName', countryName);
+      await storageServices.saveString(
+        'subAdministrativeArea',
+        subAdministrativeArea,
+      );
+
+      // Cache service için konum bilgisi
+      final cacheService = CacheService(storageServices);
+      await cacheService.saveCachedLocation({
+        'city': cityName,
+        'country': countryName,
+        'subAdministrativeArea': subAdministrativeArea,
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
+      });
+
+      // Önceki namaz vakitlerini temizle (yeni konum için yeniden çekilecek)
+      await cacheService.clearAllCache();
+
+      // Konum bilgisini tekrar kaydet (clearAllCache sildiyse)
+      await cacheService.saveCachedLocation({
+        'city': cityName,
+        'country': countryName,
+        'subAdministrativeArea': subAdministrativeArea,
+        'latitude': latitude.toString(),
+        'longitude': longitude.toString(),
+      });
+
+      // State'i güncelle
+      emit(
+        state.copyWith(
+          cityName: cityName,
+          countryName: countryName,
+          subAdministrativeArea: subAdministrativeArea,
+          isLocationLoading: false,
+        ),
+      );
+
+      log('Manuel konum kaydedildi: $subAdministrativeArea, $cityName');
+
+      // Bildirimleri yeniden zamanla
+      log('Konum güncellendi, bildirimler yeniden zamanlanıyor...');
+      await notificationManagerService.scheduleAllNotifications();
+      log('Konum değişikliği sonrası bildirimler güncellendi');
+
+      // Background service'i yeniden başlat
+      log('Background service yeniden başlatılıyor...');
+      await _restartBackgroundService();
+      log('Background service yeniden başlatıldı');
+    } catch (e) {
+      emit(state.copyWith(isLocationLoading: false));
+      log('Manuel konum kaydedilirken hata: $e');
+      rethrow;
+    }
+  }
+
   Future<void> _restartBackgroundService() async {
     try {
       final service = FlutterBackgroundService();
@@ -553,5 +627,59 @@ class SettingsCubit extends Cubit<SettingsState> {
     final service = FlutterBackgroundService();
     service.invoke('stopService');
     log('Background service durduruldu');
+  }
+
+  Future<void> loadCities() async {
+    if (state.cities.isNotEmpty) return; // Zaten yüklüyse tekrar yükleme
+
+    emit(state.copyWith(isCitiesLoading: true, citiesError: null));
+
+    try {
+      final cities = await _citiesRepository.loadCities();
+      emit(state.copyWith(cities: cities, isCitiesLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isCitiesLoading: false, citiesError: e.toString()));
+    }
+  }
+
+  /// Şehir seçer
+  void selectCity(CityModel city) {
+    emit(
+      state.copyWith(
+        selectedCity: city,
+        clearSelectedCounty: true, // İlçe seçimini sıfırla
+      ),
+    );
+  }
+
+  void selectCounty(String county) {
+    emit(state.copyWith(selectedCounty: county));
+  }
+
+  void clearCitySelection() {
+    emit(state.copyWith(clearSelectedCity: true, clearSelectedCounty: true));
+  }
+
+  Future<List<CityModel>> searchCities(String query) async {
+    return await _citiesRepository.searchCities(query);
+  }
+
+  List<String> searchCounties(String query) {
+    if (state.selectedCity == null) return [];
+    return _citiesRepository.searchCounties(state.selectedCity!, query);
+  }
+
+  Future<void> saveSelectedLocation() async {
+    if (state.selectedCity == null || state.selectedCounty == null) return;
+
+    await saveManualLocation(
+      cityName: state.selectedCity!.displayName,
+      countryName: 'Türkiye',
+      subAdministrativeArea: state.selectedCounty!,
+      latitude: state.selectedCity!.latitude,
+      longitude: state.selectedCity!.longitude,
+    );
+
+    clearCitySelection();
   }
 }
