@@ -78,13 +78,8 @@ class CitySelection extends StatelessWidget {
                 title: state.selectedCounty ?? l10n.selectDistrict,
                 subtitle: l10n.district,
                 icon: Icons.location_on,
-                iconColor: state.selectedCity == null
-                    ? Colors.grey
-                    : Colors.orange,
+                iconColor: state.selectedCity == null ? null : Colors.orange,
                 isEnabled: state.selectedCity != null,
-                backgroundColor: state.selectedCity == null
-                    ? Colors.grey[100]
-                    : null,
                 onTap: state.selectedCity == null
                     ? () => _showSelectCityFirstMessage(context, l10n)
                     : () => _showCountySelectionSheet(

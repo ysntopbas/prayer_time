@@ -21,7 +21,7 @@ class SelectionListTile extends StatelessWidget {
   /// Tile'ın aktif/pasif durumu
   final bool isEnabled;
 
-  /// Arka plan rengi
+  /// Arka plan rengi (null ise tema rengini kullanır)
   final Color? backgroundColor;
 
   /// Border rengi
@@ -43,127 +43,125 @@ class SelectionListTile extends StatelessWidget {
     this.borderRadius = 12,
   });
 
-  /// CircleAvatar ile icon içeren versiyon
+  /// İkon ile oluşturma
   factory SelectionListTile.withIcon({
-    Key? key,
     required String title,
     required String subtitle,
     required IconData icon,
-    required Color iconColor,
-    Color? iconBackgroundColor,
-    Widget? trailing,
+    Color? iconColor,
     VoidCallback? onTap,
     bool isEnabled = true,
     Color? backgroundColor,
-    Color? borderColor,
-    double borderRadius = 12,
   }) {
     return SelectionListTile(
-      key: key,
       title: title,
       subtitle: subtitle,
-      leading: CircleAvatar(
-        backgroundColor:
-            iconBackgroundColor ?? iconColor.withValues(alpha: 0.1),
-        child: Icon(icon, color: iconColor),
+      leading: Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          final effectiveIconColor = isEnabled
+              ? (iconColor ?? theme.colorScheme.primary)
+              : theme.colorScheme.onSurface.withValues(alpha: 0.38);
+          return CircleAvatar(
+            backgroundColor: effectiveIconColor.withValues(alpha: 0.1),
+            child: Icon(icon, color: effectiveIconColor),
+          );
+        },
       ),
-      trailing: trailing,
+      trailing: Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          return Icon(
+            Icons.keyboard_arrow_down,
+            color: isEnabled
+                ? theme.colorScheme.onSurface.withValues(alpha: 0.6)
+                : theme.colorScheme.onSurface.withValues(alpha: 0.38),
+          );
+        },
+      ),
       onTap: onTap,
       isEnabled: isEnabled,
       backgroundColor: backgroundColor,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
     );
   }
 
-  /// CircleAvatar ile metin içeren versiyon
-  factory SelectionListTile.withText({
-    Key? key,
-    required String title,
-    required String subtitle,
-    required String text,
-    required Color textColor,
-    Color? textBackgroundColor,
-    double fontSize = 12,
-    Widget? trailing,
-    VoidCallback? onTap,
-    bool isEnabled = true,
-    Color? backgroundColor,
-    Color? borderColor,
-    double borderRadius = 12,
-  }) {
-    return SelectionListTile(
-      key: key,
-      title: title,
-      subtitle: subtitle,
-      leading: CircleAvatar(
-        backgroundColor:
-            textBackgroundColor ?? textColor.withValues(alpha: 0.1),
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-            fontSize: fontSize,
-          ),
-        ),
-      ),
-      trailing: trailing,
-      onTap: onTap,
-      isEnabled: isEnabled,
-      backgroundColor: backgroundColor,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
-    );
-  }
-
-  /// Kilitli (read-only) versiyon
+  /// Kilitli (seçilemez) görünüm
   factory SelectionListTile.locked({
-    Key? key,
     required String title,
     required String subtitle,
     Widget? leading,
     Color? backgroundColor,
-    Color? borderColor,
-    double borderRadius = 12,
   }) {
     return SelectionListTile(
-      key: key,
       title: title,
       subtitle: subtitle,
       leading: leading,
-      trailing: Icon(Icons.lock_outline, size: 18, color: Colors.grey[500]),
+      trailing: Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          return Icon(
+            Icons.lock_outline,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.38),
+            size: 20,
+          );
+        },
+      ),
       isEnabled: false,
       backgroundColor: backgroundColor,
-      borderColor: borderColor,
-      borderRadius: borderRadius,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
 
-    final effectiveBackgroundColor =
-        backgroundColor ??
-        (isEnabled ? appTheme.colorScheme.surface : Colors.grey[100]);
+    // Tema bazlı arka plan rengi hesaplama
+    final Color effectiveBackgroundColor;
+    if (backgroundColor != null) {
+      effectiveBackgroundColor = backgroundColor!;
+    } else if (!isEnabled) {
+      // Devre dışı durum için tema uyumlu renk
+      effectiveBackgroundColor = isDarkMode
+          ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)
+          : Colors.grey[100]!;
+    } else {
+      effectiveBackgroundColor = theme.colorScheme.surface;
+    }
 
-    final effectiveBorderColor = borderColor ?? Colors.grey.shade300;
+    // Border rengi
+    final Color effectiveBorderColor =
+        borderColor ??
+        (isEnabled
+            ? theme.colorScheme.outline.withValues(alpha: 0.3)
+            : theme.colorScheme.outline.withValues(alpha: 0.15));
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: Container(
-        decoration: BoxDecoration(
-          color: effectiveBackgroundColor,
-          borderRadius: BorderRadius.circular(borderRadius),
-          border: Border.all(color: effectiveBorderColor),
+    // Metin renkleri
+    final Color titleColor = isEnabled
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onSurface.withValues(alpha: 0.5);
+
+    final Color subtitleColor = isEnabled
+        ? theme.colorScheme.onSurface.withValues(alpha: 0.6)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.38);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: effectiveBackgroundColor,
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.all(color: effectiveBorderColor),
+      ),
+      child: ListTile(
+        leading: leading,
+        title: Text(
+          title,
+          style: TextStyle(color: titleColor, fontWeight: FontWeight.w500),
         ),
-        child: ListTile(
-          leading: leading,
-          title: Text(title),
-          subtitle: Text(subtitle),
-          trailing: trailing ?? const Icon(Icons.keyboard_arrow_down),
+        subtitle: Text(subtitle, style: TextStyle(color: subtitleColor)),
+        trailing: trailing,
+        onTap: isEnabled ? onTap : null,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );
