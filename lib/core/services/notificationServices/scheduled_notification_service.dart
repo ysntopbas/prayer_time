@@ -5,16 +5,20 @@ import 'package:prayer_time/core/init/locator.dart' as di;
 import 'package:timezone/timezone.dart' as tz;
 
 class ScheduledNotificationService {
-  final StorageServices storageServices;
+  StorageServices? _storageServices;
+
+  // Lazy getter - GetIt hazır olduğunda alır
+  StorageServices get storageServices {
+    _storageServices ??= di.sl<StorageServices>();
+    return _storageServices!;
+  }
 
   static final ScheduledNotificationService _instance =
-      ScheduledNotificationService._internal(
-        storageServices: di.sl<StorageServices>(),
-      );
+      ScheduledNotificationService._internal();
 
   factory ScheduledNotificationService() => _instance;
 
-  ScheduledNotificationService._internal({required this.storageServices});
+  ScheduledNotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
