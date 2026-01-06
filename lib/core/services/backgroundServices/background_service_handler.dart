@@ -80,7 +80,20 @@ void onStart(ServiceInstance service) async {
   int lastUpdateDay = DateTime.now().day;
 
   // ═══════════════════════════════════════════════════════════
-  // ANA TIMER: Dakikalık güncelleme
+  // SAYAÇ TIMER: Her 30 saniyede bir bildirim güncelle
+  // ═══════════════════════════════════════════════════════════
+  Timer.periodic(const Duration(seconds: 30), (timer) async {
+    if (service is AndroidServiceInstance &&
+        await service.isForegroundService()) {
+      await sharedPreferences.reload();
+
+      // Sayacı güncelle
+      await _refreshNotification(service, cacheService, storageServices, l10n);
+    }
+  });
+
+  // ═══════════════════════════════════════════════════════════
+  // ANA TIMER: Dakikalık kontroller (gün değişimi, sessiz mod vs.)
   // ═══════════════════════════════════════════════════════════
   Timer.periodic(const Duration(minutes: 1), (timer) async {
     if (service is AndroidServiceInstance &&
@@ -114,23 +127,18 @@ void onStart(ServiceInstance service) async {
         log('[BackgroundService] ✅ Yeni gün güncellemesi tamamlandı');
       }
 
-      // Normal dakikalık güncelleme
-      await _refreshNotification(service, cacheService, storageServices, l10n);
+      // Sessiz mod kontrolü
       await silentModeService.checkAndToggleSilentMode();
     }
   });
 }
 
-/// Yarının vakitlerini bugüne taşı
+/// Günlük vakitleri döndür (yarını bugüne taşı)
 Future<void> _rotateDailyTimings(CacheService cacheService) async {
-  log('[BackgroundService] Yarının vakitleri bugüne taşınıyor...');
-
   final tomorrowTimings = cacheService.getNextDayTimings();
   if (tomorrowTimings != null) {
     await cacheService.saveDailyTimings(tomorrowTimings);
-    log('[BackgroundService] ✓ Vakitler taşındı');
-  } else {
-    log('[BackgroundService] ⚠ Yarının vakitleri bulunamadı');
+    log('[BackgroundService] ✓ Yarının vakitleri bugüne taşındı');
   }
 }
 
@@ -139,9 +147,8 @@ Future<void> _fetchTomorrowTimings(
   CacheService cacheService,
   StorageServices storageServices,
 ) async {
-  log('[BackgroundService] API\'den yarının vakitleri çekiliyor...');
-
   final cachedLocation = cacheService.getCachedLocation();
+
   if (cachedLocation == null) {
     log('[BackgroundService] ⚠ Konum bulunamadı, API çağrısı yapılamıyor');
     return;
@@ -321,12 +328,12 @@ Future<void> _updateForegroundNotification(String title, String content) async {
         'Namaz vakti hatırlatmaları ve sessiz mod için kullanılır',
     importance: Importance.low,
     priority: Priority.low,
-    ongoing: true, // BU EN ONEMLI: Bildirimi silinemez yap
-    autoCancel: false, // Tıklandığında otomatik silinmesin
+    ongoing: true,
+    autoCancel: false,
     playSound: false,
     enableVibration: false,
     showWhen: false,
-    icon: 'prayer_time_icon_notification', // Kendi icon'unuz varsa
+    icon: 'prayer_time_icon_notification',
   );
 
   const NotificationDetails notificationDetails = NotificationDetails(
@@ -341,7 +348,7 @@ Future<void> _updateForegroundNotification(String title, String content) async {
   );
 }
 
-// Ilk cache yuklemesini bekleyen fonksiyon
+// İlk cache yüklemesini bekleyen fonksiyon
 Future<void> _waitForInitialCache(
   ServiceInstance service,
   CacheService cacheService,
@@ -349,10 +356,9 @@ Future<void> _waitForInitialCache(
   SharedPreferences sharedPreferences,
 ) async {
   int attempts = 0;
-  const maxAttempts = 60; // 5 dakika (5 saniyede bir kontrol)
+  const maxAttempts = 60;
 
   while (attempts < maxAttempts) {
-    // Her kontrol oncesi disk'ten yeniden oku
     await sharedPreferences.reload();
     await Future.delayed(const Duration(milliseconds: 200));
 
@@ -380,7 +386,6 @@ Future<void> _waitForInitialCache(
           await service.isForegroundService()) {
         final notificationData = _calculateNextPrayer(cacheService, l10n);
 
-        // Ongoing bildirim gonder
         await _updateForegroundNotification(
           notificationData['title'] as String,
           notificationData['content'] as String,
@@ -397,9 +402,10 @@ Future<void> _waitForInitialCache(
     await Future.delayed(const Duration(seconds: 5));
   }
 
-  log('[BackgroundService] Cache could not be loaded, max attempts reached');
+  log('[BackgroundService] ⚠ Cache loading timeout, starting with empty state');
 }
 
+/// Bir sonraki namazı hesapla ve bildirim içeriğini oluştur
 Map<String, String> _calculateNextPrayer(
   CacheService cacheService,
   AppLocalizations? l10n,
@@ -407,58 +413,108 @@ Map<String, String> _calculateNextPrayer(
   try {
     final todayTimings = cacheService.getDailyTimings();
     final tomorrowTimings = cacheService.getNextDayTimings();
-    // final cachedLocation = cacheService.getCachedLocation();
 
-    log('[BackgroundService] _calculateNextPrayer called');
-    // log(
-    //   '[BackgroundService]   Location: ${cachedLocation?['city']} / ${cachedLocation?['subAdministrativeArea']}',
-    // );
-    // log('[BackgroundService]   Fajr: ${todayTimings?.fajr}');
-    // log('[BackgroundService]   Dhuhr: ${todayTimings?.dhuhr}');
-
-    if (todayTimings == null || tomorrowTimings == null) {
-      log('[BackgroundService] Cache is empty, cannot display notification');
+    if (todayTimings == null) {
       return {
         'title': l10n?.prayTime ?? 'Prayer Time',
-        'content': l10n?.prayTimeNotAvailable ?? 'Loading prayer times...',
+        'content': 'Loading...',
       };
     }
 
     final now = DateTime.now();
-    final nextPrayerInfo = _getNextPrayerInfo(
-      todayTimings,
-      tomorrowTimings,
-      now,
-      l10n,
-    );
 
-    if (nextPrayerInfo == null) {
-      return {
-        'title': l10n?.prayTime ?? 'Prayer Time',
-        'content': l10n?.prayTimeNotAvailable ?? 'No prayer times available',
-      };
+    DateTime? parseTime(String? timeStr) {
+      if (timeStr == null) return null;
+      try {
+        final cleanTime = timeStr.split('(').first.trim();
+        final parts = cleanTime.split(':');
+        if (parts.length >= 2) {
+          final hour = int.parse(parts[0]);
+          final minute = int.parse(parts[1]);
+          return DateTime(now.year, now.month, now.day, hour, minute);
+        }
+      } catch (e) {
+        log('[BackgroundService] Time parse error: $e');
+      }
+      return null;
     }
 
-    final remainingTime = nextPrayerInfo['remainingTime'] as Duration;
-    final hours = remainingTime.inHours;
-    final minutes = remainingTime.inMinutes % 60;
+    final prayers = [
+      {
+        'name': l10n?.fajr ?? 'Fajr',
+        'time': todayTimings.fajr,
+        'isTomorrow': false,
+      },
+      {
+        'name': l10n?.sunrise ?? 'Sunrise',
+        'time': todayTimings.sunrise,
+        'isTomorrow': false,
+      },
+      {
+        'name': l10n?.dhuhr ?? 'Dhuhr',
+        'time': todayTimings.dhuhr,
+        'isTomorrow': false,
+      },
+      {
+        'name': l10n?.asr ?? 'Asr',
+        'time': todayTimings.asr,
+        'isTomorrow': false,
+      },
+      {
+        'name': l10n?.maghrib ?? 'Maghrib',
+        'time': todayTimings.maghrib,
+        'isTomorrow': false,
+      },
+      {
+        'name': l10n?.isha ?? 'Isha',
+        'time': todayTimings.isha,
+        'isTomorrow': false,
+      },
+    ];
 
-    final prayerName = nextPrayerInfo['name'] as String;
-    final prayerIcon = _getPrayerIcon(prayerName, l10n);
-
-    String timeFormat;
-    if (hours > 0) {
-      timeFormat =
-          '$hours:${minutes.toString().padLeft(2, '0')} ${l10n?.leftMinutes ?? 'left'}';
-    } else {
-      timeFormat =
-          '$minutes ${l10n?.minutes ?? 'min'} ${l10n?.leftMinutes ?? 'left'}';
+    // Yarının imsak vaktini ekle
+    if (tomorrowTimings != null) {
+      prayers.add({
+        'name': l10n?.fajr ?? 'Fajr',
+        'time': tomorrowTimings.fajr,
+        'isTomorrow': true,
+      });
     }
 
-    return {
-      'title': '${l10n?.nextPrayer ?? 'Next Prayer'}: $prayerName',
-      'content': '$prayerIcon $timeFormat',
-    };
+    for (var prayer in prayers) {
+      final prayerTime = parseTime(prayer['time'] as String?);
+      if (prayerTime != null) {
+        DateTime targetTime = prayerTime;
+        if (prayer['isTomorrow'] == true) {
+          targetTime = targetTime.add(const Duration(days: 1));
+        }
+
+        if (now.isBefore(targetTime)) {
+          final difference = targetTime.difference(now);
+          final hours = difference.inHours;
+          final minutes = difference.inMinutes % 60;
+
+          final prayerName = prayer['name'] as String;
+          final prayerIcon = _getPrayerIcon(prayerName, l10n);
+
+          String timeFormat;
+          if (hours > 0) {
+            timeFormat =
+                '$hours:${minutes.toString().padLeft(2, '0')} ${l10n?.leftMinutes ?? 'left'}';
+          } else {
+            timeFormat =
+                '$minutes ${l10n?.minutes ?? 'min'} ${l10n?.leftMinutes ?? 'left'}';
+          }
+
+          return {
+            'title': '${l10n?.nextPrayer ?? 'Next Prayer'}: $prayerName',
+            'content': '$prayerIcon $timeFormat',
+          };
+        }
+      }
+    }
+
+    return {'title': l10n?.prayTime ?? 'Prayer Time', 'content': 'Loading...'};
   } catch (e) {
     log('[BackgroundService] Error occurred: $e');
     return {
@@ -478,87 +534,9 @@ String _getPrayerIcon(String prayerName, AppLocalizations? l10n) {
   } else if (prayerName == l10n?.asr || prayerName == 'Asr') {
     return '🌤️';
   } else if (prayerName == l10n?.maghrib || prayerName == 'Maghrib') {
-    return '🌆';
+    return '🌇';
   } else if (prayerName == l10n?.isha || prayerName == 'Isha') {
     return '🌃';
   }
   return '🕌';
-}
-
-Map<String, dynamic>? _getNextPrayerInfo(
-  Timings todayTimings,
-  Timings tomorrowTimings,
-  DateTime now,
-  AppLocalizations? l10n,
-) {
-  DateTime? parseTime(String? timeStr) {
-    if (timeStr == null) return null;
-    try {
-      final cleanTime = timeStr.split('(').first.trim();
-      final parts = cleanTime.split(':');
-      if (parts.length >= 2) {
-        final hour = int.parse(parts[0]);
-        final minute = int.parse(parts[1]);
-        return DateTime(now.year, now.month, now.day, hour, minute);
-      }
-    } catch (e) {
-      log('[BackgroundService] Time parse error: $e');
-    }
-    return null;
-  }
-
-  final prayers = [
-    {
-      'name': l10n?.fajr ?? 'Fajr',
-      'time': todayTimings.fajr,
-      'isTomorrow': false,
-    },
-    {
-      'name': l10n?.sunrise ?? 'Sunrise',
-      'time': todayTimings.sunrise,
-      'isTomorrow': false,
-    },
-    {
-      'name': l10n?.dhuhr ?? 'Dhuhr',
-      'time': todayTimings.dhuhr,
-      'isTomorrow': false,
-    },
-    {'name': l10n?.asr ?? 'Asr', 'time': todayTimings.asr, 'isTomorrow': false},
-    {
-      'name': l10n?.maghrib ?? 'Maghrib',
-      'time': todayTimings.maghrib,
-      'isTomorrow': false,
-    },
-    {
-      'name': l10n?.isha ?? 'Isha',
-      'time': todayTimings.isha,
-      'isTomorrow': false,
-    },
-    {
-      'name': l10n?.fajr ?? 'Fajr',
-      'time': tomorrowTimings.fajr,
-      'isTomorrow': true,
-    },
-  ];
-
-  for (var prayer in prayers) {
-    final prayerTime = parseTime(prayer['time'] as String?);
-    if (prayerTime != null) {
-      DateTime targetTime = prayerTime;
-      if (prayer['isTomorrow'] == true) {
-        targetTime = targetTime.add(const Duration(days: 1));
-      }
-
-      if (now.isBefore(targetTime)) {
-        final remaining = targetTime.difference(now);
-        return {
-          'remainingTime': remaining,
-          'name': prayer['name'],
-          'time': prayer['time'],
-        };
-      }
-    }
-  }
-
-  return null;
 }

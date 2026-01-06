@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.7.1-blue.svg)
+![Version](https://img.shields.io/badge/version-0.7.2-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.5-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -184,7 +184,10 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 #### Version 0.7.1 - Bug Fixes & Improvements 🔧
 - **🐛 Bug Fixes**: Minor bug fixes and stability improvements
 - **⚡ Performance**: Small performance optimizations
-- **🔧 Code Cleanup**: Removed temporary test button from version 0.6.3
+
+#### Version 0.7.2 - Bug Fixes & Improvements 🔧
+- **🐛 Bug Fixes**: Minor bug fixes and stability improvements
+- **⚡ Performance**: Small performance optimizations
 
 ### 🛠️ Technical Stack
 
@@ -603,6 +606,10 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **🐛 Hata Düzeltmeleri**: Küçük hata düzeltmeleri ve stabilite iyileştirmeleri
 - **⚡ Performans**: Küçük performans optimizasyonları
 - **🔧 Kod Temizliği**: Versiyon 0.6.3'teki geçici test butonu kaldırıldı
+
+#### Versiyon 0.7.2 - Hata Düzeltmeleri ve İyileştirmeler 🔧
+- **🐛 Hata Düzeltmeleri**: Küçük hata düzeltmeleri ve stabilite iyileştirmeleri
+- **⚡ Performans**: Küçük performans optimizasyonları
 
 ### 🛠️ Teknoloji Yığını
 
