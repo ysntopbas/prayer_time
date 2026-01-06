@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.7.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.7.1-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.5-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -181,6 +181,11 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **🇹🇷 Turkish Cities Database**: Complete JSON database with all 81 provinces, their coordinates, and districts
 - **🌐 Full Localization**: All new UI elements fully translated to English and Turkish
 
+#### Version 0.7.1 - Bug Fixes & Improvements 🔧
+- **🐛 Bug Fixes**: Minor bug fixes and stability improvements
+- **⚡ Performance**: Small performance optimizations
+- **🔧 Code Cleanup**: Removed temporary test button from version 0.6.3
+
 ### 🛠️ Technical Stack
 
 - **Framework**: Flutter 3.32.5 (Dart 3.8.1)
@@ -219,7 +224,7 @@ lib/
 │   ├── constants/                 # App constants
 │   │   └── notification_sounds.dart # Notification sound enum with localization
 │   ├── services/                  # Services (notifications, location, cache)
-│   │   ├── backgroundServices/    # Background service implementation
+│   │   ├── backgroundServices    # Background service implementation
 │   │   │   ├── background_service_handler.dart
 │   │   │   └── background_service_initialization.dart
 │   │   ├── locationServices      # Location detection and management
@@ -594,6 +599,11 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **🇹🇷 Türkiye Şehirleri Veritabanı**: 81 il, koordinatları ve ilçeleriyle birlikte tam JSON veritabanı
 - **🌐 Tam Yerelleştirme**: Tüm yeni UI öğeleri İngilizce ve Türkçe'ye tam olarak çevrildi
 
+#### Versiyon 0.7.1 - Hata Düzeltmeleri ve İyileştirmeler 🔧
+- **🐛 Hata Düzeltmeleri**: Küçük hata düzeltmeleri ve stabilite iyileştirmeleri
+- **⚡ Performans**: Küçük performans optimizasyonları
+- **🔧 Kod Temizliği**: Versiyon 0.6.3'teki geçici test butonu kaldırıldı
+
 ### 🛠️ Teknoloji Yığını
 
 - **Framework**: Flutter 3.32.5 (Dart 3.8.1)
@@ -632,7 +642,7 @@ lib/
 │   ├── constants/                 # App constants
 │   │   └── notification_sounds.dart # Notification sound enum with localization
 │   ├── services/                  # Services (notifications, location, cache)
-│   │   ├── backgroundServices/    # Background service implementation
+│   │   ├── backgroundServices    # Background service implementation
 │   │   │   ├── background_service_handler.dart
 │   │   │   └── background_service_initialization.dart
 │   │   ├── locationServices      # Location detection and management
@@ -794,7 +804,7 @@ Kapsamlı bildirim yönetimi:
 - Namaz hatırlatıcıları için zamanlanmış bildirimler
 - Bir sonraki namazı gösteren kalıcı bildirim (silinemez)
 - Her namaz vakti için bireysel kontrol
-- Yerelleştirilmiş isimlerle 13 özelleştirilebilir bildirim sesi
+- 13 özelleştirilebilir bildirim sesi yerelleştirilmiş isimlerle
 - Seçimden önce ses önizleme işlevi
 
 #### Sessiz Mod

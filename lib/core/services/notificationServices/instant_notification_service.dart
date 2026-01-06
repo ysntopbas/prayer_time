@@ -4,16 +4,20 @@ import 'package:prayer_time/core/services/storage_services.dart';
 import 'package:prayer_time/core/init/locator.dart' as di;
 
 class InstantNotificationService {
-  final StorageServices storageServices;
+  StorageServices? _storageServices;
+
+  // Lazy getter - GetIt hazır olduğunda alır
+  StorageServices get storageServices {
+    _storageServices ??= di.sl<StorageServices>();
+    return _storageServices!;
+  }
 
   static final InstantNotificationService _instance =
-      InstantNotificationService._internal(
-        storageServices: di.sl<StorageServices>(),
-      );
+      InstantNotificationService._internal();
 
   factory InstantNotificationService() => _instance;
 
-  InstantNotificationService._internal({required this.storageServices});
+  InstantNotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -77,9 +81,9 @@ class InstantNotificationService {
         ),
         payload: payload,
       );
-      log(' Notification sent successfully - ID: $id, Channel: $channelId');
+      log('[InstantNotification] Notification shown - ID: $id, Title: $title');
     } catch (e) {
-      log(' Notification error: $e');
+      log('[InstantNotification] Error showing notification: $e');
       rethrow;
     }
   }
