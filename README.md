@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.6.0-blue.svg)
+![Version](https://img.shields.io/badge/version-0.7.1-blue.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.32.5-02569B.svg?logo=flutter)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -169,6 +169,23 @@ Prayer Time is a comprehensive mobile application that helps Muslims keep track 
 - **⚠️ Temporary Feature**: Test button will be removed in the next update once notification sound issues are fully resolved
 - **🐛 Bug Fixes**: Addressing notification sound playback problems that occurred in previous versions (0.6.1 and 0.6.2)
 
+#### Version 0.7.0 - Manual Location Selection & Code Optimization 📍
+- **📍 Manual City Selection**: Users can now manually select their city and district from a comprehensive list of 81 Turkish provinces
+- **🏙️ District Support**: All districts (ilçe) for each city are available with search functionality
+- **🔍 Searchable Lists**: Quick search feature for both cities and districts in bottom sheet selectors
+- **💾 Location Persistence**: Manually selected location is saved and used across the entire app
+- **🔊 Notification Sound Fix**: Fixed issue where scheduled notifications weren't changing sound - now uses dynamic channel IDs
+- **🎨 Reusable Widgets**: Created global `SearchableBottomSheet` and `SelectionListTile` widgets for better code reusability
+- **🏗️ Architecture Improvement**: Migrated city selection from StatefulWidget to Cubit pattern for consistency
+- **🌍 Future-Ready**: Country selection infrastructure added (currently locked to Turkey, expandable for future updates)
+- **🇹🇷 Turkish Cities Database**: Complete JSON database with all 81 provinces, their coordinates, and districts
+- **🌐 Full Localization**: All new UI elements fully translated to English and Turkish
+
+#### Version 0.7.1 - Bug Fixes & Improvements 🔧
+- **🐛 Bug Fixes**: Minor bug fixes and stability improvements
+- **⚡ Performance**: Small performance optimizations
+- **🔧 Code Cleanup**: Removed temporary test button from version 0.6.3
+
 ### 🛠️ Technical Stack
 
 - **Framework**: Flutter 3.32.5 (Dart 3.8.1)
@@ -207,7 +224,7 @@ lib/
 │   ├── constants/                 # App constants
 │   │   └── notification_sounds.dart # Notification sound enum with localization
 │   ├── services/                  # Services (notifications, location, cache)
-│   │   ├── backgroundServices/    # Background service implementation
+│   │   ├── backgroundServices    # Background service implementation
 │   │   │   ├── background_service_handler.dart
 │   │   │   └── background_service_initialization.dart
 │   │   ├── locationServices      # Location detection and management
@@ -230,10 +247,12 @@ lib/
 │   │   └── app_routes.dart
 │   ├── theme/                     # App theme
 │   │   └── app_theme.dart
-│   ├── widgets/                   # Shared widgets
+│   ├── widgets/                   # Shared widgets / Paylaşılan widget'lar
 │   │   ├── custom_app_bar.dart
 │   │   ├── custom_card.dart
-│   │   └── custom_drawer.dart
+│   │   ├── custom_drawer.dart
+│   │   ├── searchable_bottom_sheet.dart  # Reusable searchable bottom sheet
+│   │   └── selection_list_tile.dart      # Reusable selection list tile
 │   ├── domain/                    # Domain models
 │   │   └── models/
 │   │       └── prayer_time_model.dart
@@ -275,7 +294,12 @@ lib/
 │   │       └── widgets/
 │   │           ├── monthly_prayer_day_card.dart
 │   │           └── prayer_time_item.dart
-│   ├── settings/                 # App settings
+│   ├── settings/                 # App settings / Uygulama ayarları
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   │   └── city_model.dart       # City and county data models
+│   │   │   └── repository/
+│   │   │       └── cities_repository.dart # Turkish cities JSON loader
 │   │   ├── presentation/
 │   │   │   ├── cubit/
 │   │   │   │   ├── settings_cubit.dart
@@ -284,8 +308,11 @@ lib/
 │   │   │   │   └── settings_screen.dart
 │   │   │   └── widgets/
 │   │   │       ├── battery_optimization_dialog.dart
+│   │   │       ├── city_selection.dart   # Manual city/district selection
 │   │   │       ├── notification_switch_list_tile.dart
 │   │   │       └── slient_mode_list_tile.dart
+│   │   └── extensions/
+│   │       └── settings_cubit_extension.dart
 │   │   └── extensions/
 │   │       └── settings_cubit_extension.dart
 │   └── splashScreen/             # Splash screen
@@ -559,6 +586,24 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 - **⚠️ Geçici Özellik**: Bildirim sesi sorunları tamamen çözüldüğünde test butonu bir sonraki güncellemede kaldırılacaktır
 - **🐛 Hata Düzeltmeleri**: Önceki versiyonlarda (0.6.1 ve 0.6.2) meydana gelen bildirim sesi çalma sorunlarının giderilmesi
 
+
+#### Versiyon 0.7.0 - Manuel Konum Seçimi ve Kod Optimizasyonu 📍
+- **📍 Manuel Şehir Seçimi**: Kullanıcılar artık 81 Türkiye ilinden şehir ve ilçelerini manuel olarak seçebilir
+- **🏙️ İlçe Desteği**: Her şehir için tüm ilçeler arama özelliğiyle birlikte mevcut
+- **🔍 Aranabilir Listeler**: Şehirler ve ilçeler için bottom sheet seçicilerde hızlı arama özelliği
+- **💾 Konum Kalıcılığı**: Manuel seçilen konum kaydedilir ve tüm uygulamada kullanılır
+- **🔊 Bildirim Sesi Düzeltmesi**: Zamanlanmış bildirimlerin ses değiştirmemesi sorunu düzeltildi - artık dinamik channel ID'leri kullanılıyor
+- **🎨 Yeniden Kullanılabilir Widget'lar**: Daha iyi kod tekrar kullanılabilirliği için global `SearchableBottomSheet` ve `SelectionListTile` widget'ları oluşturuldu
+- **🏗️ Mimari İyileştirme**: Tutarlılık için şehir seçimi StatefulWidget'tan Cubit desenine taşındı
+- **🌍 Geleceğe Hazır**: Ülke seçimi altyapısı eklendi (şu anda Türkiye'ye kilitli, gelecek güncellemeler için genişletilebilir)
+- **🇹🇷 Türkiye Şehirleri Veritabanı**: 81 il, koordinatları ve ilçeleriyle birlikte tam JSON veritabanı
+- **🌐 Tam Yerelleştirme**: Tüm yeni UI öğeleri İngilizce ve Türkçe'ye tam olarak çevrildi
+
+#### Versiyon 0.7.1 - Hata Düzeltmeleri ve İyileştirmeler 🔧
+- **🐛 Hata Düzeltmeleri**: Küçük hata düzeltmeleri ve stabilite iyileştirmeleri
+- **⚡ Performans**: Küçük performans optimizasyonları
+- **🔧 Kod Temizliği**: Versiyon 0.6.3'teki geçici test butonu kaldırıldı
+
 ### 🛠️ Teknoloji Yığını
 
 - **Framework**: Flutter 3.32.5 (Dart 3.8.1)
@@ -593,44 +638,46 @@ Namaz Vakti, Müslümanların günlük namaz vakitlerini takip etmelerine yardı
 
 ```
 lib/
-├── core/                          # Temel işlevsellik
-│   ├── constants/                 # Uygulama sabitleri
-│   │   └── notification_sounds.dart # Yerelleştirme ile bildirim sesi enum
-│   ├── services/                  # Servisler (bildirimler, konum, önbellek)
-│   │   ├── backgroundServices/    # Arka plan servisi implementasyonu
+├── core/                          # Core functionality
+│   ├── constants/                 # App constants
+│   │   └── notification_sounds.dart # Notification sound enum with localization
+│   ├── services/                  # Services (notifications, location, cache)
+│   │   ├── backgroundServices    # Background service implementation
 │   │   │   ├── background_service_handler.dart
 │   │   │   └── background_service_initialization.dart
-│   │   ├── locationServices      # Konum algılama ve yönetimi
+│   │   ├── locationServices      # Location detection and management
 │   │   │   ├── location_service.dart
 │   │   │   └── location_service_initialization.dart
-│   │   ├── notificationServices/  # Bildirim yönetimi
+│   │   ├── notificationServices/  # Notification handling
 │   │   │   ├── instant_notification_service.dart
 │   │   │   ├── scheduled_notification_service.dart
 │   │   │   ├── notification_manager_service.dart
 │   │   │   └── notification_initialization_service.dart
-│   │   ├── silentModeServices/    # Sessiz mod yönetimi
+│   │   ├── silentModeServices/    # Silent mode management
 │   │   │   └── silent_mode_manager_service.dart
-│   │   ├── cache_service.dart      # Önbellek yönetimi
-│   │   ├── storage_services.dart   # Yerel depolama
-│   │   ├── dio_client.dart         # HTTP istemcisi
+│   │   ├── cache_service.dart      # Cache management
+│   │   ├── storage_services.dart   # Local storage
+│   │   ├── dio_client.dart         # HTTP client
 │   │   ├── battery_optimization_service.dart
 │   │   └── app_settings_service.dart
-│   ├── routing/                   # GoRouter ile navigasyon
+│   ├── routing/                   # Navigation with GoRouter
 │   │   ├── app_router.dart
 │   │   └── app_routes.dart
-│   ├── theme/                     # Uygulama teması
+│   ├── theme/                     # App theme
 │   │   └── app_theme.dart
-│   ├── widgets/                   # Paylaşılan widget'lar
+│   ├── widgets/                   # Shared widgets / Paylaşılan widget'lar
 │   │   ├── custom_app_bar.dart
 │   │   ├── custom_card.dart
-│   │   └── custom_drawer.dart
-│   ├── domain/                    # Domain modelleri
+│   │   ├── custom_drawer.dart
+│   │   ├── searchable_bottom_sheet.dart  # Reusable searchable bottom sheet
+│   │   └── selection_list_tile.dart      # Reusable selection list tile
+│   ├── domain/                    # Domain models
 │   │   └── models/
 │   │       └── prayer_time_model.dart
-│   └── init/                      # Bağımlılık enjeksiyonu
+│   └── init/                      # Dependency injection
 │       └── locator.dart
-├── features/                      # Özellik modülleri (BLoC mimarisi)
-│   ├── home/                      # Günlük namaz vakitleri
+├── features/                      # Feature modules (BLoC architecture)
+│   ├── home/                      # Daily prayer times
 │   │   ├── data/
 │   │   │   └── repository/
 │   │   │       └── home_repository.dart
@@ -644,7 +691,7 @@ lib/
 │   │           ├── prayer_countdown_card.dart
 │   │           ├── prayer_header.dart
 │   │           └── prayer_time_list.dart
-│   ├── weeklyPrayer/             # Haftalık takvim
+│   ├── weeklyPrayer/             # Weekly calendar
 │   │   ├── data/
 │   │   │   └── repository/
 │   │   │       └── weekly_repository.dart
@@ -652,7 +699,7 @@ lib/
 │   │       ├── cubit/
 │   │       ├── screens/
 │   │       └── widgets/
-│   ├── monthlyPrayer/            # Aylık takvim
+│   ├── monthlyPrayer/            # Monthly calendar
 │   │   ├── data/
 │   │   │   └── repository/
 │   │   │       └── monthly_repository.dart
@@ -665,7 +712,12 @@ lib/
 │   │       └── widgets/
 │   │           ├── monthly_prayer_day_card.dart
 │   │           └── prayer_time_item.dart
-│   ├── settings/                 # Uygulama ayarları
+│   ├── settings/                 # App settings / Uygulama ayarları
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   │   └── city_model.dart       # City and county data models
+│   │   │   └── repository/
+│   │   │       └── cities_repository.dart # Turkish cities JSON loader
 │   │   ├── presentation/
 │   │   │   ├── cubit/
 │   │   │   │   ├── settings_cubit.dart
@@ -674,20 +726,23 @@ lib/
 │   │   │   │   └── settings_screen.dart
 │   │   │   └── widgets/
 │   │   │       ├── battery_optimization_dialog.dart
+│   │   │       ├── city_selection.dart   # Manual city/district selection
 │   │   │       ├── notification_switch_list_tile.dart
 │   │   │       └── slient_mode_list_tile.dart
 │   │   └── extensions/
 │   │       └── settings_cubit_extension.dart
-│   └── splashScreen/             # Açılış ekranı
+│   │   └── extensions/
+│   │       └── settings_cubit_extension.dart
+│   └── splashScreen/             # Splash screen
 │       └── splash_screen.dart
-├── l10n/                         # Yerelleştirme dosyaları
-│   ├── app_en.arb                # İngilizce çeviriler
-│   ├── app_tr.arb                # Türkçe çeviriler
-│   ├── app_localizations.dart    # Oluşturulan yerelleştirmeler
+├── l10n/                         # Localization files
+│   ├── app_en.arb                # English translations
+│   ├── app_tr.arb                # Turkish translations
+│   ├── app_localizations.dart    # Generated localizations
 │   ├── app_localizations_en.dart
 │   └── app_localizations_tr.dart
-├── firebase_options.dart          # Firebase yapılandırması
-└── main.dart                      # Uygulama giriş noktası
+├── firebase_options.dart          # Firebase configuration
+└── main.dart                      # App entry point
 ```
 
 ### 🔧 Kurulum
@@ -749,7 +804,7 @@ Kapsamlı bildirim yönetimi:
 - Namaz hatırlatıcıları için zamanlanmış bildirimler
 - Bir sonraki namazı gösteren kalıcı bildirim (silinemez)
 - Her namaz vakti için bireysel kontrol
-- Yerelleştirilmiş isimlerle 13 özelleştirilebilir bildirim sesi
+- 13 özelleştirilebilir bildirim sesi yerelleştirilmiş isimlerle
 - Seçimden önce ses önizleme işlevi
 
 #### Sessiz Mod
