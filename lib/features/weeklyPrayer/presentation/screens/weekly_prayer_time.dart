@@ -63,9 +63,9 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
-      backgroundColor: AppTheme.prayerBackgroundColor,
+      backgroundColor: AppTheme.getBackgroundColor(context),
       appBar: AppBar(
-        backgroundColor: AppTheme.prayerBackgroundColor,
+        backgroundColor: AppTheme.getAppBarColor(context),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppTheme.textWhite),
@@ -276,7 +276,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppTheme.cardBorderColor),
+          bottom: BorderSide(color: AppTheme.getDividerColor(context)),
         ),
       ),
       child: Row(
@@ -306,7 +306,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         text.length > 4 ? text.substring(0, 4) : text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: AppTheme.textWhite60,
+          color: AppTheme.getSecondaryTextColor(context),
           fontSize: 10,
           fontWeight: FontWeight.w500,
         ),

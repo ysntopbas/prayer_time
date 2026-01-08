@@ -87,7 +87,7 @@ class _HomeScaffold extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppTheme.prayerBackgroundColor,
+      backgroundColor: AppTheme.getBackgroundColor(context), // DEĞİŞTİ
       drawer: const CustomDrawer(),
       body: BlocListener<SettingsCubit, SettingsState>(
         listenWhen: (previous, current) =>
@@ -108,7 +108,9 @@ class _HomeScaffold extends StatelessWidget {
           builder: (context, state) {
             if (state is HomeInitial || state is HomeLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: AppTheme.loadingColor),
+                child: CircularProgressIndicator(
+                  color: AppTheme.primaryGreen, // SABİT
+                ),
               );
             } else if (state is HomeError) {
               return Center(
@@ -117,7 +119,9 @@ class _HomeScaffold extends StatelessWidget {
                   children: [
                     Text(
                       state.message,
-                      style: const TextStyle(color: AppTheme.textWhite70),
+                      style: TextStyle(
+                        color: AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
+                      ),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -141,7 +145,7 @@ class _HomeScaffold extends StatelessWidget {
                   children: [
                     // Background mosque silhouette
                     Positioned.fill(
-                      child: CustomPaint(painter: MosqueSilhouettePainter()),
+                      child: CustomPaint(painter: MosqueSilhouettePainter(context)),
                     ),
                     // Main content
                     Column(
@@ -225,10 +229,14 @@ class _HomeScaffold extends StatelessWidget {
 
 // Mosque silhouette painter for background
 class MosqueSilhouettePainter extends CustomPainter {
+  final BuildContext context;
+  
+  MosqueSilhouettePainter(this.context);
+  
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.mosqueBackgroundColor.withValues(alpha: 0.3)
+      ..color = AppTheme.getMosqueColor(context) // DEĞİŞTİ
       ..style = PaintingStyle.fill;
 
     final path = Path();

@@ -11,7 +11,7 @@ class CustomDrawer extends StatelessWidget {
     final l10nL = AppLocalizations.of(context)!;
 
     return Drawer(
-      backgroundColor: AppTheme.prayerBackgroundColor,
+      backgroundColor: AppTheme.getBackgroundColor(context), // DEĞİŞTİ
       child: Column(
         children: [
           // Modern gradient drawer header
@@ -21,8 +21,8 @@ class CustomDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppTheme.drawerGradientStart,
-                  AppTheme.drawerGradientEnd,
+                  AppTheme.getDrawerGradientStart(context), // DEĞİŞTİ
+                  AppTheme.getDrawerGradientEnd(context), // DEĞİŞTİ
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -111,12 +111,18 @@ class CustomDrawer extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: AppTheme.cardBorderColor)),
+              border: Border(
+                top: BorderSide(color: AppTheme.getBorderColor(context)), // DEĞİŞTİ
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.info_outline, color: AppTheme.textWhite50, size: 18),
+                Icon(
+                  Icons.info_outline,
+                  color: AppTheme.getTertiaryTextColor(context), // DEĞİŞTİ
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,14 +131,14 @@ class CustomDrawer extends StatelessWidget {
                     Text(
                       "${l10nL.version} 1.0.0",
                       style: TextStyle(
-                        color: AppTheme.textWhite70,
+                        color: AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       l10nL.ownerName,
                       style: TextStyle(
-                        color: AppTheme.textWhite50,
+                        color: AppTheme.getTertiaryTextColor(context), // DEĞİŞTİ
                         fontSize: 11,
                       ),
                     ),

@@ -11,7 +11,6 @@ import 'package:prayer_time/core/services/cache_service.dart';
 import 'package:prayer_time/core/services/locationServices/location_service.dart';
 import 'package:prayer_time/core/services/notificationServices/instant_notification_service.dart';
 import 'package:prayer_time/core/theme/app_theme.dart';
-import 'package:prayer_time/core/widgets/custom_app_bar.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/city_selection.dart';
 import 'package:prayer_time/features/settings/presentation/widgets/notification_switch_list_tile.dart';
@@ -26,9 +25,10 @@ class SettingsScreen extends StatelessWidget {
     final l10nL = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppTheme.prayerBackgroundColor,
-      appBar: CustomAppBar(
-        title: l10nL.settingsPageTitle,
+      backgroundColor: AppTheme.getBackgroundColor(context), // DEĞİŞTİ
+      appBar: AppBar(
+        backgroundColor: AppTheme.getAppBarColor(context),
+        title: Text(l10nL.settingsPageTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -63,13 +63,12 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   title: Text(
                     l10nL.darkMode,
-                    style: const TextStyle(color: AppTheme.textWhite),
+                    style: TextStyle(color: AppTheme.getTextColor(context)),
                   ),
                 );
               },
             ),
-            Divider(color: AppTheme.cardBorderColor),
-
+            Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
             // Dil Seçeneği
             BlocSelector<SettingsCubit, SettingsState, String>(
               selector: (state) => state.languageCode,
@@ -84,9 +83,12 @@ class SettingsScreen extends StatelessWidget {
                     languageCode == 'en'
                         ? 'English'
                         : languageCode == 'tr'
-                        ? 'Türkçe'
-                        : 'Unknown',
-                    style: TextStyle(color: AppTheme.textWhite60),
+                        ? 'Başladı'
+                        : 'Started',
+                    style: TextStyle(
+                      color: AppTheme.getTertiaryTextColor(context),
+                      fontSize: 11,
+                    ),
                   ),
                   onTap: () {
                     _showLanguageSelectionDialog(context);
@@ -94,8 +96,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
-            Divider(color: AppTheme.cardBorderColor),
-
+            Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
             // Konum Güncelleme
             BlocBuilder<SettingsCubit, SettingsState>(
               builder: (context, state) {
@@ -193,7 +194,7 @@ class SettingsScreen extends StatelessWidget {
             ),
 
             CitySelection(),
-            Divider(color: AppTheme.cardBorderColor),
+            Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
             BlocSelector<SettingsCubit, SettingsState, String>(
               selector: (state) => state.notificationSound,
 
@@ -348,16 +349,15 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
 
-            Divider(color: AppTheme.cardBorderColor),
+            Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
 
             NotificationSwitchListTile(),
-            Divider(color: AppTheme.cardBorderColor),
-
+            Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
             //İOS'da sessiz mod ayarı yok çünkü fiziksel anahtarla kontrol ediliyor
             Platform.isIOS ? const SizedBox.shrink() : SilentModeListTile(),
             Platform.isIOS
                 ? const SizedBox.shrink()
-                : Divider(color: AppTheme.cardBorderColor),
+                : Divider(color: AppTheme.getDividerColor(context)), // DEĞİŞTİ
             ElevatedButton(
               onPressed: () async {
                 try {
@@ -409,40 +409,38 @@ class SettingsScreen extends StatelessWidget {
     final l10nL = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppTheme.darkGreen,
-          title: Text(
-            l10nL.language,
-            style: const TextStyle(color: AppTheme.textWhite),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text(
-                  'English',
-                  style: TextStyle(color: AppTheme.textWhite),
-                ),
-                onTap: () {
-                  context.read<SettingsCubit>().changeLanguage('en');
-                  Navigator.pop(context);
-                },
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppTheme.getDialogBackground(context), // DEĞİŞTİ
+        title: Text(
+          l10nL.language,
+          style: const TextStyle(color: AppTheme.textWhite),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text(
+                'English',
+                style: TextStyle(color: AppTheme.textWhite),
               ),
-              ListTile(
-                title: const Text(
-                  'Türkçe',
-                  style: TextStyle(color: AppTheme.textWhite),
-                ),
-                onTap: () {
-                  context.read<SettingsCubit>().changeLanguage('tr');
-                  Navigator.pop(context);
-                },
+              onTap: () {
+                context.read<SettingsCubit>().changeLanguage('en');
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Türkçe',
+                style: TextStyle(color: AppTheme.textWhite),
               ),
-            ],
-          ),
-        );
-      },
+              onTap: () {
+                context.read<SettingsCubit>().changeLanguage('tr');
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 

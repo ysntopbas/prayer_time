@@ -24,18 +24,16 @@ class PrayerHeader extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          // Location and Menu Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Menu Button
               GestureDetector(
                 onTap: () => Scaffold.of(context).openDrawer(),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.location_on,
-                      color: AppTheme.locationIconColor,
+                      color: AppTheme.primaryGreen, // SABİT
                       size: 24,
                     ),
                     const SizedBox(width: 8),
@@ -44,8 +42,8 @@ class PrayerHeader extends StatelessWidget {
                       children: [
                         Text(
                           '$cityName, Türkiye',
-                          style: const TextStyle(
-                            color: AppTheme.textWhite,
+                          style: TextStyle(
+                            color: AppTheme.getTextColor(context), // DEĞİŞTİ
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -53,7 +51,9 @@ class PrayerHeader extends StatelessWidget {
                         Text(
                           subAdministrativeArea,
                           style: TextStyle(
-                            color: AppTheme.textWhite70,
+                            color: AppTheme.getSecondaryTextColor(
+                              context,
+                            ), // DEĞİŞTİ
                             fontSize: 14,
                           ),
                         ),
@@ -62,18 +62,17 @@ class PrayerHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              // Menu Icon
               IconButton(
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppTheme.countdownBadgeBackground,
+                    color: AppTheme.getChipBackground(context), // DEĞİŞTİ
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.menu,
-                    color: AppTheme.textWhite,
+                    color: AppTheme.getTextColor(context), // DEĞİŞTİ
                     size: 24,
                   ),
                 ),
@@ -94,7 +93,9 @@ class PrayerHeader extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.countdownBadgeBackground,
+                  color: AppTheme.getCountdownBadgeBackground(
+                    context,
+                  ), // DEĞİŞTİ
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -133,12 +134,13 @@ class PrayerHeader extends StatelessWidget {
               );
             },
           ),
+
           const SizedBox(height: 8),
           // Gregorian Date
           Text(
             dateFormat.format(now).toUpperCase(),
             style: TextStyle(
-              color: AppTheme.textWhite60,
+              color: AppTheme.getTertiaryTextColor(context), // DEĞİŞTİ
               fontSize: 14,
               letterSpacing: 1,
             ),

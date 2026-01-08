@@ -96,56 +96,53 @@ class PrayerTimesList extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: isCurrentPrayer
-            ? AppTheme.activeCardBackground
+            ? AppTheme.getActiveCardBackground(context) // DEĞİŞTİ
             : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         border: isCurrentPrayer
-            ? Border.all(color: AppTheme.activeCardBorderColor, width: 1.5)
+            ? Border.all(color: AppTheme.primaryGreen, width: 1.5)
             : null,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: [
-            // Status Indicator
             Container(
               width: 10,
               height: 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isCurrentPrayer
-                    ? AppTheme.activeIndicatorColor
+                    ? AppTheme.primaryGreen
                     : isPassed
-                    ? AppTheme.passedIndicatorColor
+                    ? AppTheme.getBorderColor(context) // DEĞİŞTİ
                     : Colors.transparent,
                 border: Border.all(
                   color: isCurrentPrayer
-                      ? AppTheme.activeIndicatorColor
-                      : AppTheme.normalIndicatorBorderColor,
+                      ? AppTheme.primaryGreen
+                      : AppTheme.getBorderColor(context), // DEĞİŞTİ
                   width: 2,
                 ),
               ),
             ),
             const SizedBox(width: 12),
-            // Icon
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: isCurrentPrayer
-                    ? AppTheme.chipActiveBackground
-                    : AppTheme.chipBackground,
+                    ? AppTheme.primaryGreen.withValues(alpha: 0.2)
+                    : AppTheme.getChipBackground(context), // DEĞİŞTİ
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 prayer.icon,
                 color: isCurrentPrayer
-                    ? AppTheme.activeIconColor
-                    : AppTheme.normalIconColor,
+                    ? AppTheme.primaryGreen
+                    : AppTheme.getIconColor(context), // DEĞİŞTİ
                 size: 18,
               ),
             ),
             const SizedBox(width: 12),
-            // Prayer Name
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,10 +152,10 @@ class PrayerTimesList extends StatelessWidget {
                     prayer.name,
                     style: TextStyle(
                       color: isCurrentPrayer
-                          ? AppTheme.textWhite
+                          ? AppTheme.getTextColor(context) // DEĞİŞTİ
                           : isPassed
-                          ? AppTheme.textWhite40
-                          : AppTheme.textWhite70,
+                          ? AppTheme.getTertiaryTextColor(context) // DEĞİŞTİ
+                          : AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
                       fontSize: 15,
                       fontWeight: isCurrentPrayer
                           ? FontWeight.bold

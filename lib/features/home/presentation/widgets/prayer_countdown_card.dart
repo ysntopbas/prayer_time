@@ -32,8 +32,8 @@ class PrayerCountdownCard extends StatelessWidget {
             nextPrayerTime.isNotEmpty
                 ? nextPrayerTime.split('(').first.trim()
                 : '--:--',
-            style: const TextStyle(
-              color: AppTheme.textWhite,
+            style: TextStyle(
+              color: AppTheme.getTextColor(context), // DEĞİŞTİ
               fontSize: 72,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
@@ -44,8 +44,8 @@ class PrayerCountdownCard extends StatelessWidget {
             nextPrayerName.isNotEmpty
                 ? '$nextPrayerName ${languageCode == 'tr' ? 'Vakti' : 'Time'}'
                 : '',
-            style: const TextStyle(
-              color: AppTheme.textWhite,
+            style: TextStyle(
+              color: AppTheme.getTextColor(context), // DEĞİŞTİ
               fontSize: 24,
               fontWeight: FontWeight.w500,
             ),
@@ -55,10 +55,10 @@ class PrayerCountdownCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: AppTheme.countdownBadgeBackground,
+              color: AppTheme.getCountdownBadgeBackground(context), // DEĞİŞTİ
               borderRadius: BorderRadius.circular(25),
               border: Border.all(
-                color: AppTheme.countdownBadgeBorderColor,
+                color: AppTheme.primaryGreen.withValues(alpha: 0.5), // SABİT
                 width: 1,
               ),
             ),
@@ -83,7 +83,10 @@ class PrayerCountdownCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   languageCode == 'tr' ? 'kaldı' : 'left',
-                  style: TextStyle(color: AppTheme.textWhite70, fontSize: 14),
+                  style: TextStyle(
+                    color: AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
@@ -103,7 +106,10 @@ class PrayerCountdownCard extends StatelessWidget {
   ) {
     return Text(
       '${languageCode == 'tr' ? 'Sonraki' : 'Next'}: $nextPrayerName',
-      style: TextStyle(color: AppTheme.textWhite50, fontSize: 14),
+      style: TextStyle(
+        color: AppTheme.getTertiaryTextColor(context), // DEĞİŞTİ
+        fontSize: 14,
+      ),
     );
   }
 }

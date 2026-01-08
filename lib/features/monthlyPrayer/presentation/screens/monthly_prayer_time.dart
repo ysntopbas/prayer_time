@@ -64,9 +64,9 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
-      backgroundColor: AppTheme.prayerBackgroundColor,
+      backgroundColor: AppTheme.getBackgroundColor(context),
       appBar: AppBar(
-        backgroundColor: AppTheme.prayerBackgroundColor,
+        backgroundColor: AppTheme.getAppBarColor(context),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppTheme.textWhite),
@@ -310,7 +310,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppTheme.cardBorderColor)),
+        border: Border(bottom: BorderSide(color: AppTheme.getDividerColor(context))),
       ),
       child: Row(
         children: [
@@ -340,7 +340,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         text.length > 4 ? text.substring(0, 4) : text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: AppTheme.textWhite60,
+          color: AppTheme.getSecondaryTextColor(context),
           fontSize: 10,
           fontWeight: FontWeight.w500,
         ),

@@ -12,173 +12,184 @@ class AppTheme {
   // ANA RENKLER (Primary Colors)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Ana yeşil renk - Butonlar, vurgular, aktif durumlar için
   static const Color primaryGreen = Color(0xFF4CAF50);
-
-  /// Koyu yeşil - Arka plan için
   static const Color darkGreen = Color(0xFF1A2E1A);
-
-  /// Orta yeşil - Vurgulu arka planlar için
   static const Color mediumGreen = Color(0xFF2E7D32);
-
-  /// Açık yeşil - Gradient ve ikincil vurgular için
   static const Color lightGreen = Color.fromARGB(255, 48, 140, 88);
-
-  /// Turkuaz yeşil - Gradient için
   static const Color tealGreen = Color(0xFF0E978B);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // ARKA PLAN RENKLERİ (Background Colors)
+  // TEMA BAZLI RENKLER - Bu metotları kullanarak tema uyumlu renkler alın
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Prayer ekranları için ana arka plan
-  static const Color prayerBackgroundColor = Color(0xFF1A2E1A);
+  /// Helper: Tema dark mı kontrol et
+  static bool _isDark(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark;
+  }
 
-  /// Cami silüeti için arka plan rengi
-  static const Color mosqueBackgroundColor = Color(0xFF2D4A2D);
+  /// Ana arka plan rengi
+  static Color getBackgroundColor(BuildContext context) {
+    return _isDark(context) ? darkGreen : const Color(0xFFF5F5F5);
+  }
 
-  /// Light tema arka plan
-  static const Color lightBackgroundColor = Colors.white;
+  /// Scaffold arka plan rengi
+  static Color getScaffoldColor(BuildContext context) {
+    return _isDark(context) ? darkGreen : Colors.white;
+  }
 
-  /// Dark tema arka plan
-  static const Color darkBackgroundColor = Color(0xFF1A1A1A);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // METİN RENKLERİ (Text Colors)
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /// Beyaz metin - Koyu arka planlar için
-  static const Color textWhite = Colors.white;
-
-  /// Beyaz metin %70 opacity
-  static const Color textWhite70 = Colors.white70;
-
-  /// Beyaz metin %60 opacity
-  static Color textWhite60 = Colors.white.withValues(alpha: 0.6);
-
-  /// Beyaz metin %50 opacity
-  static Color textWhite50 = Colors.white.withValues(alpha: 0.5);
-
-  /// Beyaz metin %40 opacity
-  static Color textWhite40 = Colors.white.withValues(alpha: 0.4);
-
-  /// Beyaz metin %30 opacity
-  static Color textWhite30 = Colors.white.withValues(alpha: 0.3);
-
-  /// Light tema metin rengi
-  static const Color lightTextColor = Colors.black;
-
-  /// Dark tema metin rengi
-  static const Color darkTextColor = Colors.white70;
+  /// Kart arka plan rengi
+  static Color getCardColor(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.05)
+        : Colors.white;
+  }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // KART VE BORDER RENKLERİ (Card & Border Colors)
+  // RENK YARDIMCI METODLARI (Color Helper Methods)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Aktif kart arka planı (bugün, seçili)
-  static Color activeCardBackground = primaryGreen.withValues(alpha: 0.15);
+  // Ana metin rengi - Light'ta siyah, Dark'ta beyaz
+  static Color getTextColor(BuildContext context) {
+    return _isDark(context) ? textWhite : Colors.black87;
+  }
 
-  /// Aktif kart arka planı koyu versiyon
-  static Color activeCardBackgroundDark = mediumGreen.withValues(alpha: 0.3);
+  // İkincil metin rengi
+  static Color getSecondaryTextColor(BuildContext context) {
+    return _isDark(context) ? textWhite70 : Colors.black54;
+  }
 
-  /// Normal kart border rengi
-  static Color cardBorderColor = Colors.white.withValues(alpha: 0.1);
+  // Üçüncül metin rengi
+  static Color getTertiaryTextColor(BuildContext context) {
+    return _isDark(context) ? textWhite50 : Colors.black45;
+  }
 
-  /// Aktif kart border rengi
-  static const Color activeCardBorderColor = primaryGreen;
+  // AppBar rengi
+  static Color getAppBarColor(BuildContext context) {
+    return _isDark(context) ? darkGreen : lightGreen;
+  }
+
+  // Divider rengi
+  static Color getDividerColor(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.1)
+        : Colors.grey.withValues(alpha: 0.2);
+  }
+
+  // Cami silüeti rengi
+  static Color getMosqueColor(BuildContext context) {
+    return _isDark(context)
+        ? const Color(0xFF2D4A2D).withValues(alpha: 0.3)
+        : primaryGreen.withValues(alpha: 0.1);
+  }
+
+  // ListTile başlık rengi
+  static Color getListTileTitleColor(BuildContext context) {
+    return _isDark(context) ? textWhite : Colors.black87;
+  }
+
+  // ListTile alt başlık rengi
+  static Color getListTileSubtitleColor(BuildContext context) {
+    return _isDark(context) ? textWhite70 : Colors.black54;
+  }
+
+  // Icon rengi (yeşil olmayan iconlar için)
+  static Color getIconColor(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.5)
+        : Colors.black45;
+  }
+
+  /// Border rengi
+  static Color getBorderColor(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.1)
+        : Colors.grey.withValues(alpha: 0.2);
+  }
+
+  /// Aktif kart arka planı
+  static Color getActiveCardBackground(BuildContext context) {
+    return _isDark(context)
+        ? primaryGreen.withValues(alpha: 0.15)
+        : primaryGreen.withValues(alpha: 0.1);
+  }
 
   /// Chip arka plan rengi
-  static Color chipBackground = Colors.white.withValues(alpha: 0.05);
-
-  /// Chip aktif arka plan rengi
-  static Color chipActiveBackground = primaryGreen.withValues(alpha: 0.2);
-
-  /// Chip border rengi
-  static Color chipBorderColor = Colors.white.withValues(alpha: 0.1);
-
-  /// Chip aktif border rengi
-  static Color chipActiveBorderColor = primaryGreen.withValues(alpha: 0.5);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // BADGE VE ETİKET RENKLERİ (Badge & Label Colors)
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /// Badge arka plan rengi (BUGÜN, CUMA vb.)
-  static const Color badgeBackgroundColor = primaryGreen;
-
-  /// Badge metin rengi
-  static const Color badgeTextColor = Colors.white;
+  static Color getChipBackground(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.05)
+        : Colors.grey.withValues(alpha: 0.1);
+  }
 
   /// Countdown badge arka planı
-  static Color countdownBadgeBackground = Colors.white.withValues(alpha: 0.1);
+  static Color getCountdownBadgeBackground(BuildContext context) {
+    return _isDark(context)
+        ? Colors.white.withValues(alpha: 0.1)
+        : Colors.grey.withValues(alpha: 0.1);
+  }
 
-  /// Countdown badge border rengi
-  static Color countdownBadgeBorderColor = primaryGreen.withValues(alpha: 0.5);
+  /// Drawer gradient başlangıç
+  static Color getDrawerGradientStart(BuildContext context) {
+    return _isDark(context) ? lightGreen : lightGreen;
+  }
+
+  /// Drawer gradient bitiş
+  static Color getDrawerGradientEnd(BuildContext context) {
+    return _isDark(context)
+        ? lightGreen.withValues(alpha: 0.7)
+        : lightGreen.withValues(alpha: 0.85);
+  }
+
+  /// Dropdown arka plan
+  static Color getDropdownBackground(BuildContext context) {
+    return _isDark(context) ? darkGreen : Colors.white;
+  }
+
+  /// Dialog arka plan
+  static Color getDialogBackground(BuildContext context) {
+    return _isDark(context) ? darkGreen : Colors.white;
+  }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // İKON RENKLERİ (Icon Colors)
+  // SABİT RENKLER (Tema değişmeyen)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Aktif ikon rengi
+  static const Color primaryGreenColor = primaryGreen;
+  static const Color activeCardBorderColor = primaryGreen;
+  static const Color badgeBackgroundColor = primaryGreen;
+  static const Color badgeTextColor = Colors.white;
   static const Color activeIconColor = primaryGreen;
-
-  /// Normal ikon rengi
-  static Color normalIconColor = Colors.white.withValues(alpha: 0.5);
-
-  /// Konum ikonu rengi
+  static const Color activeIndicatorColor = primaryGreen;
+  static const Color loadingColor = primaryGreen;
+  static const Color errorButtonColor = primaryGreen;
+  static const Color successColor = Colors.green;
   static const Color locationIconColor = primaryGreen;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // DURUM GÖSTERGELERİ (Status Indicators)
+  // ESKİ SABİT RENKLER (Geriye uyumluluk için - Yavaş yavaş kaldırılacak)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Aktif durum göstergesi
-  static const Color activeIndicatorColor = primaryGreen;
-
-  /// Geçmiş durum göstergesi
+  static const Color prayerBackgroundColor = darkGreen;
+  static const Color mosqueBackgroundColor = Color(0xFF2D4A2D);
+  static const Color textWhite = Colors.white;
+  static const Color textWhite70 = Colors.white70;
+  static Color textWhite60 = Colors.white.withValues(alpha: 0.6);
+  static Color textWhite50 = Colors.white.withValues(alpha: 0.5);
+  static Color textWhite40 = Colors.white.withValues(alpha: 0.4);
+  static Color textWhite30 = Colors.white.withValues(alpha: 0.3);
+  static Color cardBorderColor = Colors.white.withValues(alpha: 0.1);
+  static Color chipBackground = Colors.white.withValues(alpha: 0.05);
+  static Color chipActiveBackground = primaryGreen.withValues(alpha: 0.2);
+  static Color chipBorderColor = Colors.white.withValues(alpha: 0.1);
+  static Color chipActiveBorderColor = primaryGreen.withValues(alpha: 0.5);
+  static Color countdownBadgeBackground = Colors.white.withValues(alpha: 0.1);
+  static Color countdownBadgeBorderColor = primaryGreen.withValues(alpha: 0.5);
+  static Color normalIconColor = Colors.white.withValues(alpha: 0.5);
   static Color passedIndicatorColor = Colors.white.withValues(alpha: 0.3);
-
-  /// Normal gösterge border rengi (gün numarası çemberi)
   static Color normalIndicatorBorderColor = Colors.white.withValues(alpha: 0.3);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // LOADING VE BUTTON RENKLERİ
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /// Loading indicator rengi
-  static const Color loadingColor = primaryGreen;
-
-  /// Hata durumu button rengi
-  static const Color errorButtonColor = primaryGreen;
-
-  /// Success rengi
-  static const Color successColor = Colors.green;
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // DRAWER RENKLERİ
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /// Drawer header gradient başlangıç
   static const Color drawerGradientStart = lightGreen;
-
-  /// Drawer header gradient bitiş
   static Color drawerGradientEnd = lightGreen.withValues(alpha: 0.7);
-
-  /// Drawer arka plan rengi
-  static const Color drawerBackgroundColor = prayerBackgroundColor;
-
-  /// Drawer item arka plan rengi (hover/aktif)
-  static Color drawerItemBackground = primaryGreen.withValues(alpha: 0.15);
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SETTINGS EKRANI RENKLERİ
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  /// Settings tile ikon arka planı
-  static Color settingsIconBackground = primaryGreen.withValues(alpha: 0.15);
-
-  /// Dropdown arka plan rengi
-  static const Color dropdownBackgroundColor = darkGreen;
+  static Color activeCardBackground = primaryGreen.withValues(alpha: 0.15);
+  static Color activeCardBackgroundDark = mediumGreen.withValues(alpha: 0.3);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // METİN STİLLERİ (Text Theme)
@@ -201,36 +212,58 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     fontFamily: _fontFamily,
-    scaffoldBackgroundColor: lightBackgroundColor,
-
+    scaffoldBackgroundColor: const Color(0xFFF5F5F5),
     colorScheme: const ColorScheme.light(
       primary: lightGreen,
       secondary: tealGreen,
-      onPrimary: textWhite,
-      surface: lightBackgroundColor,
+      onPrimary: Colors.white,
+      onSurface: Colors.black87,
+      surface: Colors.white,
     ),
-
     textTheme: _textTheme.apply(
-      bodyColor: lightTextColor,
-      displayColor: lightTextColor,
+      bodyColor: Colors.black87,
+      displayColor: Colors.black87,
     ),
-
     appBarTheme: const AppBarTheme(
       backgroundColor: lightGreen,
+      foregroundColor: Colors.white,
       titleTextStyle: TextStyle(
         fontFamily: _fontFamily,
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
-        color: textWhite,
+        color: Colors.white,
       ),
-      iconTheme: IconThemeData(color: textWhite),
+      iconTheme: IconThemeData(color: Colors.white),
     ),
-
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: lightGreen,
-        foregroundColor: textWhite,
-        textStyle: _textTheme.labelLarge,
+    listTileTheme: const ListTileThemeData(
+      textColor: Colors.black87,
+      iconColor: Colors.black54,
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.all(primaryGreen),
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return primaryGreen.withValues(alpha: 0.5);
+        }
+        return Colors.grey.shade300;
+      }),
+    ),
+    dividerTheme: const DividerThemeData(color: Colors.black12),
+    cardTheme: const CardThemeData(color: Colors.white, elevation: 2),
+    iconTheme: const IconThemeData(color: Colors.black54),
+    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
+    dialogTheme: const DialogThemeData(
+      backgroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+        fontFamily: _fontFamily,
+        fontSize: 18.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.black87,
+      ),
+      contentTextStyle: TextStyle(
+        fontFamily: _fontFamily,
+        fontSize: 14.0,
+        color: Colors.black87,
       ),
     ),
   );
@@ -241,36 +274,31 @@ class AppTheme {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     fontFamily: _fontFamily,
-    scaffoldBackgroundColor: darkBackgroundColor,
-
+    scaffoldBackgroundColor: darkGreen,
     colorScheme: const ColorScheme.dark(
       primary: tealGreen,
       secondary: Color.fromARGB(255, 8, 91, 84),
-      onPrimary: textWhite,
-      surface: darkBackgroundColor,
+      onPrimary: Colors.white,
+      surface: darkGreen,
     ),
-
     textTheme: _textTheme.apply(
-      bodyColor: darkTextColor,
-      displayColor: darkTextColor,
+      bodyColor: Colors.white70,
+      displayColor: Colors.white70,
     ),
-
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey[850],
+      backgroundColor: darkGreen,
       titleTextStyle: const TextStyle(
         fontFamily: _fontFamily,
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
-        color: textWhite,
+        color: Colors.white,
       ),
-      iconTheme: const IconThemeData(color: textWhite),
+      iconTheme: const IconThemeData(color: Colors.white),
     ),
-
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: tealGreen,
-        foregroundColor: textWhite,
-        textStyle: _textTheme.labelLarge,
+        foregroundColor: Colors.white,
       ),
     ),
   );
