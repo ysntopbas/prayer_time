@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class PrayerCountdownCard extends StatelessWidget {
@@ -32,7 +33,7 @@ class PrayerCountdownCard extends StatelessWidget {
                 ? nextPrayerTime.split('(').first.trim()
                 : '--:--',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppTheme.textWhite,
               fontSize: 72,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
@@ -44,7 +45,7 @@ class PrayerCountdownCard extends StatelessWidget {
                 ? '$nextPrayerName ${languageCode == 'tr' ? 'Vakti' : 'Time'}'
                 : '',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppTheme.textWhite,
               fontSize: 24,
               fontWeight: FontWeight.w500,
             ),
@@ -54,10 +55,10 @@ class PrayerCountdownCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: AppTheme.countdownBadgeBackground,
               borderRadius: BorderRadius.circular(25),
               border: Border.all(
-                color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
+                color: AppTheme.countdownBadgeBorderColor,
                 width: 1,
               ),
             ),
@@ -66,14 +67,14 @@ class PrayerCountdownCard extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.hourglass_empty,
-                  color: Color(0xFF4CAF50),
+                  color: AppTheme.primaryGreen,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
                 Text(
                   '$hours:$minutes:$seconds',
                   style: const TextStyle(
-                    color: Color(0xFF4CAF50),
+                    color: AppTheme.primaryGreen,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'monospace',
@@ -82,10 +83,7 @@ class PrayerCountdownCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   languageCode == 'tr' ? 'kaldı' : 'left',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: AppTheme.textWhite70, fontSize: 14),
                 ),
               ],
             ),
@@ -105,10 +103,7 @@ class PrayerCountdownCard extends StatelessWidget {
   ) {
     return Text(
       '${languageCode == 'tr' ? 'Sonraki' : 'Next'}: $nextPrayerName',
-      style: TextStyle(
-        color: Colors.white.withValues(alpha: 0.5),
-        fontSize: 14,
-      ),
+      style: TextStyle(color: AppTheme.textWhite50, fontSize: 14),
     );
   }
 }

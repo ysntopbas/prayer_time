@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class WeeklyPrayerDayCard extends StatelessWidget {
@@ -47,14 +48,10 @@ class WeeklyPrayerDayCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: isToday
-            ? const Color(0xFF2E7D32).withValues(alpha: 0.3)
-            : Colors.transparent,
+        color: isToday ? AppTheme.activeCardBackgroundDark : Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isToday
-              ? const Color(0xFF4CAF50)
-              : Colors.white.withValues(alpha: 0.1),
+          color: isToday ? AppTheme.activeCardBorderColor : AppTheme.cardBorderColor,
           width: isToday ? 2 : 1,
         ),
       ),
@@ -71,25 +68,19 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: isToday
-                        ? const Color(0xFF4CAF50)
-                        : Colors.transparent,
+                    color: isToday ? AppTheme.primaryGreen : Colors.transparent,
                     shape: BoxShape.circle,
                     border: isToday
                         ? null
-                        : Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                          ),
+                        : Border.all(color: AppTheme.normalIndicatorBorderColor),
                   ),
                   child: Center(
                     child: Text(
                       '${dayNumber ?? ''}',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppTheme.textWhite,
                         fontSize: 16,
-                        fontWeight: isToday
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                        fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
                   ),
@@ -105,7 +96,7 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                           Text(
                             weekdayName,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.textWhite,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
@@ -118,13 +109,13 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF4CAF50),
+                                color: AppTheme.badgeBackgroundColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 languageCode == 'tr' ? 'BUGÜN' : 'TODAY',
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.badgeTextColor,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -139,13 +130,13 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF4CAF50),
+                                color: AppTheme.badgeBackgroundColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 languageCode == 'tr' ? 'CUMA' : 'FRIDAY',
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.badgeTextColor,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -157,16 +148,20 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                       Text(
                         '$hijriDay $hijriMonth',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: AppTheme.textWhite60,
                           fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                // Mosque Icon for Friday
-                if (isFriday)
-                  const Icon(Icons.mosque, color: Color(0xFF4CAF50), size: 24),
+                // Mosque Icon for Today/Friday
+                if (isToday || isFriday)
+                  const Icon(
+                    Icons.mosque,
+                    color: AppTheme.primaryGreen,
+                    size: 24,
+                  ),
               ],
             ),
             const SizedBox(height: 12),
@@ -174,36 +169,12 @@ class WeeklyPrayerDayCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildPrayerTimeChip(
-                  l10n.fajr,
-                  _formatTime(timings?.fajr),
-                  isToday,
-                ),
-                _buildPrayerTimeChip(
-                  l10n.sunrise,
-                  _formatTime(timings?.sunrise),
-                  isToday,
-                ),
-                _buildPrayerTimeChip(
-                  l10n.dhuhr,
-                  _formatTime(timings?.dhuhr),
-                  isToday,
-                ),
-                _buildPrayerTimeChip(
-                  l10n.asr,
-                  _formatTime(timings?.asr),
-                  isToday,
-                ),
-                _buildPrayerTimeChip(
-                  l10n.maghrib,
-                  _formatTime(timings?.maghrib),
-                  isToday,
-                ),
-                _buildPrayerTimeChip(
-                  l10n.isha,
-                  _formatTime(timings?.isha),
-                  isToday,
-                ),
+                _buildPrayerTimeChip(l10n.fajr, _formatTime(timings?.fajr), isToday),
+                _buildPrayerTimeChip(l10n.sunrise, _formatTime(timings?.sunrise), isToday),
+                _buildPrayerTimeChip(l10n.dhuhr, _formatTime(timings?.dhuhr), isToday),
+                _buildPrayerTimeChip(l10n.asr, _formatTime(timings?.asr), isToday),
+                _buildPrayerTimeChip(l10n.maghrib, _formatTime(timings?.maghrib), isToday),
+                _buildPrayerTimeChip(l10n.isha, _formatTime(timings?.isha), isToday),
               ],
             ),
           ],
@@ -223,14 +194,10 @@ class WeeklyPrayerDayCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
           decoration: BoxDecoration(
-            color: isHighlighted
-                ? const Color(0xFF4CAF50).withValues(alpha: 0.2)
-                : Colors.white.withValues(alpha: 0.05),
+            color: isHighlighted ? AppTheme.chipActiveBackground : AppTheme.chipBackground,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: isHighlighted
-                  ? const Color(0xFF4CAF50).withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.1),
+              color: isHighlighted ? AppTheme.chipActiveBorderColor : AppTheme.chipBorderColor,
             ),
           ),
           child: Column(
@@ -238,7 +205,7 @@ class WeeklyPrayerDayCard extends StatelessWidget {
               Text(
                 label.length > 5 ? label.substring(0, 5) : label,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: AppTheme.textWhite60,
                   fontSize: 9,
                 ),
               ),
@@ -246,7 +213,7 @@ class WeeklyPrayerDayCard extends StatelessWidget {
               Text(
                 time,
                 style: TextStyle(
-                  color: isHighlighted ? const Color(0xFF4CAF50) : Colors.white,
+                  color: isHighlighted ? AppTheme.primaryGreen : AppTheme.textWhite,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),

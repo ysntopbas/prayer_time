@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 
 class PrayerHeader extends StatelessWidget {
@@ -34,7 +35,7 @@ class PrayerHeader extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.location_on,
-                      color: Color(0xFF4CAF50),
+                      color: AppTheme.locationIconColor,
                       size: 24,
                     ),
                     const SizedBox(width: 8),
@@ -44,7 +45,7 @@ class PrayerHeader extends StatelessWidget {
                         Text(
                           '$cityName, Türkiye',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.textWhite,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -52,7 +53,7 @@ class PrayerHeader extends StatelessWidget {
                         Text(
                           subAdministrativeArea,
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
+                            color: AppTheme.textWhite70,
                             fontSize: 14,
                           ),
                         ),
@@ -67,10 +68,14 @@ class PrayerHeader extends StatelessWidget {
                 icon: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppTheme.countdownBadgeBackground,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.menu, color: Colors.white, size: 24),
+                  child: const Icon(
+                    Icons.menu,
+                    color: AppTheme.textWhite,
+                    size: 24,
+                  ),
                 ),
               ),
             ],
@@ -81,8 +86,7 @@ class PrayerHeader extends StatelessWidget {
             builder: (context, state) {
               String hijriDate = '';
               if (state is HomeLoaded) {
-                // You can add Hijri date from API if available
-                hijriDate = ''; // Will be populated from API
+                hijriDate = '';
               }
               return Container(
                 padding: const EdgeInsets.symmetric(
@@ -90,7 +94,7 @@ class PrayerHeader extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppTheme.countdownBadgeBackground,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -102,13 +106,13 @@ class PrayerHeader extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF4CAF50),
+                        color: AppTheme.badgeBackgroundColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         languageCode == 'tr' ? 'BUGÜN' : 'TODAY',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.badgeTextColor,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -119,7 +123,7 @@ class PrayerHeader extends StatelessWidget {
                       Text(
                         '• $hijriDate',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.textWhite,
                           fontSize: 14,
                         ),
                       ),
@@ -134,7 +138,7 @@ class PrayerHeader extends StatelessWidget {
           Text(
             dateFormat.format(now).toUpperCase(),
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.6),
+              color: AppTheme.textWhite60,
               fontSize: 14,
               letterSpacing: 1,
             ),

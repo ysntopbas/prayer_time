@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class PrayerTimesList extends StatelessWidget {
@@ -50,34 +51,38 @@ class PrayerTimesList extends StatelessWidget {
       ),
     ];
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemCount: prayers.length,
-      itemBuilder: (context, index) {
-        final prayer = prayers[index];
-        final isCurrentPrayer = prayer.name == nextPrayerName;
-        final isPassed = _isPrayerPassed(index, prayers, nextPrayerName);
+    return Container(
+      margin: const EdgeInsets.only(top: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: prayers.map((prayer) {
+          final isCurrentPrayer = prayer.name == nextPrayerName;
+          final isPassed = _isPrayerPassed(
+            prayer.time,
+            prayers,
+            nextPrayerName,
+          );
 
-        return _buildPrayerItem(
-          context,
-          prayer: prayer,
-          isCurrentPrayer: isCurrentPrayer,
-          isPassed: isPassed,
-          languageCode: languageCode,
-        );
-      },
+          return _buildPrayerItem(
+            context,
+            prayer: prayer,
+            isCurrentPrayer: isCurrentPrayer,
+            isPassed: isPassed,
+            languageCode: languageCode,
+          );
+        }).toList(),
+      ),
     );
   }
 
   bool _isPrayerPassed(
-    int index,
+    String time,
     List<_PrayerData> prayers,
     String nextPrayerName,
   ) {
     final currentIndex = prayers.indexWhere((p) => p.name == nextPrayerName);
-    return index < currentIndex;
+    final thisIndex = prayers.indexWhere((p) => p.time == time);
+    return thisIndex < currentIndex;
   }
 
   Widget _buildPrayerItem(
@@ -88,14 +93,14 @@ class PrayerTimesList extends StatelessWidget {
     required String languageCode,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: isCurrentPrayer
-            ? const Color(0xFF4CAF50).withValues(alpha: 0.15)
+            ? AppTheme.activeCardBackground
             : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
         border: isCurrentPrayer
-            ? Border.all(color: const Color(0xFF4CAF50), width: 1.5)
+            ? Border.all(color: AppTheme.activeCardBorderColor, width: 1.5)
             : null,
       ),
       child: Padding(
@@ -109,14 +114,14 @@ class PrayerTimesList extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isCurrentPrayer
-                    ? const Color(0xFF4CAF50)
+                    ? AppTheme.activeIndicatorColor
                     : isPassed
-                    ? Colors.white.withValues(alpha: 0.3)
+                    ? AppTheme.passedIndicatorColor
                     : Colors.transparent,
                 border: Border.all(
                   color: isCurrentPrayer
-                      ? const Color(0xFF4CAF50)
-                      : Colors.white.withValues(alpha: 0.3),
+                      ? AppTheme.activeIndicatorColor
+                      : AppTheme.normalIndicatorBorderColor,
                   width: 2,
                 ),
               ),
@@ -127,15 +132,15 @@ class PrayerTimesList extends StatelessWidget {
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: isCurrentPrayer
-                    ? const Color(0xFF4CAF50).withValues(alpha: 0.2)
-                    : Colors.white.withValues(alpha: 0.05),
+                    ? AppTheme.chipActiveBackground
+                    : AppTheme.chipBackground,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 prayer.icon,
                 color: isCurrentPrayer
-                    ? const Color(0xFF4CAF50)
-                    : Colors.white.withValues(alpha: 0.5),
+                    ? AppTheme.activeIconColor
+                    : AppTheme.normalIconColor,
                 size: 18,
               ),
             ),
@@ -150,10 +155,10 @@ class PrayerTimesList extends StatelessWidget {
                     prayer.name,
                     style: TextStyle(
                       color: isCurrentPrayer
-                          ? Colors.white
+                          ? AppTheme.textWhite
                           : isPassed
-                          ? Colors.white.withValues(alpha: 0.4)
-                          : Colors.white.withValues(alpha: 0.8),
+                          ? AppTheme.textWhite40
+                          : AppTheme.textWhite70,
                       fontSize: 15,
                       fontWeight: isCurrentPrayer
                           ? FontWeight.bold
@@ -164,7 +169,7 @@ class PrayerTimesList extends StatelessWidget {
                     Text(
                       languageCode == 'tr' ? 'ŞU AN' : 'NOW',
                       style: const TextStyle(
-                        color: Color(0xFF4CAF50),
+                        color: AppTheme.primaryGreen,
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
                       ),
@@ -181,10 +186,10 @@ class PrayerTimesList extends StatelessWidget {
                   prayer.time.split('(').first.trim(),
                   style: TextStyle(
                     color: isCurrentPrayer
-                        ? Colors.white
+                        ? AppTheme.textWhite
                         : isPassed
-                        ? Colors.white.withValues(alpha: 0.4)
-                        : Colors.white.withValues(alpha: 0.8),
+                        ? AppTheme.textWhite40
+                        : AppTheme.textWhite70,
                     fontSize: isCurrentPrayer ? 18 : 15,
                     fontWeight: isCurrentPrayer
                         ? FontWeight.bold
@@ -194,10 +199,7 @@ class PrayerTimesList extends StatelessWidget {
                 if (isCurrentPrayer)
                   Text(
                     languageCode == 'tr' ? 'Başladı' : 'Started',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      fontSize: 11,
-                    ),
+                    style: TextStyle(color: AppTheme.textWhite50, fontSize: 11),
                   ),
               ],
             ),

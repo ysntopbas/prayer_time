@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/cubit/weekly_cubit.dart';
 import 'package:prayer_time/features/weeklyPrayer/presentation/widgets/weekly_prayer_day_card.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
@@ -62,12 +63,12 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1A2E1A),
+      backgroundColor: AppTheme.prayerBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A2E1A),
+        backgroundColor: AppTheme.prayerBackgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.textWhite),
           onPressed: () => Navigator.pop(context),
         ),
         title: BlocBuilder<SettingsCubit, SettingsState>(
@@ -80,7 +81,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                 Text(
                   l10n.weeklyPrayerTimePageTitle,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppTheme.textWhite,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -89,14 +90,14 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                   children: [
                     const Icon(
                       Icons.location_on,
-                      color: Colors.white70,
+                      color: AppTheme.textWhite70,
                       size: 14,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       '$cityName${subArea.isNotEmpty ? ', $subArea' : ''}',
                       style: const TextStyle(
-                        color: Colors.white70,
+                        color: AppTheme.textWhite70,
                         fontSize: 12,
                       ),
                     ),
@@ -108,7 +109,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today, color: Colors.white),
+            icon: const Icon(Icons.calendar_today, color: AppTheme.textWhite),
             onPressed: _scrollToToday,
           ),
         ],
@@ -133,7 +134,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                     if (state is WeeklyInitial || state is WeeklyLoading) {
                       return const Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFF4CAF50),
+                          color: AppTheme.loadingColor,
                         ),
                       );
                     } else if (state is WeeklyError) {
@@ -143,13 +144,13 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                           children: [
                             Text(
                               state.message,
-                              style: const TextStyle(color: Colors.white70),
+                              style: const TextStyle(color: AppTheme.textWhite70),
                             ),
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _loadWeeklyPrayerTimes,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF4CAF50),
+                                backgroundColor: AppTheme.errorButtonColor,
                               ),
                               child: Text(l10n.tryAgain),
                             ),
@@ -163,7 +164,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                         return Center(
                           child: Text(
                             l10n.prayTimeNotAvailable,
-                            style: const TextStyle(color: Colors.white70),
+                            style: const TextStyle(color: AppTheme.textWhite70),
                           ),
                         );
                       }
@@ -251,7 +252,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
           Text(
             '$startDate - $endDate',
             style: const TextStyle(
-              color: Colors.white,
+              color: AppTheme.textWhite,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -260,7 +261,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
           Text(
             l10n.weeklyPrayerTimePageTitle.toUpperCase(),
             style: const TextStyle(
-              color: Color(0xFF4CAF50),
+              color: AppTheme.primaryGreen,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -275,7 +276,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          bottom: BorderSide(color: AppTheme.cardBorderColor),
         ),
       ),
       child: Row(
@@ -305,7 +306,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         text.length > 4 ? text.substring(0, 4) : text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.6),
+          color: AppTheme.textWhite60,
           fontSize: 10,
           fontWeight: FontWeight.w500,
         ),

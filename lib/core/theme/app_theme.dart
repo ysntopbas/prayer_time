@@ -3,24 +3,170 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  // 2. Font ailesini sabit bir değişkene atıyoruz (opsiyonel ama temiz)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FONT AİLESİ
+  // ═══════════════════════════════════════════════════════════════════════════
   static const String _fontFamily = 'Montserrat';
 
-  // 3. Renk paletimizi tanımlıyoruz
-  static const Color _lightPrimaryColor = Color.fromARGB(255, 48, 140, 88);
-  static const Color _lightSecondaryColor = Color(0xFF0E978B);
-  static const Color _lightOnPrimaryColor = Colors.white;
-  static const Color _lightBackgroundColor = Colors.white;
-  static const Color _lightTextColor = Colors.black;
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ANA RENKLER (Primary Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
 
-  static const Color _darkPrimaryColor = Color(0xFF0E978B);
-  static const Color _darkSecondaryColor = Color.fromARGB(255, 8, 91, 84);
-  static const Color _darkOnPrimaryColor = Colors.white;
-  static const Color _darkBackgroundColor = Color(0xFF1A1A1A);
-  static const Color _darkTextColor = Colors.white70;
+  /// Ana yeşil renk - Butonlar, vurgular, aktif durumlar için
+  static const Color primaryGreen = Color(0xFF4CAF50);
 
-  // 4. Tekrar kullanılacak TEMEL Metin Stillerini (TextTheme) tanımlıyoruz
-  // Bu, sorduğunuz "başlıkları, metinleri tek yerden kontrol etme" kısmıdır.
+  /// Koyu yeşil - Arka plan için
+  static const Color darkGreen = Color(0xFF1A2E1A);
+
+  /// Orta yeşil - Vurgulu arka planlar için
+  static const Color mediumGreen = Color(0xFF2E7D32);
+
+  /// Açık yeşil - Gradient ve ikincil vurgular için
+  static const Color lightGreen = Color.fromARGB(255, 48, 140, 88);
+
+  /// Turkuaz yeşil - Gradient için
+  static const Color tealGreen = Color(0xFF0E978B);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ARKA PLAN RENKLERİ (Background Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Prayer ekranları için ana arka plan
+  static const Color prayerBackgroundColor = Color(0xFF1A2E1A);
+
+  /// Cami silüeti için arka plan rengi
+  static const Color mosqueBackgroundColor = Color(0xFF2D4A2D);
+
+  /// Light tema arka plan
+  static const Color lightBackgroundColor = Colors.white;
+
+  /// Dark tema arka plan
+  static const Color darkBackgroundColor = Color(0xFF1A1A1A);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // METİN RENKLERİ (Text Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Beyaz metin - Koyu arka planlar için
+  static const Color textWhite = Colors.white;
+
+  /// Beyaz metin %70 opacity
+  static const Color textWhite70 = Colors.white70;
+
+  /// Beyaz metin %60 opacity
+  static Color textWhite60 = Colors.white.withValues(alpha: 0.6);
+
+  /// Beyaz metin %50 opacity
+  static Color textWhite50 = Colors.white.withValues(alpha: 0.5);
+
+  /// Beyaz metin %40 opacity
+  static Color textWhite40 = Colors.white.withValues(alpha: 0.4);
+
+  /// Beyaz metin %30 opacity
+  static Color textWhite30 = Colors.white.withValues(alpha: 0.3);
+
+  /// Light tema metin rengi
+  static const Color lightTextColor = Colors.black;
+
+  /// Dark tema metin rengi
+  static const Color darkTextColor = Colors.white70;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // KART VE BORDER RENKLERİ (Card & Border Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Aktif kart arka planı (bugün, seçili)
+  static Color activeCardBackground = primaryGreen.withValues(alpha: 0.15);
+
+  /// Aktif kart arka planı koyu versiyon
+  static Color activeCardBackgroundDark = mediumGreen.withValues(alpha: 0.3);
+
+  /// Normal kart border rengi
+  static Color cardBorderColor = Colors.white.withValues(alpha: 0.1);
+
+  /// Aktif kart border rengi
+  static const Color activeCardBorderColor = primaryGreen;
+
+  /// Chip arka plan rengi
+  static Color chipBackground = Colors.white.withValues(alpha: 0.05);
+
+  /// Chip aktif arka plan rengi
+  static Color chipActiveBackground = primaryGreen.withValues(alpha: 0.2);
+
+  /// Chip border rengi
+  static Color chipBorderColor = Colors.white.withValues(alpha: 0.1);
+
+  /// Chip aktif border rengi
+  static Color chipActiveBorderColor = primaryGreen.withValues(alpha: 0.5);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BADGE VE ETİKET RENKLERİ (Badge & Label Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Badge arka plan rengi (BUGÜN, CUMA vb.)
+  static const Color badgeBackgroundColor = primaryGreen;
+
+  /// Badge metin rengi
+  static const Color badgeTextColor = Colors.white;
+
+  /// Countdown badge arka planı
+  static Color countdownBadgeBackground = Colors.white.withValues(alpha: 0.1);
+
+  /// Countdown badge border rengi
+  static Color countdownBadgeBorderColor = primaryGreen.withValues(alpha: 0.5);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // İKON RENKLERİ (Icon Colors)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Aktif ikon rengi
+  static const Color activeIconColor = primaryGreen;
+
+  /// Normal ikon rengi
+  static Color normalIconColor = Colors.white.withValues(alpha: 0.5);
+
+  /// Konum ikonu rengi
+  static const Color locationIconColor = primaryGreen;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DURUM GÖSTERGELERİ (Status Indicators)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Aktif durum göstergesi
+  static const Color activeIndicatorColor = primaryGreen;
+
+  /// Geçmiş durum göstergesi
+  static Color passedIndicatorColor = Colors.white.withValues(alpha: 0.3);
+
+  /// Normal gösterge border rengi (gün numarası çemberi)
+  static Color normalIndicatorBorderColor = Colors.white.withValues(alpha: 0.3);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LOADING VE BUTTON RENKLERİ
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Loading indicator rengi
+  static const Color loadingColor = primaryGreen;
+
+  /// Hata durumu button rengi
+  static const Color errorButtonColor = primaryGreen;
+
+  /// Success rengi
+  static const Color successColor = Colors.green;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DRAWER RENKLERİ
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Drawer header gradient başlangıç
+  static const Color drawerGradientStart = lightGreen;
+
+  /// Drawer header gradient bitiş
+  static Color drawerGradientEnd = lightGreen.withValues(alpha: 0.7);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // METİN STİLLERİ (Text Theme)
+  // ═══════════════════════════════════════════════════════════════════════════
   static const TextTheme _textTheme = TextTheme(
     headlineLarge: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
     headlineMedium: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
@@ -33,87 +179,83 @@ class AppTheme {
     labelLarge: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
   );
 
-  // 5. AÇIK TEMA (Light Theme)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // AÇIK TEMA (Light Theme)
+  // ═══════════════════════════════════════════════════════════════════════════
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     fontFamily: _fontFamily,
-    scaffoldBackgroundColor: _lightBackgroundColor,
+    scaffoldBackgroundColor: lightBackgroundColor,
 
-    // Renk şeması
     colorScheme: const ColorScheme.light(
-      primary: _lightPrimaryColor,
-      secondary: _lightSecondaryColor,
-      onPrimary: _lightOnPrimaryColor,
-      surface: _lightBackgroundColor,
+      primary: lightGreen,
+      secondary: tealGreen,
+      onPrimary: textWhite,
+      surface: lightBackgroundColor,
     ),
 
-    // Metin stillerini (renkleriyle birlikte) ayarla
     textTheme: _textTheme.apply(
-      bodyColor: _lightTextColor,
-      displayColor: _lightTextColor,
+      bodyColor: lightTextColor,
+      displayColor: lightTextColor,
     ),
 
-    // Diğer widget'ların temalarını özelleştir
     appBarTheme: const AppBarTheme(
-      backgroundColor: _lightPrimaryColor,
+      backgroundColor: lightGreen,
       titleTextStyle: TextStyle(
         fontFamily: _fontFamily,
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
-        color: _lightOnPrimaryColor,
+        color: textWhite,
       ),
-      iconTheme: IconThemeData(color: _lightOnPrimaryColor),
+      iconTheme: IconThemeData(color: textWhite),
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: _lightPrimaryColor,
-        foregroundColor: _lightOnPrimaryColor,
+        backgroundColor: lightGreen,
+        foregroundColor: textWhite,
         textStyle: _textTheme.labelLarge,
       ),
     ),
   );
 
-  // 6. KOYU TEMA (Dark Theme)
+  // ═══════════════════════════════════════════════════════════════════════════
+  // KOYU TEMA (Dark Theme)
+  // ═══════════════════════════════════════════════════════════════════════════
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     fontFamily: _fontFamily,
-    scaffoldBackgroundColor: _darkBackgroundColor,
+    scaffoldBackgroundColor: darkBackgroundColor,
 
     colorScheme: const ColorScheme.dark(
-      primary: _darkPrimaryColor,
-      secondary: _darkSecondaryColor,
-      onPrimary: _darkOnPrimaryColor,
-      surface: _darkBackgroundColor,
+      primary: tealGreen,
+      secondary: Color.fromARGB(255, 8, 91, 84),
+      onPrimary: textWhite,
+      surface: darkBackgroundColor,
     ),
 
-    // Metin stillerini (renkleriyle birlikte) ayarla
     textTheme: _textTheme.apply(
-      bodyColor: _darkTextColor,
-      displayColor: _darkTextColor,
+      bodyColor: darkTextColor,
+      displayColor: darkTextColor,
     ),
 
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.grey[850],
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         fontFamily: _fontFamily,
         fontSize: 18.0,
         fontWeight: FontWeight.bold,
-        color: _darkOnPrimaryColor,
+        color: textWhite,
       ),
-      iconTheme: const IconThemeData(color: _darkOnPrimaryColor),
+      iconTheme: const IconThemeData(color: textWhite),
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: _darkPrimaryColor,
-        foregroundColor: _darkOnPrimaryColor,
+        backgroundColor: tealGreen,
+        foregroundColor: textWhite,
         textStyle: _textTheme.labelLarge,
       ),
     ),
   );
 }
-
-
-//308c58 yeşil kodu #308c58 gradient first
-//0e978b mavi kodu #0e978b gradient last

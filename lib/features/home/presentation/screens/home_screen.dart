@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/core/widgets/custom_drawer.dart';
 import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
@@ -86,7 +87,7 @@ class _HomeScaffold extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1A2E1A),
+      backgroundColor: AppTheme.prayerBackgroundColor,
       drawer: const CustomDrawer(),
       body: BlocListener<SettingsCubit, SettingsState>(
         listenWhen: (previous, current) =>
@@ -107,7 +108,7 @@ class _HomeScaffold extends StatelessWidget {
           builder: (context, state) {
             if (state is HomeInitial || state is HomeLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
+                child: CircularProgressIndicator(color: AppTheme.loadingColor),
               );
             } else if (state is HomeError) {
               return Center(
@@ -116,13 +117,13 @@ class _HomeScaffold extends StatelessWidget {
                   children: [
                     Text(
                       state.message,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: AppTheme.textWhite70),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: onLoadPrayerTimes,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
+                        backgroundColor: AppTheme.errorButtonColor,
                       ),
                       child: Text(l10n.tryAgain),
                     ),
@@ -138,7 +139,7 @@ class _HomeScaffold extends StatelessWidget {
               return SafeArea(
                 child: Stack(
                   children: [
-                    // Background mosque silhouette (optional - you can add an image)
+                    // Background mosque silhouette
                     Positioned.fill(
                       child: CustomPaint(painter: MosqueSilhouettePainter()),
                     ),
@@ -227,7 +228,7 @@ class MosqueSilhouettePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF2D4A2D).withValues(alpha: 0.3)
+      ..color = AppTheme.mosqueBackgroundColor.withValues(alpha: 0.3)
       ..style = PaintingStyle.fill;
 
     final path = Path();
