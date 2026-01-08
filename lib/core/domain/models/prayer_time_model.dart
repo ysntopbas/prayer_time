@@ -182,18 +182,18 @@ class Hijri {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['hijridate'] = hijridate;
-    data['hijriformat'] = hijriformat;
-    data['hijriday'] = hijriday;
+    data['date'] = hijridate;
+    data['format'] = hijriformat;
+    data['day'] = hijriday;
     if (hijriweekday != null) {
-      data['hijriweekday'] = hijriweekday!.toJson();
+      data['weekday'] = hijriweekday!.toJson();
     }
     if (hijrimonth != null) {
-      data['hijrimonth'] = hijrimonth!.toJson();
+      data['month'] = hijrimonth!.toJson();
     }
-    data['hijriyear'] = hijriyear;
+    data['year'] = hijriyear;
     if (hijridesignation != null) {
-      data['hijridesignation'] = hijridesignation!.toJson();
+      data['designation'] = hijridesignation!.toJson();
     }
     if (holidays != null) {
       data['holidays'] = holidays!.map((v) => v).toList();
@@ -242,10 +242,10 @@ class Hijrimonth {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['hijrinumber'] = hijrinumber;
-    data['hijrien'] = hijrien;
-    data['hijriar'] = hijriar;
-    data['hijridays'] = hijridays;
+    data['number'] = hijrinumber;
+    data['en'] = hijrien;
+    data['ar'] = hijriar;
+    data['days'] = hijridays;
     return data;
   }
 }
