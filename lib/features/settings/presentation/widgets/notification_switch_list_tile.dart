@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
@@ -11,7 +12,6 @@ class NotificationSwitchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context);
-    final appTheme = Theme.of(context);
 
     return BlocBuilder<SettingsCubit, SettingsState>(
       builder: (context, state) {
@@ -23,14 +23,18 @@ class NotificationSwitchListTile extends StatelessWidget {
             ListTile(
               leading: Icon(
                 Icons.notifications_active,
-                color: appTheme.colorScheme.primary,
+                color: AppTheme.primaryGreen,
               ),
-              title: Text(l10nL!.notificationBeforePrayTime),
+              title: Text(
+                l10nL!.notificationBeforePrayTime,
+                style: const TextStyle(color: AppTheme.textWhite),
+              ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Switch(
                     value: mainNotificationsEnabled,
+                    activeColor: AppTheme.primaryGreen,
                     onChanged: (value) {
                       context.read<SettingsCubit>().mainToggleNotifications();
                     },
@@ -39,6 +43,7 @@ class NotificationSwitchListTile extends StatelessWidget {
                     mainNotificationsEnabled
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
+                    color: AppTheme.textWhite70,
                   ),
                 ],
               ),
@@ -51,7 +56,6 @@ class NotificationSwitchListTile extends StatelessWidget {
                 state,
                 mainNotificationsEnabled,
                 l10nL,
-                appTheme,
               ),
           ],
         );
@@ -64,7 +68,6 @@ class NotificationSwitchListTile extends StatelessWidget {
     SettingsState state,
     bool mainEnabled,
     AppLocalizations l10n,
-    ThemeData theme,
   ) {
     final prayers = {
       PrayerType.fajr: (l10n.fajr, state.notificationBeforePraysSettings.fajr),
@@ -86,11 +89,9 @@ class NotificationSwitchListTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: AppTheme.chipBackground,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppTheme.cardBorderColor),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -106,17 +107,20 @@ class NotificationSwitchListTile extends StatelessWidget {
                 leading: Icon(
                   Icons.alarm,
                   color: prayerSettings.isEnabled && mainEnabled
-                      ? theme.colorScheme.primary
-                      : Colors.grey,
+                      ? AppTheme.primaryGreen
+                      : AppTheme.textWhite40,
                 ),
                 title: Text(
                   prayerName,
-                  style: TextStyle(color: mainEnabled ? null : Colors.grey),
+                  style: TextStyle(
+                    color: mainEnabled ? AppTheme.textWhite : AppTheme.textWhite40,
+                  ),
                 ),
                 trailing: Opacity(
                   opacity: mainEnabled ? 1.0 : 0.5,
                   child: Switch(
                     value: prayerSettings.isEnabled,
+                    activeColor: AppTheme.primaryGreen,
                     onChanged: mainEnabled
                         ? (value) {
                             context
@@ -152,21 +156,15 @@ class NotificationSwitchListTile extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.1,
-                          ),
+                          color: AppTheme.chipActiveBackground,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.3,
-                            ),
-                          ),
+                          border: Border.all(color: AppTheme.chipActiveBorderColor),
                         ),
                         child: Column(
                           children: [
                             Icon(
                               Icons.notifications_active,
-                              color: theme.colorScheme.primary,
+                              color: AppTheme.primaryGreen,
                               size: 28,
                             ),
                             const SizedBox(height: 8),
@@ -174,7 +172,7 @@ class NotificationSwitchListTile extends StatelessWidget {
                               l10n.before,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: theme.colorScheme.primary,
+                                color: AppTheme.primaryGreen,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -184,7 +182,7 @@ class NotificationSwitchListTile extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.primary,
+                                color: AppTheme.primaryGreen,
                               ),
                             ),
                           ],
@@ -212,7 +210,11 @@ class NotificationSwitchListTile extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(l10n.selectTime),
+          backgroundColor: AppTheme.darkGreen,
+          title: Text(
+            l10n.selectTime,
+            style: const TextStyle(color: AppTheme.textWhite),
+          ),
           content: SizedBox(
             height: 200,
             child: CupertinoPicker(
@@ -228,7 +230,10 @@ class NotificationSwitchListTile extends StatelessWidget {
                 return Center(
                   child: Text(
                     '$minutes ${l10n.minutes}',
-                    style: const TextStyle(fontSize: 22),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      color: AppTheme.textWhite,
+                    ),
                   ),
                 );
               }),
@@ -237,7 +242,10 @@ class NotificationSwitchListTile extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
+              child: Text(
+                l10n.cancel,
+                style: TextStyle(color: AppTheme.textWhite60),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -251,7 +259,10 @@ class NotificationSwitchListTile extends StatelessWidget {
                 );
                 Navigator.pop(context);
               },
-              child: Text(l10n.done),
+              child: Text(
+                l10n.done,
+                style: const TextStyle(color: AppTheme.primaryGreen),
+              ),
             ),
           ],
         );

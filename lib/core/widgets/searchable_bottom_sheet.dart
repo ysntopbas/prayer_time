@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 
 /// Aranabilir bottom sheet widget'ı
 /// Herhangi bir liste için kullanılabilir
@@ -114,8 +115,6 @@ class _SearchableBottomSheetState<T> extends State<SearchableBottomSheet<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
-
     return DraggableScrollableSheet(
       initialChildSize: widget.initialChildSize,
       minChildSize: widget.minChildSize,
@@ -123,7 +122,7 @@ class _SearchableBottomSheetState<T> extends State<SearchableBottomSheet<T>> {
       builder: (_, controller) {
         return Container(
           decoration: BoxDecoration(
-            color: appTheme.scaffoldBackgroundColor,
+            color: AppTheme.prayerBackgroundColor,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -144,14 +143,15 @@ class _SearchableBottomSheetState<T> extends State<SearchableBottomSheet<T>> {
                 onChanged: _handleSearch,
               ),
 
-              const Divider(height: 1),
+              Divider(height: 1, color: AppTheme.cardBorderColor),
 
               // Item list
               Expanded(
                 child: ListView.separated(
                   controller: controller,
                   itemCount: _filteredItems.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  separatorBuilder: (_, __) =>
+                      Divider(height: 1, color: AppTheme.cardBorderColor),
                   itemBuilder: (context, index) {
                     final item = _filteredItems[index];
                     return widget.itemBuilder(context, item, () {
@@ -181,7 +181,7 @@ class _HandleBar extends StatelessWidget {
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: Colors.grey[400],
+          color: AppTheme.textWhite40,
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -198,17 +198,22 @@ class _TitleBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          IconButton(onPressed: onClose, icon: const Icon(Icons.close)),
+          IconButton(
+            onPressed: onClose,
+            icon: const Icon(Icons.close, color: AppTheme.textWhite),
+          ),
           Expanded(
             child: Text(
               title,
-              style: appTheme.textTheme.titleLarge,
+              style: const TextStyle(
+                color: AppTheme.textWhite,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -237,10 +242,25 @@ class _SearchBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextField(
         controller: controller,
+        style: const TextStyle(color: AppTheme.textWhite),
         decoration: InputDecoration(
           hintText: hintText,
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          hintStyle: TextStyle(color: AppTheme.textWhite50),
+          prefixIcon: Icon(Icons.search, color: AppTheme.textWhite60),
+          filled: true,
+          fillColor: AppTheme.chipBackground,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppTheme.cardBorderColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppTheme.cardBorderColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: AppTheme.primaryGreen),
+          ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,

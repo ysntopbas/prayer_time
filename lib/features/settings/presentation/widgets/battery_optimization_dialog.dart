@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class BatteryOptimizationDialog extends StatelessWidget {
@@ -14,23 +15,25 @@ class BatteryOptimizationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return AlertDialog(
+      backgroundColor: AppTheme.darkGreen,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Row(
         children: [
           Icon(
             Icons.battery_alert_rounded,
-            color: theme.colorScheme.primary,
+            color: AppTheme.primaryGreen,
             size: 28,
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               l10n.batteryOptimizationTitle,
-              style: theme.textTheme.titleLarge?.copyWith(
+              style: const TextStyle(
+                color: AppTheme.textWhite,
                 fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
           ),
@@ -43,19 +46,15 @@ class BatteryOptimizationDialog extends StatelessWidget {
           children: [
             Text(
               l10n.batteryOptimizationMessage,
-              style: theme.textTheme.bodyMedium,
+              style: TextStyle(color: AppTheme.textWhite70),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(
-                  alpha: 0.3,
-                ),
+                color: AppTheme.chipActiveBackground,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                ),
+                border: Border.all(color: AppTheme.chipActiveBorderColor),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,15 +64,16 @@ class BatteryOptimizationDialog extends StatelessWidget {
                       Icon(
                         Icons.info_outline,
                         size: 20,
-                        color: theme.colorScheme.primary,
+                        color: AppTheme.primaryGreen,
                       ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           l10n.batteryOptimizationWhy,
-                          style: theme.textTheme.titleSmall?.copyWith(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.primary,
+                            color: AppTheme.primaryGreen,
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -82,7 +82,7 @@ class BatteryOptimizationDialog extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     l10n.batteryOptimizationReason,
-                    style: theme.textTheme.bodySmall,
+                    style: TextStyle(color: AppTheme.textWhite70, fontSize: 12),
                   ),
                 ],
               ),
@@ -93,14 +93,16 @@ class BatteryOptimizationDialog extends StatelessWidget {
                 Icon(
                   Icons.check_circle_outline,
                   size: 20,
-                  color: Colors.green[700],
+                  color: AppTheme.primaryGreen,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     l10n.batteryOptimizationSteps,
-                    style: theme.textTheme.bodySmall?.copyWith(
+                    style: TextStyle(
+                      color: AppTheme.textWhite60,
                       fontStyle: FontStyle.italic,
+                      fontSize: 12,
                     ),
                   ),
                 ),
@@ -110,14 +112,22 @@ class BatteryOptimizationDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(onPressed: onCancel, child: Text(l10n.cancel)),
+        TextButton(
+          onPressed: onCancel,
+          child: Text(
+            l10n.cancel,
+            style: TextStyle(color: AppTheme.textWhite60),
+          ),
+        ),
         ElevatedButton.icon(
           onPressed: onConfirm,
-          icon: const Icon(Icons.settings, size: 20),
-          label: Text(l10n.batteryOptimizationGoToSettings),
+          icon: const Icon(Icons.settings, size: 20, color: AppTheme.textWhite),
+          label: Text(
+            l10n.batteryOptimizationGoToSettings,
+            style: const TextStyle(color: AppTheme.textWhite),
+          ),
           style: ElevatedButton.styleFrom(
-            backgroundColor: theme.colorScheme.primary,
-            foregroundColor: Colors.white,
+            backgroundColor: AppTheme.primaryGreen,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),

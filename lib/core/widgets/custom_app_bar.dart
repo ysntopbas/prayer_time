@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -14,12 +15,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppTheme.textWhite,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       actions: actions,
       leading: leading,
-      backgroundColor: appTheme.colorScheme.primary,
+      backgroundColor: AppTheme.prayerBackgroundColor,
+      iconTheme: const IconThemeData(color: AppTheme.textWhite),
+      elevation: 0,
     );
   }
 

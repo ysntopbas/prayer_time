@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class TimeCard extends StatelessWidget {
@@ -18,16 +19,24 @@ class TimeCard extends StatelessWidget {
     final l10nL = AppLocalizations.of(context)!;
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: AppTheme.chipBackground,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: AppTheme.cardBorderColor),
+      ),
       clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Column(
           children: [
             Text(
-              "${l10nL.prayTimes} - $cityName", // Başlık
+              "${l10nL.prayTimes} - $cityName",
+              style: const TextStyle(
+                color: AppTheme.textWhite,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 CustomCardColumn(name: prayName[0], time: timings.fajr),
@@ -56,7 +65,20 @@ class CustomCardColumn extends StatelessWidget {
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [Text(name), const SizedBox(height: 4), Text(time!)],
+        children: [
+          Text(
+            name,
+            style: TextStyle(color: AppTheme.textWhite60, fontSize: 12),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            time ?? '--:--',
+            style: const TextStyle(
+              color: AppTheme.textWhite,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

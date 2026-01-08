@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -8,9 +9,9 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
 
     return Drawer(
+      backgroundColor: AppTheme.prayerBackgroundColor,
       child: Column(
         children: [
           // Modern gradient drawer header
@@ -20,8 +21,8 @@ class CustomDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  colorScheme.primary,
-                  colorScheme.primary.withValues(alpha: 0.7),
+                  AppTheme.drawerGradientStart,
+                  AppTheme.drawerGradientEnd,
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -33,20 +34,21 @@ class CustomDrawer extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppTheme.textWhite.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.mosque,
-                    color: Colors.white,
+                    color: AppTheme.textWhite,
                     size: 40,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   l10nL.drawerTitle,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
+                  style: const TextStyle(
+                    color: AppTheme.textWhite,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -87,7 +89,12 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
 
-                const Divider(height: 1, indent: 16, endIndent: 16),
+                Divider(
+                  height: 1,
+                  indent: 16,
+                  endIndent: 16,
+                  color: AppTheme.cardBorderColor,
+                ),
                 _buildDrawerItem(
                   context,
                   icon: Icons.settings_rounded,
@@ -100,35 +107,40 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Icon(Icons.info_outline)],
+          // Footer
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: AppTheme.cardBorderColor)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.info_outline, color: AppTheme.textWhite50, size: 18),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "${l10nL.version} 1.0.0",
+                      style: TextStyle(
+                        color: AppTheme.textWhite70,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        "${l10nL.version} 1.0.0",
-                        style: Theme.of(context).textTheme.bodyMedium,
+                    Text(
+                      l10nL.ownerName,
+                      style: TextStyle(
+                        color: AppTheme.textWhite50,
+                        fontSize: 11,
                       ),
-                      Text(
-                        l10nL.ownerName,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          Padding(padding: const EdgeInsets.only(bottom: 12)),
         ],
       ),
     );
@@ -140,22 +152,21 @@ class CustomDrawer extends StatelessWidget {
     required String title,
     required VoidCallback onTap,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: colorScheme.primary.withValues(alpha: 0.1),
+          color: AppTheme.primaryGreen.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: colorScheme.primary, size: 22),
+        child: Icon(icon, color: AppTheme.primaryGreen, size: 22),
       ),
       title: Text(
         title,
-        style: Theme.of(
-          context,
-        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+        style: const TextStyle(
+          color: AppTheme.textWhite,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

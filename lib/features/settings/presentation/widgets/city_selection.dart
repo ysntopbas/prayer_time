@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/core/widgets/searchable_bottom_sheet.dart';
 import 'package:prayer_time/core/widgets/selection_list_tile.dart';
 import 'package:prayer_time/features/settings/data/models/city_model.dart';
@@ -12,7 +13,6 @@ class CitySelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final appTheme = Theme.of(context);
 
     // İlk yüklemede şehirleri çek
     context.read<SettingsCubit>().loadCities();
@@ -29,7 +29,9 @@ class CitySelection extends StatelessWidget {
         if (state.isCitiesLoading) {
           return const Padding(
             padding: EdgeInsets.all(16.0),
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(
+              child: CircularProgressIndicator(color: AppTheme.primaryGreen),
+            ),
           );
         }
 
@@ -48,7 +50,7 @@ class CitySelection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[600],
+                  color: AppTheme.textWhite60,
                 ),
               ),
               const SizedBox(height: 10),
@@ -58,8 +60,7 @@ class CitySelection extends StatelessWidget {
                 title: l10n.turkey,
                 subtitle: l10n.country,
                 leading: const Text("🇹🇷", style: TextStyle(fontSize: 24)),
-                backgroundColor: appTheme.colorScheme.surfaceContainerHighest
-                    .withValues(alpha: 0.5),
+                backgroundColor: AppTheme.chipBackground,
               ),
               const SizedBox(height: 12),
 
@@ -68,7 +69,7 @@ class CitySelection extends StatelessWidget {
                 title: state.selectedCity?.displayName ?? l10n.selectCity,
                 subtitle: l10n.city,
                 icon: Icons.location_city,
-                iconColor: appTheme.colorScheme.primary,
+                iconColor: AppTheme.primaryGreen,
                 onTap: () => _showCitySelectionSheet(context, state.cities),
               ),
               const SizedBox(height: 12),
@@ -90,7 +91,7 @@ class CitySelection extends StatelessWidget {
 
               // Selected Location Display & Save Button
               if (state.selectedCity != null && state.selectedCounty != null)
-                _buildSelectedLocationCard(context, state, appTheme, l10n),
+                _buildSelectedLocationCard(context, state, l10n),
             ],
           ),
         );
@@ -112,7 +113,13 @@ class CitySelection extends StatelessWidget {
             const SizedBox(height: 8),
             ElevatedButton(
               onPressed: () => context.read<SettingsCubit>().loadCities(),
-              child: Text(l10n.tryAgain),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primaryGreen,
+              ),
+              child: Text(
+                l10n.tryAgain,
+                style: const TextStyle(color: AppTheme.textWhite),
+              ),
             ),
           ],
         ),
@@ -123,7 +130,6 @@ class CitySelection extends StatelessWidget {
   Widget _buildSelectedLocationCard(
     BuildContext context,
     SettingsState state,
-    ThemeData appTheme,
     AppLocalizations l10n,
   ) {
     return Column(
@@ -133,23 +139,17 @@ class CitySelection extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: appTheme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+            color: AppTheme.chipActiveBackground,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: appTheme.colorScheme.primary.withValues(alpha: 0.3),
-            ),
+            border: Border.all(color: AppTheme.chipActiveBorderColor),
           ),
           child: Column(
             children: [
-              Icon(
-                Icons.location_on,
-                color: appTheme.colorScheme.primary,
-                size: 32,
-              ),
+              Icon(Icons.location_on, color: AppTheme.primaryGreen, size: 32),
               const SizedBox(height: 8),
               Text(
                 l10n.selectedLocation,
-                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 12, color: AppTheme.textWhite60),
               ),
               const SizedBox(height: 4),
               Text(
@@ -157,7 +157,7 @@ class CitySelection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: appTheme.colorScheme.primary,
+                  color: AppTheme.primaryGreen,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -177,11 +177,18 @@ class CitySelection extends StatelessWidget {
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.textWhite,
+                    ),
                   )
-                : const Icon(Icons.save),
-            label: Text(l10n.saveLocation),
+                : const Icon(Icons.save, color: AppTheme.textWhite),
+            label: Text(
+              l10n.saveLocation,
+              style: const TextStyle(color: AppTheme.textWhite),
+            ),
             style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryGreen,
               padding: const EdgeInsets.symmetric(vertical: 14),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -197,14 +204,16 @@ class CitySelection extends StatelessWidget {
     BuildContext context,
     AppLocalizations l10n,
   ) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(l10n.pleaseSelectCityFirst)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.pleaseSelectCityFirst),
+        backgroundColor: Colors.orange,
+      ),
+    );
   }
 
   void _showCitySelectionSheet(BuildContext context, List<CityModel> cities) {
     final l10n = AppLocalizations.of(context)!;
-    final appTheme = Theme.of(context);
     final cubit = context.read<SettingsCubit>();
 
     SearchableBottomSheet.show<CityModel>(
@@ -216,19 +225,25 @@ class CitySelection extends StatelessWidget {
       onItemSelected: (city) => cubit.selectCity(city),
       itemBuilder: (context, city, onTap) => ListTile(
         leading: CircleAvatar(
-          backgroundColor: appTheme.colorScheme.primary.withValues(alpha: 0.1),
+          backgroundColor: AppTheme.chipActiveBackground,
           child: Text(
             city.plate,
             style: TextStyle(
-              color: appTheme.colorScheme.primary,
+              color: AppTheme.primaryGreen,
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
           ),
         ),
-        title: Text(city.displayName),
-        subtitle: Text('${city.counties.length} ${l10n.districts}'),
-        trailing: const Icon(Icons.chevron_right),
+        title: Text(
+          city.displayName,
+          style: const TextStyle(color: AppTheme.textWhite),
+        ),
+        subtitle: Text(
+          '${city.counties.length} ${l10n.districts}',
+          style: TextStyle(color: AppTheme.textWhite60),
+        ),
+        trailing: Icon(Icons.chevron_right, color: AppTheme.textWhite60),
         onTap: onTap,
       ),
     );
@@ -254,8 +269,8 @@ class CitySelection extends StatelessWidget {
           backgroundColor: Colors.orange.withValues(alpha: 0.1),
           child: const Icon(Icons.location_on, color: Colors.orange),
         ),
-        title: Text(county),
-        trailing: const Icon(Icons.chevron_right),
+        title: Text(county, style: const TextStyle(color: AppTheme.textWhite)),
+        trailing: Icon(Icons.chevron_right, color: AppTheme.textWhite60),
         onTap: onTap,
       ),
     );
@@ -271,7 +286,7 @@ class CitySelection extends StatelessWidget {
       messenger.showSnackBar(
         SnackBar(
           content: Text(l10n.locationSaved),
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.primaryGreen,
         ),
       );
     } catch (e) {

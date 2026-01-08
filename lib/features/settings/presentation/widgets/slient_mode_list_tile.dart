@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prayer_time/core/theme/app_theme.dart';
 import 'package:prayer_time/features/settings/extensions/settings_cubit_extension.dart';
 import 'package:prayer_time/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
@@ -12,16 +13,13 @@ class SilentModeListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10nL = AppLocalizations.of(context);
-    final appTheme = Theme.of(context);
 
     return BlocListener<SettingsCubit, SettingsState>(
       listenWhen: (previous, current) =>
           previous.needsPermissionDialog != current.needsPermissionDialog,
       listener: (context, state) {
         if (state.needsPermissionDialog) {
-          // Dialog göster
           _showPermissionDialog(context);
-          // Flag'i temizle
           context.read<SettingsCubit>().clearPermissionDialogFlag();
         }
       },
@@ -35,14 +33,18 @@ class SilentModeListTile extends StatelessWidget {
               ListTile(
                 leading: Icon(
                   Icons.volume_off,
-                  color: appTheme.colorScheme.primary,
+                  color: AppTheme.primaryGreen,
                 ),
-                title: Text(l10nL!.silentMode),
+                title: Text(
+                  l10nL!.silentMode,
+                  style: const TextStyle(color: AppTheme.textWhite),
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Switch(
                       value: mainSilentModeEnabled,
+                      activeColor: AppTheme.primaryGreen,
                       onChanged: (value) {
                         context.read<SettingsCubit>().mainToggleSilentMode();
                       },
@@ -51,6 +53,7 @@ class SilentModeListTile extends StatelessWidget {
                       mainSilentModeEnabled
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
+                      color: AppTheme.textWhite70,
                     ),
                   ],
                 ),
@@ -63,7 +66,6 @@ class SilentModeListTile extends StatelessWidget {
                   state,
                   mainSilentModeEnabled,
                   l10nL,
-                  appTheme,
                 ),
             ],
           );
@@ -77,7 +79,6 @@ class SilentModeListTile extends StatelessWidget {
     SettingsState state,
     bool mainEnabled,
     AppLocalizations l10n,
-    ThemeData theme,
   ) {
     final prayers = {
       PrayerType.fajr: (l10n.fajr, state.silentModeDuringPraysSettings.fajr),
@@ -96,11 +97,9 @@ class SilentModeListTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: AppTheme.chipBackground,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppTheme.cardBorderColor),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
@@ -116,17 +115,20 @@ class SilentModeListTile extends StatelessWidget {
                 leading: Icon(
                   Icons.volume_off,
                   color: prayerSettings.isEnabled && mainEnabled
-                      ? theme.colorScheme.primary
-                      : Colors.grey,
+                      ? AppTheme.primaryGreen
+                      : AppTheme.textWhite40,
                 ),
                 title: Text(
                   prayerName,
-                  style: TextStyle(color: mainEnabled ? null : Colors.grey),
+                  style: TextStyle(
+                    color: mainEnabled ? AppTheme.textWhite : AppTheme.textWhite40,
+                  ),
                 ),
                 trailing: Opacity(
                   opacity: mainEnabled ? 1.0 : 0.5,
                   child: Switch(
                     value: prayerSettings.isEnabled,
+                    activeColor: AppTheme.primaryGreen,
                     onChanged: mainEnabled
                         ? (value) {
                             context
@@ -165,21 +167,15 @@ class SilentModeListTile extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withValues(
-                                alpha: 0.1,
-                              ),
+                              color: AppTheme.chipActiveBackground,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: theme.colorScheme.primary.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
+                              border: Border.all(color: AppTheme.chipActiveBorderColor),
                             ),
                             child: Column(
                               children: [
                                 Icon(
                                   Icons.arrow_back,
-                                  color: theme.colorScheme.primary,
+                                  color: AppTheme.primaryGreen,
                                   size: 28,
                                 ),
                                 const SizedBox(height: 8),
@@ -187,7 +183,7 @@ class SilentModeListTile extends StatelessWidget {
                                   l10n.beforeSilentMode,
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -195,18 +191,17 @@ class SilentModeListTile extends StatelessWidget {
                                   l10n.before,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
                                 const SizedBox(height: 4),
                                 Text(
                                   '${prayerSettings.minutesBefore} ${l10n.minutes}',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                   ),
                                 ),
                               ],
@@ -232,21 +227,15 @@ class SilentModeListTile extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.primary.withValues(
-                                alpha: 0.1,
-                              ),
+                              color: AppTheme.chipActiveBackground,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: theme.colorScheme.primary.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
+                              border: Border.all(color: AppTheme.chipActiveBorderColor),
                             ),
                             child: Column(
                               children: [
                                 Icon(
                                   Icons.arrow_forward,
-                                  color: theme.colorScheme.primary,
+                                  color: AppTheme.primaryGreen,
                                   size: 28,
                                 ),
                                 const SizedBox(height: 8),
@@ -254,7 +243,7 @@ class SilentModeListTile extends StatelessWidget {
                                   l10n.afterSilentMode,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -262,7 +251,7 @@ class SilentModeListTile extends StatelessWidget {
                                   l10n.after,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -272,7 +261,7 @@ class SilentModeListTile extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: theme.colorScheme.primary,
+                                    color: AppTheme.primaryGreen,
                                   ),
                                 ),
                               ],
@@ -303,10 +292,12 @@ class SilentModeListTile extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: AppTheme.darkGreen,
           title: Text(
             isBefore
                 ? '${l10n.before} ${l10n.selectTime}'
                 : '${l10n.after} ${l10n.selectTime}',
+            style: const TextStyle(color: AppTheme.textWhite),
           ),
           content: SizedBox(
             height: 200,
@@ -323,7 +314,10 @@ class SilentModeListTile extends StatelessWidget {
                 return Center(
                   child: Text(
                     '$minutes ${l10n.minutes}',
-                    style: const TextStyle(fontSize: 22),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      color: AppTheme.textWhite,
+                    ),
                   ),
                 );
               }),
@@ -332,7 +326,10 @@ class SilentModeListTile extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
+              child: Text(
+                l10n.cancel,
+                style: TextStyle(color: AppTheme.textWhite60),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -343,7 +340,10 @@ class SilentModeListTile extends StatelessWidget {
                 );
                 Navigator.pop(context);
               },
-              child: Text(l10n.done),
+              child: Text(
+                l10n.done,
+                style: const TextStyle(color: AppTheme.primaryGreen),
+              ),
             ),
           ],
         );
@@ -351,26 +351,33 @@ class SilentModeListTile extends StatelessWidget {
     );
   }
 
-  /// Kullanıcıya izin vermesi gerektiğini anlatan pencere
   void _showPermissionDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppTheme.darkGreen,
         title: Row(
           children: [
             Icon(
               Icons.notifications_off_outlined,
-              color: theme.colorScheme.primary,
+              color: AppTheme.primaryGreen,
             ),
             const SizedBox(width: 8),
-            Expanded(child: Text(l10n.permissionRequired)),
+            Expanded(
+              child: Text(
+                l10n.permissionRequired,
+                style: const TextStyle(color: AppTheme.textWhite),
+              ),
+            ),
           ],
         ),
-        content: Text(l10n.silentModePermissionMessage),
+        content: Text(
+          l10n.silentModePermissionMessage,
+          style: TextStyle(color: AppTheme.textWhite70),
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -378,17 +385,15 @@ class SilentModeListTile extends StatelessWidget {
             },
             child: Text(
               l10n.cancel,
-              style: const TextStyle(color: Colors.grey),
+              style: TextStyle(color: AppTheme.textWhite60),
             ),
           ),
           ElevatedButton.icon(
             onPressed: () async {
               Navigator.pop(dialogContext);
 
-              // Do Not Disturb ayarlarını aç
               await PermissionHandler.openDoNotDisturbSetting();
 
-              // Kullanıcı ayarlardan geri döndüğünde izni kontrol et
               await Future.delayed(const Duration(seconds: 1));
 
               if (!context.mounted) return;
@@ -399,18 +404,16 @@ class SilentModeListTile extends StatelessWidget {
               if (!context.mounted) return;
 
               if (permissionGranted == true) {
-                // İzin verildi, sessiz modu aç
                 context.read<SettingsCubit>().enableSilentModeAfterPermission();
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(l10n.silentModePermissionGranted),
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppTheme.primaryGreen,
                     duration: const Duration(seconds: 2),
                   ),
                 );
               } else {
-                // İzin verilmedi
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(l10n.silentModePermissionRequired),
@@ -420,8 +423,14 @@ class SilentModeListTile extends StatelessWidget {
                 );
               }
             },
-            icon: const Icon(Icons.settings),
-            label: Text(l10n.openSettings),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryGreen,
+            ),
+            icon: const Icon(Icons.settings, color: AppTheme.textWhite),
+            label: Text(
+              l10n.openSettings,
+              style: const TextStyle(color: AppTheme.textWhite),
+            ),
           ),
         ],
       ),

@@ -164,6 +164,22 @@ class AppTheme {
   /// Drawer header gradient bitiş
   static Color drawerGradientEnd = lightGreen.withValues(alpha: 0.7);
 
+  /// Drawer arka plan rengi
+  static const Color drawerBackgroundColor = prayerBackgroundColor;
+
+  /// Drawer item arka plan rengi (hover/aktif)
+  static Color drawerItemBackground = primaryGreen.withValues(alpha: 0.15);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SETTINGS EKRANI RENKLERİ
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Settings tile ikon arka planı
+  static Color settingsIconBackground = primaryGreen.withValues(alpha: 0.15);
+
+  /// Dropdown arka plan rengi
+  static const Color dropdownBackgroundColor = darkGreen;
+
   // ═══════════════════════════════════════════════════════════════════════════
   // METİN STİLLERİ (Text Theme)
   // ═══════════════════════════════════════════════════════════════════════════
