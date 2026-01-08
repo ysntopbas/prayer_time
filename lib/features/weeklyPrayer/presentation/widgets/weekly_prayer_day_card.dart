@@ -1,283 +1,260 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:prayer_time/core/domain/models/prayer_time_model.dart';
-import 'package:prayer_time/features/weeklyPrayer/presentation/widgets/prayer_time_item.dart';
 import 'package:prayer_time/l10n/app_localizations.dart';
 
 class WeeklyPrayerDayCard extends StatelessWidget {
   final PrayerTimeModel prayerTime;
-  final String cityName;
+  final bool isToday;
+  final bool isFriday;
+  final String languageCode;
 
   const WeeklyPrayerDayCard({
     super.key,
     required this.prayerTime,
-    required this.cityName,
+    this.isToday = false,
+    this.isFriday = false,
+    this.languageCode = 'tr',
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final timings = prayerTime.timings;
     final gregorian = prayerTime.date?.gregorian;
     final hijri = prayerTime.date?.hijri;
-    final timings = prayerTime.timings;
-    final l10nL = AppLocalizations.of(context)!;
-    final appTheme = Theme.of(context);
+
+    // Parse date
+    int? dayNumber;
+    String weekdayName = '';
+    if (gregorian?.date != null) {
+      try {
+        final parts = gregorian!.date!.split('-');
+        if (parts.length == 3) {
+          dayNumber = int.parse(parts[0]);
+          final month = int.parse(parts[1]);
+          final year = int.parse(parts[2]);
+          final date = DateTime(year, month, dayNumber);
+          weekdayName = DateFormat('EEEE', languageCode).format(date);
+        }
+      } catch (_) {}
+    }
+
+    // Hijri date
+    final hijriDay = hijri?.hijriday ?? '';
+    final hijriMonth = hijri?.hijrimonth?.hijrien ?? '';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: isToday
+            ? const Color(0xFF2E7D32).withValues(alpha: 0.3)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isToday
+              ? const Color(0xFF4CAF50)
+              : Colors.white.withValues(alpha: 0.1),
+          width: isToday ? 2 : 1,
+        ),
       ),
-      child: Column(
-        children: [
-          // Date Header
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: appTheme.colorScheme.primary,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-            ),
-            child: Row(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Row - Day info
+            Row(
               children: [
-                // Day Number
+                // Day Number Circle
                 Container(
-                  width: 60,
-                  height: 60,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
+                    color: isToday
+                        ? const Color(0xFF4CAF50)
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                    border: isToday
+                        ? null
+                        : Border.all(
+                            color: Colors.white.withValues(alpha: 0.3),
+                          ),
                   ),
                   child: Center(
                     child: Text(
-                      gregorian?.day ?? '',
+                      '${dayNumber ?? ''}',
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: appTheme.colorScheme.primary,
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: isToday
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                // Date Info
+                const SizedBox(width: 12),
+                // Day Name and Hijri Date
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${gregorian?.day ?? ''} ${_getLocalizedMonth(gregorian?.month?.en, l10nL)} ${gregorian?.year ?? ''}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: appTheme.colorScheme.onPrimary,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            weekdayName,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          if (isToday) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4CAF50),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                languageCode == 'tr' ? 'BUGÜN' : 'TODAY',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                          if (isFriday && !isToday) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4CAF50),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                languageCode == 'tr' ? 'CUMA' : 'FRIDAY',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                       Text(
-                        _getLocalizedWeekday(gregorian?.weekday?.en, l10nL),
+                        '$hijriDay $hijriMonth',
                         style: TextStyle(
-                          fontSize: 14,
-                          color: appTheme.colorScheme.onPrimary.withValues(
-                            alpha: 0.9,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${hijri?.hijriday ?? ''} ${_getLocalizedHijriMonth(hijri?.hijrimonth?.hijrien, l10nL)} ${hijri?.hijriyear ?? ''}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: appTheme.colorScheme.onPrimary.withValues(
-                            alpha: 0.8,
-                          ),
+                          color: Colors.white.withValues(alpha: 0.6),
+                          fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                // City Name
-                Text(
-                  cityName,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: appTheme.colorScheme.onPrimary,
-                  ),
-                ),
+                // Mosque Icon for Friday
+                if (isFriday)
+                  const Icon(Icons.mosque, color: Color(0xFF4CAF50), size: 24),
               ],
             ),
-          ),
-
-          // Prayer Times Grid
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+            const SizedBox(height: 12),
+            // Prayer Times Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.fajr,
-                        time: timings?.fajr ?? '',
-                        icon: Icons.nightlight_round,
-                        color: const Color(0xFF5C6BC0),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.sunrise,
-                        time: timings?.sunrise ?? '',
-                        icon: Icons.wb_sunny,
-                        color: const Color(0xFFFFA726),
-                      ),
-                    ),
-                  ],
+                _buildPrayerTimeChip(
+                  l10n.fajr,
+                  _formatTime(timings?.fajr),
+                  isToday,
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.dhuhr,
-                        time: timings?.dhuhr ?? '',
-                        icon: Icons.wb_sunny_outlined,
-                        color: const Color(0xFFFF7043),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.asr,
-                        time: timings?.asr ?? '',
-                        icon: Icons.wb_twilight,
-                        color: const Color(0xFFFFB74D),
-                      ),
-                    ),
-                  ],
+                _buildPrayerTimeChip(
+                  l10n.sunrise,
+                  _formatTime(timings?.sunrise),
+                  isToday,
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.maghrib,
-                        time: timings?.maghrib ?? '',
-                        icon: Icons.wb_sunny,
-                        color: const Color(0xFFEF5350),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: PrayerTimeItem(
-                        title: l10nL.isha,
-                        time: timings?.isha ?? '',
-                        icon: Icons.nightlight,
-                        color: const Color(0xFF7E57C2),
-                      ),
-                    ),
-                  ],
+                _buildPrayerTimeChip(
+                  l10n.dhuhr,
+                  _formatTime(timings?.dhuhr),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  l10n.asr,
+                  _formatTime(timings?.asr),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  l10n.maghrib,
+                  _formatTime(timings?.maghrib),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  l10n.isha,
+                  _formatTime(timings?.isha),
+                  isToday,
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
 
-String _getLocalizedMonth(String? monthEn, AppLocalizations l10n) {
-  if (monthEn == null) return '';
-
-  switch (monthEn.toLowerCase()) {
-    case 'january':
-      return l10n.january;
-    case 'february':
-      return l10n.february;
-    case 'march':
-      return l10n.march;
-    case 'april':
-      return l10n.april;
-    case 'may':
-      return l10n.may;
-    case 'june':
-      return l10n.june;
-    case 'july':
-      return l10n.july;
-    case 'august':
-      return l10n.august;
-    case 'september':
-      return l10n.september;
-    case 'october':
-      return l10n.october;
-    case 'november':
-      return l10n.november;
-    case 'december':
-      return l10n.december;
-    default:
-      return monthEn;
+  String _formatTime(String? time) {
+    if (time == null) return '--:--';
+    return time.split(' ').first.split('(').first.trim();
   }
-}
 
-String _getLocalizedWeekday(String? weekdayEn, AppLocalizations l10n) {
-  if (weekdayEn == null) return '';
-
-  switch (weekdayEn.toLowerCase()) {
-    case 'monday':
-      return l10n.monday;
-    case 'tuesday':
-      return l10n.tuesday;
-    case 'wednesday':
-      return l10n.wednesday;
-    case 'thursday':
-      return l10n.thursday;
-    case 'friday':
-      return l10n.friday;
-    case 'saturday':
-      return l10n.saturday;
-    case 'sunday':
-      return l10n.sunday;
-    default:
-      return weekdayEn;
-  }
-}
-
-String _getLocalizedHijriMonth(String? hijriEn, AppLocalizations l10n) {
-  if (hijriEn == null) return '';
-
-  switch (hijriEn) {
-    case 'Muḥarram':
-      return l10n.muharram;
-    case 'Ṣafar':
-      return l10n.safar;
-    case 'Rabīʿ al-awwal':
-      return l10n.rabialAwwal;
-    case 'Rabīʿ al-thānī':
-      return l10n.rabiAlThani;
-    case 'Jumādá al-ūlá':
-      return l10n.jumadaAlAwwal;
-    case 'Jumādá al-ākhirah':
-      return l10n.jumadaAlThani;
-    case 'Rajab':
-      return l10n.rajab;
-    case 'Shaʿbān':
-      return l10n.shaban;
-    case 'Ramaḍān':
-      return l10n.ramadan;
-    case 'Shawwāl':
-      return l10n.shawwal;
-    case 'Dhū al-Qaʿdah':
-      return l10n.dhuAlQiDah;
-    case 'Dhū al-Ḥijjah':
-      return l10n.dhuAlHijjah;
-    default:
-      return hijriEn;
+  Widget _buildPrayerTimeChip(String label, String time, bool isHighlighted) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+          decoration: BoxDecoration(
+            color: isHighlighted
+                ? const Color(0xFF4CAF50).withValues(alpha: 0.2)
+                : Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: isHighlighted
+                  ? const Color(0xFF4CAF50).withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.1),
+            ),
+          ),
+          child: Column(
+            children: [
+              Text(
+                label.length > 5 ? label.substring(0, 5) : label,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 9,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                time,
+                style: TextStyle(
+                  color: isHighlighted ? const Color(0xFF4CAF50) : Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
