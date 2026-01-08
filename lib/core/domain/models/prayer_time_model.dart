@@ -63,15 +63,22 @@ class Timings {
     this.imsak,
   });
 
+  // Timezone bilgisini kaldıran helper fonksiyon
+  String? _removeTimezone(String? time) {
+    if (time == null) return null;
+    // "(+03)" veya "(-05)" gibi timezone bilgisini kaldır
+    return time.replaceAll(RegExp(r'\s*\([+-]\d{2}\)'), '');
+  }
+
   Timings.fromJson(Map<String, dynamic> json) {
-    fajr = json['Fajr'];
-    sunrise = json['Sunrise'];
-    dhuhr = json['Dhuhr'];
-    asr = json['Asr'];
-    sunset = json['Sunset'];
-    maghrib = json['Maghrib'];
-    isha = json['Isha'];
-    imsak = json['Imsak'];
+    fajr = _removeTimezone(json['Fajr']);
+    sunrise = _removeTimezone(json['Sunrise']);
+    dhuhr = _removeTimezone(json['Dhuhr']);
+    asr = _removeTimezone(json['Asr']);
+    sunset = _removeTimezone(json['Sunset']);
+    maghrib = _removeTimezone(json['Maghrib']);
+    isha = _removeTimezone(json['Isha']);
+    imsak = _removeTimezone(json['Imsak']);
   }
 
   Map<String, dynamic> toJson() {
