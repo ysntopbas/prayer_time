@@ -1,101 +1,145 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:prayer_time/l10n/app_localizations.dart';
+import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 
 class PrayerHeader extends StatelessWidget {
   final String subAdministrativeArea;
   final String cityName;
-  final GlobalKey<ScaffoldState>? scaffoldKey;
 
   const PrayerHeader({
     super.key,
     required this.subAdministrativeArea,
     required this.cityName,
-    this.scaffoldKey,
   });
 
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final dateFormat = DateFormat(
-      'EEEE, MMMM d, yyyy',
-      Localizations.localeOf(context).languageCode,
-    );
-    final appTheme = Theme.of(context);
-    final l10nL = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final dateFormat = DateFormat('d MMMM yyyy', languageCode);
 
-    return SafeArea(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              appTheme.colorScheme.primary,
-              appTheme.colorScheme.secondary,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Location and Menu Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Menu Button
+              GestureDetector(
+                onTap: () => Scaffold.of(context).openDrawer(),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      color: Color(0xFF4CAF50),
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '$cityName, Türkiye',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          subAdministrativeArea,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Menu Icon
+              IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.menu, color: Colors.white, size: 24),
+                ),
+              ),
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              padding: EdgeInsets.all(12),
-              icon: Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    l10nL.headerTitle,
-                    style: appTheme.textTheme.headlineMedium?.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '$subAdministrativeArea, $cityName',
-                      maxLines: 1,
-                      style: appTheme.textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
+          const SizedBox(height: 24),
+          // Date Badge
+          BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              String hijriDate = '';
+              if (state is HomeLoaded) {
+                // You can add Hijri date from API if available
+                hijriDate = ''; // Will be populated from API
+              }
+              return Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4CAF50),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        languageCode == 'tr' ? 'BUGÜN' : 'TODAY',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-
-                    child: Text(
-                      dateFormat.format(now),
-                      maxLines: 1,
-                      style: appTheme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
+                    if (hijriDate.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        '• $hijriDate',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
+                    ],
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 8),
+          // Gregorian Date
+          Text(
+            dateFormat.format(now).toUpperCase(),
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 14,
+              letterSpacing: 1,
             ),
-            SizedBox(width: 10),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.mosque, color: Colors.white, size: 28),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

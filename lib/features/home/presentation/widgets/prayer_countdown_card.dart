@@ -15,104 +15,99 @@ class PrayerCountdownCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appTheme = Theme.of(context);
-    final l10nL = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
 
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            appTheme.colorScheme.primary,
-            appTheme.colorScheme.secondary,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: appTheme.colorScheme.primary.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
+    final hours = remainingTime.inHours.toString().padLeft(2, '0');
+    final minutes = (remainingTime.inMinutes % 60).toString().padLeft(2, '0');
+    final seconds = (remainingTime.inSeconds % 60).toString().padLeft(2, '0');
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          Text(
-            l10nL.nextPrayer,
-            style: appTheme.textTheme.titleMedium?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            nextPrayerName.isNotEmpty ? nextPrayerName : '-',
-            style: appTheme.textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTimeBox(
-                appTheme,
-                remainingTime.inHours.toString().padLeft(2, '0'),
-                l10nL.hours,
-              ),
-              const SizedBox(width: 12),
-              _buildTimeBox(
-                appTheme,
-                (remainingTime.inMinutes % 60).toString().padLeft(2, '0'),
-                l10nL.minutes,
-              ),
-              const SizedBox(width: 12),
-              _buildTimeBox(
-                appTheme,
-                (remainingTime.inSeconds % 60).toString().padLeft(2, '0'),
-                l10nL.seconds,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
+          // Current Time Display
           Text(
             nextPrayerTime.isNotEmpty
                 ? nextPrayerTime.split('(').first.trim()
-                : '-',
-            style: appTheme.textTheme.headlineSmall?.copyWith(
+                : '--:--',
+            style: const TextStyle(
               color: Colors.white,
+              fontSize: 72,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
             ),
           ),
+          // Prayer Name
+          Text(
+            nextPrayerName.isNotEmpty
+                ? '$nextPrayerName ${languageCode == 'tr' ? 'Vakti' : 'Time'}'
+                : '',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Countdown Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(
+                color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.hourglass_empty,
+                  color: Color(0xFF4CAF50),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '$hours:$minutes:$seconds',
+                  style: const TextStyle(
+                    color: Color(0xFF4CAF50),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  languageCode == 'tr' ? 'kaldı' : 'left',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Next Prayer Info
+          _buildNextPrayerInfo(context, l10n, languageCode),
         ],
       ),
     );
   }
 
-  Widget _buildTimeBox(ThemeData theme, String value, String label) {
-    final appTheme = theme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: appTheme.textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: appTheme.textTheme.bodySmall?.copyWith(color: Colors.white),
-          ),
-        ],
+  Widget _buildNextPrayerInfo(
+    BuildContext context,
+    AppLocalizations l10n,
+    String languageCode,
+  ) {
+    return Text(
+      '${languageCode == 'tr' ? 'Sonraki' : 'Next'}: $nextPrayerName',
+      style: TextStyle(
+        color: Colors.white.withValues(alpha: 0.5),
+        fontSize: 14,
       ),
     );
   }

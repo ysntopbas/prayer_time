@@ -14,169 +14,204 @@ class PrayerTimesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10nL = AppLocalizations.of(context)!;
-    final appTheme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
 
-    return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: appTheme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+    final prayers = [
+      _PrayerData(
+        name: l10n.fajr,
+        time: timings.fajr ?? '--:--',
+        icon: Icons.nightlight_round,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Text(
-              l10nL.todaysPrayerTimes,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          _buildPrayerItem(
-            context,
-            icon: Icons.nightlight_round,
-            iconColor: const Color(0xFF7E57C2),
-            title: l10nL.fajr,
-            subtitle: l10nL.dawnPrayer,
-            time: timings.fajr ?? '-',
-            isNext: nextPrayerName == l10nL.fajr,
-          ),
-          _buildDivider(),
-          _buildPrayerItem(
-            context,
-            icon: Icons.wb_sunny_outlined,
-            iconColor: const Color(0xFFFFA726),
-            title: l10nL.sunrise,
-            subtitle: l10nL.sunRise,
-            time: timings.sunrise ?? '-',
-            isNext: nextPrayerName == l10nL.sunrise,
-          ),
-          _buildDivider(),
-          _buildPrayerItem(
-            context,
-            icon: Icons.wb_sunny,
-            iconColor: const Color(0xFFFFA726),
-            title: l10nL.dhuhr,
-            subtitle: l10nL.noonMiddayPrayer,
-            time: timings.dhuhr ?? '-',
-            isNext: nextPrayerName == l10nL.dhuhr,
-          ),
-          _buildDivider(),
-          _buildPrayerItem(
-            context,
-            icon: Icons.wb_cloudy,
-            iconColor: const Color(0xFFFF7043),
-            title: l10nL.asr,
-            subtitle: l10nL.afternoonPrayer,
-            time: timings.asr ?? '-',
-            isNext: nextPrayerName == l10nL.asr,
-          ),
-          _buildDivider(),
-          _buildPrayerItem(
-            context,
-            icon: Icons.wb_twilight,
-            iconColor: const Color(0xFFEF5350),
-            title: l10nL.maghrib,
-            subtitle: l10nL.sunsetPrayer,
-            time: timings.maghrib ?? '-',
-            isNext: nextPrayerName == l10nL.maghrib,
-          ),
-          _buildDivider(),
-          _buildPrayerItem(
-            context,
-            icon: Icons.nights_stay,
-            iconColor: const Color(0xFF5C6BC0),
-            title: l10nL.isha,
-            subtitle: l10nL.nightPrayer,
-            time: timings.isha ?? '-',
-            isNext: nextPrayerName == l10nL.isha,
-          ),
-        ],
+      _PrayerData(
+        name: l10n.sunrise,
+        time: timings.sunrise ?? '--:--',
+        icon: Icons.wb_twilight,
       ),
+      _PrayerData(
+        name: l10n.dhuhr,
+        time: timings.dhuhr ?? '--:--',
+        icon: Icons.wb_sunny,
+      ),
+      _PrayerData(
+        name: l10n.asr,
+        time: timings.asr ?? '--:--',
+        icon: Icons.sunny_snowing,
+      ),
+      _PrayerData(
+        name: l10n.maghrib,
+        time: timings.maghrib ?? '--:--',
+        icon: Icons.nights_stay,
+      ),
+      _PrayerData(
+        name: l10n.isha,
+        time: timings.isha ?? '--:--',
+        icon: Icons.dark_mode,
+      ),
+    ];
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      itemCount: prayers.length,
+      itemBuilder: (context, index) {
+        final prayer = prayers[index];
+        final isCurrentPrayer = prayer.name == nextPrayerName;
+        final isPassed = _isPrayerPassed(index, prayers, nextPrayerName);
+
+        return _buildPrayerItem(
+          context,
+          prayer: prayer,
+          isCurrentPrayer: isCurrentPrayer,
+          isPassed: isPassed,
+          languageCode: languageCode,
+        );
+      },
     );
+  }
+
+  bool _isPrayerPassed(
+    int index,
+    List<_PrayerData> prayers,
+    String nextPrayerName,
+  ) {
+    final currentIndex = prayers.indexWhere((p) => p.name == nextPrayerName);
+    return index < currentIndex;
   }
 
   Widget _buildPrayerItem(
     BuildContext context, {
-    required IconData icon,
-    required Color iconColor,
-    required String title,
-    required String subtitle,
-    required String time,
-    required bool isNext,
+    required _PrayerData prayer,
+    required bool isCurrentPrayer,
+    required bool isPassed,
+    required String languageCode,
   }) {
-    final appTheme = Theme.of(context);
-    final l10nL = AppLocalizations.of(context)!;
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
-        border: isNext
-            ? Border(
-                left: BorderSide(color: appTheme.colorScheme.primary, width: 4),
-              )
+        color: isCurrentPrayer
+            ? const Color(0xFF4CAF50).withValues(alpha: 0.15)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        border: isCurrentPrayer
+            ? Border.all(color: const Color(0xFF4CAF50), width: 1.5)
             : null,
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            // Status Indicator
+            Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isCurrentPrayer
+                    ? const Color(0xFF4CAF50)
+                    : isPassed
+                    ? Colors.white.withValues(alpha: 0.3)
+                    : Colors.transparent,
+                border: Border.all(
+                  color: isCurrentPrayer
+                      ? const Color(0xFF4CAF50)
+                      : Colors.white.withValues(alpha: 0.3),
+                  width: 2,
+                ),
+              ),
             ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(width: 12),
+            // Icon
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: isCurrentPrayer
+                    ? const Color(0xFF4CAF50).withValues(alpha: 0.2)
+                    : Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                prayer.icon,
+                color: isCurrentPrayer
+                    ? const Color(0xFF4CAF50)
+                    : Colors.white.withValues(alpha: 0.5),
+                size: 18,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Prayer Name
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    prayer.name,
+                    style: TextStyle(
+                      color: isCurrentPrayer
+                          ? Colors.white
+                          : isPassed
+                          ? Colors.white.withValues(alpha: 0.4)
+                          : Colors.white.withValues(alpha: 0.8),
+                      fontSize: 15,
+                      fontWeight: isCurrentPrayer
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  if (isCurrentPrayer)
+                    Text(
+                      languageCode == 'tr' ? 'ŞU AN' : 'NOW',
+                      style: const TextStyle(
+                        color: Color(0xFF4CAF50),
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            // Time
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(title, style: appTheme.textTheme.titleMedium),
-                const SizedBox(height: 2),
                 Text(
-                  isNext ? l10nL.nextPrayer : subtitle,
-                  style: appTheme.textTheme.bodySmall?.copyWith(
-                    color: isNext
-                        ? appTheme.colorScheme.primary
-                        : appTheme.colorScheme.onSurface.withValues(alpha: 0.6),
-                    fontWeight: isNext ? FontWeight.w600 : FontWeight.normal,
+                  prayer.time.split('(').first.trim(),
+                  style: TextStyle(
+                    color: isCurrentPrayer
+                        ? Colors.white
+                        : isPassed
+                        ? Colors.white.withValues(alpha: 0.4)
+                        : Colors.white.withValues(alpha: 0.8),
+                    fontSize: isCurrentPrayer ? 18 : 15,
+                    fontWeight: isCurrentPrayer
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
                 ),
+                if (isCurrentPrayer)
+                  Text(
+                    languageCode == 'tr' ? 'Başladı' : 'Started',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 11,
+                    ),
+                  ),
               ],
             ),
-          ),
-          Text(_formatTime(time), style: appTheme.textTheme.titleMedium),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildDivider() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Divider(height: 1, color: Colors.grey.withValues(alpha: 0.2)),
-    );
-  }
+class _PrayerData {
+  final String name;
+  final String time;
+  final IconData icon;
 
-  String _formatTime(String time) {
-    try {
-      // API'den gelen format: "05:30 (EET)" veya "05:30"
-      final cleanTime = time.split('(').first.trim();
-      return cleanTime;
-    } catch (e) {
-      return time;
-    }
-  }
+  _PrayerData({required this.name, required this.time, required this.icon});
 }

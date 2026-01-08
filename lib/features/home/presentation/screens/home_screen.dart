@@ -83,152 +83,183 @@ class _HomeScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
+      backgroundColor: const Color(0xFF1A2E1A),
       drawer: const CustomDrawer(),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              appTheme.colorScheme.primary,
-              appTheme.colorScheme.secondary,
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-        ),
-        child: BlocListener<SettingsCubit, SettingsState>(
-          listenWhen: (previous, current) =>
-              previous.cityName != current.cityName,
-          listener: (context, state) {
-            onLoadPrayerTimes();
+      body: BlocListener<SettingsCubit, SettingsState>(
+        listenWhen: (previous, current) =>
+            previous.cityName != current.cityName,
+        listener: (context, state) {
+          onLoadPrayerTimes();
+        },
+        child: BlocBuilder<HomeCubit, HomeState>(
+          buildWhen: (previous, current) {
+            if (previous is HomeLoaded && current is HomeLoaded) {
+              return previous.prayerTimings != current.prayerTimings ||
+                  previous.cityName != current.cityName ||
+                  previous.subAdministrativeArea !=
+                      current.subAdministrativeArea;
+            }
+            return true;
           },
-          child: BlocBuilder<HomeCubit, HomeState>(
-            buildWhen: (previous, current) {
-              if (previous is HomeLoaded && current is HomeLoaded) {
-                return previous.prayerTimings != current.prayerTimings ||
-                    previous.cityName != current.cityName ||
-                    previous.subAdministrativeArea !=
-                        current.subAdministrativeArea;
-              }
-              return true;
-            },
-            builder: (context, state) {
-              if (state is HomeInitial || state is HomeLoading) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: appTheme.colorScheme.onPrimary,
-                  ),
-                );
-              } else if (state is HomeError) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        state.message,
-                        style: TextStyle(color: appTheme.colorScheme.onPrimary),
+          builder: (context, state) {
+            if (state is HomeInitial || state is HomeLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
+              );
+            } else if (state is HomeError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      state.message,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: onLoadPrayerTimes,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF4CAF50),
                       ),
-                    ],
-                  ),
-                );
-              } else if (state is HomeLoaded) {
-                final prayerTimings = state.prayerTimings;
-                final cityName = state.cityName ?? 'Istanbul';
-                final subAdministrativeArea =
-                    state.subAdministrativeArea ?? 'Fatih';
+                      child: Text(l10n.tryAgain),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is HomeLoaded) {
+              final prayerTimings = state.prayerTimings;
+              final cityName = state.cityName ?? 'Istanbul';
+              final subAdministrativeArea =
+                  state.subAdministrativeArea ?? 'Fatih';
 
-                return SafeArea(
-                  child: Column(
-                    children: [
-                      PrayerHeader(
-                        subAdministrativeArea: subAdministrativeArea,
-                        cityName: cityName,
-                        scaffoldKey: null,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
-                            ),
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                BlocSelector<
-                                  HomeCubit,
-                                  HomeState,
-                                  Map<String, dynamic>
-                                >(
-                                  selector: (state) {
-                                    if (state is HomeLoaded) {
-                                      return {
-                                        'remainingTime': state.remainingTime,
-                                        'nextPrayerName': state.nextPrayerName,
-                                        'nextPrayerTime': state.nextPrayerTime,
-                                      };
-                                    }
-                                    return {
-                                      'remainingTime': Duration.zero,
-                                      'nextPrayerName': '',
-                                      'nextPrayerTime': '',
-                                    };
-                                  },
-                                  builder: (context, countdownData) {
-                                    final translatedPrayerName =
-                                        _getTranslatedPrayerName(
-                                          context,
-                                          countdownData['nextPrayerName']
-                                              as String,
-                                        );
+              return SafeArea(
+                child: Stack(
+                  children: [
+                    // Background mosque silhouette (optional - you can add an image)
+                    Positioned.fill(
+                      child: CustomPaint(painter: MosqueSilhouettePainter()),
+                    ),
+                    // Main content
+                    Column(
+                      children: [
+                        // Header
+                        PrayerHeader(
+                          subAdministrativeArea: subAdministrativeArea,
+                          cityName: cityName,
+                        ),
+                        // Countdown Card
+                        BlocSelector<
+                          HomeCubit,
+                          HomeState,
+                          Map<String, dynamic>
+                        >(
+                          selector: (state) {
+                            if (state is HomeLoaded) {
+                              return {
+                                'remainingTime': state.remainingTime,
+                                'nextPrayerName': state.nextPrayerName,
+                                'nextPrayerTime': state.nextPrayerTime,
+                              };
+                            }
+                            return {
+                              'remainingTime': Duration.zero,
+                              'nextPrayerName': '',
+                              'nextPrayerTime': '',
+                            };
+                          },
+                          builder: (context, countdownData) {
+                            final translatedPrayerName =
+                                _getTranslatedPrayerName(
+                                  context,
+                                  countdownData['nextPrayerName'] as String,
+                                );
 
-                                    return PrayerCountdownCard(
-                                      remainingTime:
-                                          countdownData['remainingTime']
-                                              as Duration,
-                                      nextPrayerName: translatedPrayerName,
-                                      nextPrayerTime:
-                                          countdownData['nextPrayerTime']
-                                              as String,
-                                    );
-                                  },
-                                ),
-                                BlocSelector<HomeCubit, HomeState, String>(
-                                  selector: (state) {
-                                    if (state is HomeLoaded) {
-                                      return state.nextPrayerName;
-                                    }
-                                    return '';
-                                  },
-                                  builder: (context, nextPrayerName) {
-                                    final translatedPrayerName =
-                                        _getTranslatedPrayerName(
-                                          context,
-                                          nextPrayerName,
-                                        );
-                                    return PrayerTimesList(
-                                      timings: prayerTimings,
-                                      nextPrayerName: translatedPrayerName,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
+                            return PrayerCountdownCard(
+                              remainingTime:
+                                  countdownData['remainingTime'] as Duration,
+                              nextPrayerName: translatedPrayerName,
+                              nextPrayerTime:
+                                  countdownData['nextPrayerTime'] as String,
+                            );
+                          },
+                        ),
+                        // Prayer Times List
+                        Expanded(
+                          child: BlocSelector<HomeCubit, HomeState, String>(
+                            selector: (state) {
+                              if (state is HomeLoaded) {
+                                return state.nextPrayerName;
+                              }
+                              return '';
+                            },
+                            builder: (context, nextPrayerName) {
+                              final translatedPrayerName =
+                                  _getTranslatedPrayerName(
+                                    context,
+                                    nextPrayerName,
+                                  );
+                              return PrayerTimesList(
+                                timings: prayerTimings,
+                                nextPrayerName: translatedPrayerName,
+                              );
+                            },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
   }
+}
+
+// Mosque silhouette painter for background
+class MosqueSilhouettePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF2D4A2D).withValues(alpha: 0.3)
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+
+    // Simple minaret shape
+    final centerX = size.width / 2;
+    final bottomY = size.height * 0.85;
+
+    // Left minaret
+    path.moveTo(centerX - 30, bottomY);
+    path.lineTo(centerX - 30, size.height * 0.3);
+    path.lineTo(centerX - 20, size.height * 0.25);
+    path.lineTo(centerX - 10, size.height * 0.3);
+    path.lineTo(centerX - 10, bottomY);
+    path.close();
+
+    // Right minaret
+    path.moveTo(centerX + 10, bottomY);
+    path.lineTo(centerX + 10, size.height * 0.3);
+    path.lineTo(centerX + 20, size.height * 0.25);
+    path.lineTo(centerX + 30, size.height * 0.3);
+    path.lineTo(centerX + 30, bottomY);
+    path.close();
+
+    // Dome
+    path.moveTo(centerX - 60, bottomY);
+    path.quadraticBezierTo(centerX, size.height * 0.4, centerX + 60, bottomY);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
