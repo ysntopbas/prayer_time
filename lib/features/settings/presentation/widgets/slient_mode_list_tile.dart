@@ -31,13 +31,10 @@ class SilentModeListTile extends StatelessWidget {
             children: [
               // Ana Switch
               ListTile(
-                leading: Icon(
-                  Icons.volume_off,
-                  color: AppTheme.primaryGreen,
-                ),
+                leading: Icon(Icons.volume_off, color: AppTheme.primaryGreen),
                 title: Text(
                   l10nL!.silentMode,
-                  style: const TextStyle(color: AppTheme.textWhite),
+                  style: TextStyle(color: AppTheme.getTextColor(context)),
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -53,7 +50,7 @@ class SilentModeListTile extends StatelessWidget {
                       mainSilentModeEnabled
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
-                      color: AppTheme.textWhite70,
+                      color: AppTheme.getTextColor(context),
                     ),
                   ],
                 ),
@@ -116,12 +113,14 @@ class SilentModeListTile extends StatelessWidget {
                   Icons.volume_off,
                   color: prayerSettings.isEnabled && mainEnabled
                       ? AppTheme.primaryGreen
-                      : AppTheme.textWhite40,
+                      : AppTheme.getTextColor(context),
                 ),
                 title: Text(
                   prayerName,
                   style: TextStyle(
-                    color: mainEnabled ? AppTheme.textWhite : AppTheme.textWhite40,
+                    color: mainEnabled
+                        ? AppTheme.getTextColor(context)
+                        : AppTheme.getTextColor(context),
                   ),
                 ),
                 trailing: Opacity(
@@ -169,7 +168,9 @@ class SilentModeListTile extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppTheme.chipActiveBackground,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppTheme.chipActiveBorderColor),
+                              border: Border.all(
+                                color: AppTheme.chipActiveBorderColor,
+                              ),
                             ),
                             child: Column(
                               children: [
@@ -229,7 +230,9 @@ class SilentModeListTile extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppTheme.chipActiveBackground,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppTheme.chipActiveBorderColor),
+                              border: Border.all(
+                                color: AppTheme.chipActiveBorderColor,
+                              ),
                             ),
                             child: Column(
                               children: [
@@ -297,7 +300,7 @@ class SilentModeListTile extends StatelessWidget {
             isBefore
                 ? '${l10n.before} ${l10n.selectTime}'
                 : '${l10n.after} ${l10n.selectTime}',
-            style: const TextStyle(color: AppTheme.textWhite),
+            style: TextStyle(color: AppTheme.getTextColor(context)),
           ),
           content: SizedBox(
             height: 200,
@@ -314,9 +317,9 @@ class SilentModeListTile extends StatelessWidget {
                 return Center(
                   child: Text(
                     '$minutes ${l10n.minutes}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
-                      color: AppTheme.textWhite,
+                      color: AppTheme.getTextColor(context),
                     ),
                   ),
                 );
@@ -328,7 +331,7 @@ class SilentModeListTile extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: Text(
                 l10n.cancel,
-                style: TextStyle(color: AppTheme.textWhite60),
+                style: TextStyle(color: AppTheme.getTextColor(context)),
               ),
             ),
             TextButton(
@@ -369,14 +372,14 @@ class SilentModeListTile extends StatelessWidget {
             Expanded(
               child: Text(
                 l10n.permissionRequired,
-                style: const TextStyle(color: AppTheme.textWhite),
+                style: TextStyle(color: AppTheme.getTextColor(context)),
               ),
             ),
           ],
         ),
         content: Text(
           l10n.silentModePermissionMessage,
-          style: TextStyle(color: AppTheme.textWhite70),
+          style: TextStyle(color: AppTheme.getTextColor(context)),
         ),
         actions: [
           TextButton(
@@ -385,7 +388,7 @@ class SilentModeListTile extends StatelessWidget {
             },
             child: Text(
               l10n.cancel,
-              style: TextStyle(color: AppTheme.textWhite60),
+              style: TextStyle(color: AppTheme.getTextColor(context)),
             ),
           ),
           ElevatedButton.icon(
@@ -426,10 +429,10 @@ class SilentModeListTile extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTheme.primaryGreen,
             ),
-            icon: const Icon(Icons.settings, color: AppTheme.textWhite),
+            icon: Icon(Icons.settings, color: AppTheme.getTextColor(context)),
             label: Text(
               l10n.openSettings,
-              style: const TextStyle(color: AppTheme.textWhite),
+              style: TextStyle(color: AppTheme.getTextColor(context)),
             ),
           ),
         ],

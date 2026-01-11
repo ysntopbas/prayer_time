@@ -161,8 +161,7 @@ class MonthlyPrayerDayCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Mosque Icon for Today/Friday
-                if (isToday || isFriday)
+                if (isFriday)
                   const Icon(
                     Icons.mosque,
                     color: AppTheme.primaryGreen,

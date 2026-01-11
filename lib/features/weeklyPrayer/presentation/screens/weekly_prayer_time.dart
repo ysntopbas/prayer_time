@@ -68,7 +68,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         backgroundColor: AppTheme.getAppBarColor(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textWhite),
+          icon: Icon(Icons.arrow_back, color: AppTheme.getTextColor(context)),
           onPressed: () => Navigator.pop(context),
         ),
         title: BlocBuilder<SettingsCubit, SettingsState>(
@@ -80,8 +80,8 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
               children: [
                 Text(
                   l10n.weeklyPrayerTimePageTitle,
-                  style: const TextStyle(
-                    color: AppTheme.textWhite,
+                  style: TextStyle(
+                    color: AppTheme.getTextColor(context),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -96,8 +96,8 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                     const SizedBox(width: 4),
                     Text(
                       '$cityName${subArea.isNotEmpty ? ', $subArea' : ''}',
-                      style: const TextStyle(
-                        color: AppTheme.textWhite70,
+                      style: TextStyle(
+                        color: AppTheme.getTextColor(context),
                         fontSize: 12,
                       ),
                     ),
@@ -109,7 +109,10 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today, color: AppTheme.textWhite),
+            icon: Icon(
+              Icons.calendar_today,
+              color: AppTheme.getTextColor(context),
+            ),
             onPressed: _scrollToToday,
           ),
         ],
@@ -144,7 +147,9 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                           children: [
                             Text(
                               state.message,
-                              style: const TextStyle(color: AppTheme.textWhite70),
+                              style: TextStyle(
+                                color: AppTheme.getTextColor(context),
+                              ),
                             ),
                             const SizedBox(height: 16),
                             ElevatedButton(
@@ -164,7 +169,9 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
                         return Center(
                           child: Text(
                             l10n.prayTimeNotAvailable,
-                            style: const TextStyle(color: AppTheme.textWhite70),
+                            style: TextStyle(
+                              color: AppTheme.getTextColor(context),
+                            ),
                           ),
                         );
                       }
@@ -251,8 +258,8 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
         children: [
           Text(
             '$startDate - $endDate',
-            style: const TextStyle(
-              color: AppTheme.textWhite,
+            style: TextStyle(
+              color: AppTheme.getTextColor(context),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -260,7 +267,7 @@ class _WeeklyPrayerTimeScreenState extends State<WeeklyPrayerTimeScreen> {
           const SizedBox(height: 4),
           Text(
             l10n.weeklyPrayerTimePageTitle.toUpperCase(),
-            style: const TextStyle(
+            style: TextStyle(
               color: AppTheme.primaryGreen,
               fontSize: 12,
               fontWeight: FontWeight.w500,

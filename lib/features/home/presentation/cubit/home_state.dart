@@ -16,6 +16,7 @@ final class HomeLoaded extends HomeState {
   final Timings prayerTimings;
   final String? cityName;
   final String? subAdministrativeArea;
+  final String? countryName;
   final Duration remainingTime;
   final String nextPrayerName;
   final String nextPrayerTime;
@@ -28,6 +29,7 @@ final class HomeLoaded extends HomeState {
     required this.remainingTime,
     required this.nextPrayerName,
     required this.nextPrayerTime,
+    this.countryName,
   });
 
   @override
@@ -35,6 +37,7 @@ final class HomeLoaded extends HomeState {
     prayerTimings,
     cityName ?? '',
     subAdministrativeArea ?? '',
+    countryName ?? '',
     nextTimings,
     remainingTime,
     nextPrayerName,

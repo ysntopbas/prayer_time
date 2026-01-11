@@ -12,6 +12,7 @@ class HomeRepository {
   final CacheService _cacheService;
   String? cityName;
   String? subAdministrativeArea;
+  String? countryName;
 
   HomeRepository(this._cacheService);
 

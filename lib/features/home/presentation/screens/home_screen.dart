@@ -120,7 +120,9 @@ class _HomeScaffold extends StatelessWidget {
                     Text(
                       state.message,
                       style: TextStyle(
-                        color: AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
+                        color: AppTheme.getSecondaryTextColor(
+                          context,
+                        ), // DEĞİŞTİ
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -139,13 +141,16 @@ class _HomeScaffold extends StatelessWidget {
               final cityName = state.cityName ?? 'Istanbul';
               final subAdministrativeArea =
                   state.subAdministrativeArea ?? 'Fatih';
+              final countryName = state.countryName ?? 'Türkiye';
 
               return SafeArea(
                 child: Stack(
                   children: [
                     // Background mosque silhouette
                     Positioned.fill(
-                      child: CustomPaint(painter: MosqueSilhouettePainter(context)),
+                      child: CustomPaint(
+                        painter: MosqueSilhouettePainter(context),
+                      ),
                     ),
                     // Main content
                     Column(
@@ -154,6 +159,7 @@ class _HomeScaffold extends StatelessWidget {
                         PrayerHeader(
                           subAdministrativeArea: subAdministrativeArea,
                           cityName: cityName,
+                          countryName: countryName,
                         ),
                         // Countdown Card
                         BlocSelector<
@@ -230,13 +236,14 @@ class _HomeScaffold extends StatelessWidget {
 // Mosque silhouette painter for background
 class MosqueSilhouettePainter extends CustomPainter {
   final BuildContext context;
-  
+
   MosqueSilhouettePainter(this.context);
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppTheme.getMosqueColor(context) // DEĞİŞTİ
+      ..color =
+          AppTheme.getMosqueColor(context) // DEĞİŞTİ
       ..style = PaintingStyle.fill;
 
     final path = Path();

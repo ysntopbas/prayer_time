@@ -7,11 +7,13 @@ import 'package:prayer_time/features/home/presentation/cubit/home_cubit.dart';
 class PrayerHeader extends StatelessWidget {
   final String subAdministrativeArea;
   final String cityName;
+  final String countryName;
 
   const PrayerHeader({
     super.key,
     required this.subAdministrativeArea,
     required this.cityName,
+    required this.countryName,
   });
 
   @override
@@ -27,40 +29,37 @@ class PrayerHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => Scaffold.of(context).openDrawer(),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: AppTheme.primaryGreen, // SABİT
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$cityName, Türkiye',
-                          style: TextStyle(
-                            color: AppTheme.getTextColor(context), // DEĞİŞTİ
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
+                    color: AppTheme.primaryGreen, // SABİT
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$cityName, $countryName',
+                        style: TextStyle(
+                          color: AppTheme.getTextColor(context), // DEĞİŞTİ
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          subAdministrativeArea,
-                          style: TextStyle(
-                            color: AppTheme.getSecondaryTextColor(
-                              context,
-                            ), // DEĞİŞTİ
-                            fontSize: 14,
-                          ),
+                      ),
+                      Text(
+                        subAdministrativeArea,
+                        style: TextStyle(
+                          color: AppTheme.getSecondaryTextColor(
+                            context,
+                          ), // DEĞİŞTİ
+                          fontSize: 14,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               IconButton(
                 onPressed: () => Scaffold.of(context).openDrawer(),

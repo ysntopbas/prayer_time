@@ -34,20 +34,22 @@ class CustomDrawer extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.textWhite.withValues(alpha: 0.2),
+                    color: AppTheme.getTextColor(
+                      context,
+                    ).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.mosque,
-                    color: AppTheme.textWhite,
+                    color: AppTheme.getTextColor(context),
                     size: 40,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   l10nL.drawerTitle,
-                  style: const TextStyle(
-                    color: AppTheme.textWhite,
+                  style: TextStyle(
+                    color: AppTheme.getTextColor(context),
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -112,7 +114,9 @@ class CustomDrawer extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: AppTheme.getBorderColor(context)), // DEĞİŞTİ
+                top: BorderSide(
+                  color: AppTheme.getBorderColor(context),
+                ), // DEĞİŞTİ
               ),
             ),
             child: Row(
@@ -131,14 +135,18 @@ class CustomDrawer extends StatelessWidget {
                     Text(
                       "${l10nL.version} 1.0.0",
                       style: TextStyle(
-                        color: AppTheme.getSecondaryTextColor(context), // DEĞİŞTİ
+                        color: AppTheme.getSecondaryTextColor(
+                          context,
+                        ), // DEĞİŞTİ
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       l10nL.ownerName,
                       style: TextStyle(
-                        color: AppTheme.getTertiaryTextColor(context), // DEĞİŞTİ
+                        color: AppTheme.getTertiaryTextColor(
+                          context,
+                        ), // DEĞİŞTİ
                         fontSize: 11,
                       ),
                     ),
@@ -169,8 +177,8 @@ class CustomDrawer extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          color: AppTheme.textWhite,
+        style: TextStyle(
+          color: AppTheme.getTextColor(context),
           fontWeight: FontWeight.w500,
         ),
       ),

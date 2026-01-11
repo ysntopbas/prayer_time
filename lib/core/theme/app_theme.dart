@@ -8,6 +8,19 @@ class AppTheme {
   // ═══════════════════════════════════════════════════════════════════════════
   static const String _fontFamily = 'Montserrat';
 
+  static const double fontSizeXXL = 72.0;
+  static const double fontSizeXL = 24.0;
+  static const double fontSizeLG = 18.0;
+  static const double fontSizeMD = 14.0;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PADDING AİLESİ
+  // ═══════════════════════════════════════════════════════════════════════════
+  static const double spacingXS = 4.0;
+  static const double spacingSM = 8.0;
+  static const double spacingMD = 12.0;
+  static const double spacingLG = 16.0;
+
   // ═══════════════════════════════════════════════════════════════════════════
   // ANA RENKLER (Primary Colors)
   // ═══════════════════════════════════════════════════════════════════════════

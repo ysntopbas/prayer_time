@@ -30,8 +30,8 @@ class BatteryOptimizationDialog extends StatelessWidget {
           Expanded(
             child: Text(
               l10n.batteryOptimizationTitle,
-              style: const TextStyle(
-                color: AppTheme.textWhite,
+              style: TextStyle(
+                color: AppTheme.getTextColor(context),
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -46,7 +46,7 @@ class BatteryOptimizationDialog extends StatelessWidget {
           children: [
             Text(
               l10n.batteryOptimizationMessage,
-              style: TextStyle(color: AppTheme.textWhite70),
+              style: TextStyle(color: AppTheme.getTextColor(context)),
             ),
             const SizedBox(height: 16),
             Container(
@@ -82,7 +82,10 @@ class BatteryOptimizationDialog extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     l10n.batteryOptimizationReason,
-                    style: TextStyle(color: AppTheme.textWhite70, fontSize: 12),
+                    style: TextStyle(
+                      color: AppTheme.getTextColor(context),
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -100,7 +103,7 @@ class BatteryOptimizationDialog extends StatelessWidget {
                   child: Text(
                     l10n.batteryOptimizationSteps,
                     style: TextStyle(
-                      color: AppTheme.textWhite60,
+                      color: AppTheme.getTextColor(context),
                       fontStyle: FontStyle.italic,
                       fontSize: 12,
                     ),
@@ -116,15 +119,19 @@ class BatteryOptimizationDialog extends StatelessWidget {
           onPressed: onCancel,
           child: Text(
             l10n.cancel,
-            style: TextStyle(color: AppTheme.textWhite60),
+            style: TextStyle(color: AppTheme.getTextColor(context)),
           ),
         ),
         ElevatedButton.icon(
           onPressed: onConfirm,
-          icon: const Icon(Icons.settings, size: 20, color: AppTheme.textWhite),
+          icon: Icon(
+            Icons.settings,
+            size: 20,
+            color: AppTheme.getTextColor(context),
+          ),
           label: Text(
             l10n.batteryOptimizationGoToSettings,
-            style: const TextStyle(color: AppTheme.textWhite),
+            style: TextStyle(color: AppTheme.getTextColor(context)),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryGreen,

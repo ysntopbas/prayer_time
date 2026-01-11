@@ -51,7 +51,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
       );
       _scrollController.animateTo(
         offset,
-        duration: const Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }
@@ -69,7 +69,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         backgroundColor: AppTheme.getAppBarColor(context),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textWhite),
+          icon: Icon(Icons.arrow_back, color: AppTheme.textWhite),
           onPressed: () => Navigator.pop(context),
         ),
         title: BlocBuilder<SettingsCubit, SettingsState>(
@@ -81,24 +81,24 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
               children: [
                 Text(
                   l10n.monthlyPrayerTimePageTitle,
-                  style: const TextStyle(
-                    color: AppTheme.textWhite,
+                  style: TextStyle(
+                    color: AppTheme.getTextColor(context),
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.location_on,
                       color: AppTheme.textWhite70,
                       size: 14,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     Text(
                       '$cityName${subArea.isNotEmpty ? ', $subArea' : ''}',
-                      style: const TextStyle(
-                        color: AppTheme.textWhite70,
+                      style: TextStyle(
+                        color: AppTheme.getTextColor(context),
                         fontSize: 12,
                       ),
                     ),
@@ -110,7 +110,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_month, color: AppTheme.textWhite),
+            icon: Icon(Icons.calendar_month, color: AppTheme.textWhite),
             onPressed: _scrollToToday,
           ),
         ],
@@ -133,7 +133,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
                 child: BlocBuilder<MonthlyCubit, MonthlyState>(
                   builder: (context, state) {
                     if (state is MonthlyInitial || state is MonthlyLoading) {
-                      return const Center(
+                      return Center(
                         child: CircularProgressIndicator(
                           color: AppTheme.loadingColor,
                         ),
@@ -145,11 +145,11 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
                           children: [
                             Text(
                               state.message,
-                              style: const TextStyle(
-                                color: AppTheme.textWhite70,
+                              style: TextStyle(
+                                color: AppTheme.getTextColor(context),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: _loadMonthlyPrayerTimes,
                               style: ElevatedButton.styleFrom(
@@ -167,7 +167,9 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
                         return Center(
                           child: Text(
                             l10n.prayTimeNotAvailable,
-                            style: const TextStyle(color: AppTheme.textWhite70),
+                            style: TextStyle(
+                              color: AppTheme.getTextColor(context),
+                            ),
                           ),
                         );
                       }
@@ -198,7 +200,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
 
                       return ListView.builder(
                         controller: _scrollController,
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 8,
                         ),
@@ -219,7 +221,7 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
                         },
                       );
                     }
-                    return const SizedBox.shrink();
+                    return SizedBox.shrink();
                   },
                 ),
               ),
@@ -253,53 +255,53 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
     final monthName = DateFormat('MMMM yyyy', languageCode).format(now);
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Column(
         children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left, color: AppTheme.textWhite),
-            onPressed: () {},
+          Text(
+            monthName.toUpperCase(),
+            style: TextStyle(
+              color: AppTheme.getTextColor(context),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          Column(
-            children: [
-              Text(
-                monthName.toUpperCase(),
-                style: const TextStyle(
-                  color: AppTheme.textWhite,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              BlocBuilder<MonthlyCubit, MonthlyState>(
-                builder: (context, state) {
-                  if (state is MonthlyLoaded) {
-                    final timings = state.monthlyTimings;
-                    if (timings != null && timings.isNotEmpty) {
-                      final hijriMonth =
-                          timings.first.date?.hijri?.hijrimonth?.hijrien ?? '';
-                      final hijriYear =
-                          timings.first.date?.hijri?.hijriyear ?? '';
-                      if (hijriMonth.isNotEmpty) {
-                        return Text(
-                          '$hijriMonth $hijriYear'.toUpperCase(),
-                          style: const TextStyle(
-                            color: AppTheme.primaryGreen,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                      }
-                    }
+          BlocBuilder<MonthlyCubit, MonthlyState>(
+            builder: (context, state) {
+              if (state is MonthlyLoaded) {
+                final timings = state.monthlyTimings;
+                if (timings != null && timings.isNotEmpty) {
+                  // İlk ve son günün hicri aylarını al
+                  final firstHijriMonth =
+                      timings.first.date?.hijri?.hijrimonth?.hijrien ?? '';
+                  final lastHijriMonth =
+                      timings.last.date?.hijri?.hijrimonth?.hijrien ?? '';
+                  final hijriYear = timings.first.date?.hijri?.hijriyear ?? '';
+
+                  String hijriText;
+                  if (firstHijriMonth == lastHijriMonth) {
+                    hijriText = '$firstHijriMonth $hijriYear';
+                  } else {
+                    hijriText = '$firstHijriMonth - $lastHijriMonth $hijriYear';
                   }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ],
-          ),
-          IconButton(
-            icon: const Icon(Icons.chevron_right, color: AppTheme.textWhite),
-            onPressed: () {},
+
+                  if (hijriText.trim().isNotEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        hijriText.toUpperCase(),
+                        style: TextStyle(
+                          color: Color(0xFF4CAF50),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }
+                }
+              }
+              return SizedBox.shrink();
+            },
           ),
         ],
       ),
@@ -308,39 +310,34 @@ class _MonthlyPrayerTimeScreenState extends State<MonthlyPrayerTimeScreen> {
 
   Widget _buildColumnHeaders(AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppTheme.getDividerColor(context))),
+        border: Border(
+          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        ),
       ),
       child: Row(
         children: [
-          const SizedBox(width: 50),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _headerText(l10n.fajr),
-                _headerText(l10n.sunrise),
-                _headerText(l10n.dhuhr),
-                _headerText(l10n.asr),
-                _headerText(l10n.maghrib),
-                _headerText(l10n.isha),
-              ],
-            ),
-          ),
+          SizedBox(width: 52), // Gün numarası için boşluk
+          _headerText(l10n.fajr),
+          _headerText(l10n.sunrise),
+          _headerText(l10n.dhuhr),
+          _headerText(l10n.asr),
+          _headerText(l10n.maghrib),
+          _headerText(l10n.isha),
         ],
       ),
     );
   }
 
   Widget _headerText(String text) {
-    return SizedBox(
-      width: 45,
+    return Expanded(
       child: Text(
-        text.length > 4 ? text.substring(0, 4) : text,
+        text,
         textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: AppTheme.getSecondaryTextColor(context),
+          color: AppTheme.getTextColor(context).withValues(alpha: 0.7),
           fontSize: 10,
           fontWeight: FontWeight.w500,
         ),

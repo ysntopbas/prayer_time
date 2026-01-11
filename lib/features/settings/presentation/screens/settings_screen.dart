@@ -77,14 +77,14 @@ class SettingsScreen extends StatelessWidget {
                   leading: Icon(Icons.language, color: AppTheme.primaryGreen),
                   title: Text(
                     l10nL.language,
-                    style: const TextStyle(color: AppTheme.textWhite),
+                    style: TextStyle(color: AppTheme.getTextColor(context)),
                   ),
                   subtitle: Text(
                     languageCode == 'en'
                         ? 'English'
                         : languageCode == 'tr'
-                        ? 'Başladı'
-                        : 'Started',
+                        ? 'Türkçe'
+                        : 'Unknown',
                     style: TextStyle(
                       color: AppTheme.getTertiaryTextColor(context),
                       fontSize: 11,
@@ -107,16 +107,20 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   title: Text(
                     l10nL.updateLocation,
-                    style: const TextStyle(color: AppTheme.textWhite),
+                    style: TextStyle(color: AppTheme.getTextColor(context)),
                   ),
                   subtitle: state.cityName != null
                       ? Text(
                           '${state.cityName}, ${state.countryName}',
-                          style: TextStyle(color: AppTheme.textWhite60),
+                          style: TextStyle(
+                            color: AppTheme.getTextColor(context),
+                          ),
                         )
                       : Text(
                           l10nL.setFirstLocation,
-                          style: TextStyle(color: AppTheme.textWhite60),
+                          style: TextStyle(
+                            color: AppTheme.getTextColor(context),
+                          ),
                         ),
                   trailing: state.isLocationLoading
                       ? const SizedBox(
@@ -215,7 +219,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     width: 300,
                     menuHeight: 200,
-                    textStyle: const TextStyle(color: AppTheme.textWhite),
+                    textStyle: TextStyle(color: AppTheme.getTextColor(context)),
                     menuStyle: MenuStyle(
                       backgroundColor: WidgetStatePropertyAll(
                         AppTheme.darkGreen,
@@ -296,13 +300,13 @@ class SettingsScreen extends StatelessWidget {
                     );
                   }
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.notifications_active,
-                  color: AppTheme.textWhite,
+                  color: AppTheme.getTextColor(context),
                 ),
-                label: const Text(
+                label: Text(
                   'Test Notification Sound',
-                  style: TextStyle(color: AppTheme.textWhite),
+                  style: TextStyle(color: AppTheme.getTextColor(context)),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryGreen,
@@ -337,10 +341,13 @@ class SettingsScreen extends StatelessWidget {
                     log("Hata: $e");
                   }
                 },
-                icon: const Icon(Icons.play_arrow, color: AppTheme.textWhite),
+                icon: Icon(
+                  Icons.play_arrow,
+                  color: AppTheme.getTextColor(context),
+                ),
                 label: Text(
                   l10nL.playSound,
-                  style: const TextStyle(color: AppTheme.textWhite),
+                  style: TextStyle(color: AppTheme.getTextColor(context)),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryGreen,
@@ -388,17 +395,9 @@ class SettingsScreen extends StatelessWidget {
               ),
               child: Text(
                 l10nL.cleanCache,
-                style: const TextStyle(color: AppTheme.textWhite),
+                style: TextStyle(color: AppTheme.getTextColor(context)),
               ),
             ),
-
-            //TEST SCREEN BUTTON
-            // ElevatedButton(
-            //   onPressed: () {
-            //     context.push('/sound-mode-change-test');
-            //   },
-            //   child: Text('Sound Mode Change Test Screen'),
-            // ),
           ],
         ),
       ),
@@ -413,15 +412,15 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: AppTheme.getDialogBackground(context), // DEĞİŞTİ
         title: Text(
           l10nL.language,
-          style: const TextStyle(color: AppTheme.textWhite),
+          style: TextStyle(color: AppTheme.getTextColor(context)),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: const Text(
+              title: Text(
                 'English',
-                style: TextStyle(color: AppTheme.textWhite),
+                style: TextStyle(color: AppTheme.getTextColor(context)),
               ),
               onTap: () {
                 context.read<SettingsCubit>().changeLanguage('en');
@@ -429,9 +428,9 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             ListTile(
-              title: const Text(
+              title: Text(
                 'Türkçe',
-                style: TextStyle(color: AppTheme.textWhite),
+                style: TextStyle(color: AppTheme.getTextColor(context)),
               ),
               onTap: () {
                 context.read<SettingsCubit>().changeLanguage('tr');
@@ -455,18 +454,18 @@ class SettingsScreen extends StatelessWidget {
             backgroundColor: AppTheme.darkGreen,
             title: Text(
               l10nL.locationServiceDisabled,
-              style: const TextStyle(color: AppTheme.textWhite),
+              style: TextStyle(color: AppTheme.getTextColor(context)),
             ),
             content: Text(
               l10nL.locationServiceMessage,
-              style: TextStyle(color: AppTheme.textWhite70),
+              style: TextStyle(color: AppTheme.getTextColor(context)),
             ),
             actions: [
               TextButton(
                 onPressed: () => navigator.pop(false),
                 child: Text(
                   l10nL.cancel,
-                  style: TextStyle(color: AppTheme.textWhite60),
+                  style: TextStyle(color: AppTheme.getTextColor(context)),
                 ),
               ),
               ElevatedButton(
@@ -476,7 +475,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 child: Text(
                   l10nL.openSettings,
-                  style: const TextStyle(color: AppTheme.textWhite),
+                  style: TextStyle(color: AppTheme.getTextColor(context)),
                 ),
               ),
             ],

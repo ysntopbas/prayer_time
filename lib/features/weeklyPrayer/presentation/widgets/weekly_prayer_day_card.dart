@@ -51,7 +51,9 @@ class WeeklyPrayerDayCard extends StatelessWidget {
         color: isToday ? AppTheme.activeCardBackgroundDark : Colors.transparent,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isToday ? AppTheme.activeCardBorderColor : AppTheme.cardBorderColor,
+          color: isToday
+              ? AppTheme.activeCardBorderColor
+              : AppTheme.cardBorderColor,
           width: isToday ? 2 : 1,
         ),
       ),
@@ -72,15 +74,19 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: isToday
                         ? null
-                        : Border.all(color: AppTheme.normalIndicatorBorderColor),
+                        : Border.all(
+                            color: AppTheme.normalIndicatorBorderColor,
+                          ),
                   ),
                   child: Center(
                     child: Text(
                       '${dayNumber ?? ''}',
                       style: TextStyle(
-                        color: AppTheme.textWhite,
+                        color: AppTheme.getTextColor(context),
                         fontSize: 16,
-                        fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isToday
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                     ),
                   ),
@@ -95,8 +101,8 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                         children: [
                           Text(
                             weekdayName,
-                            style: const TextStyle(
-                              color: AppTheme.textWhite,
+                            style: TextStyle(
+                              color: AppTheme.getTextColor(context),
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
@@ -148,7 +154,7 @@ class WeeklyPrayerDayCard extends StatelessWidget {
                       Text(
                         '$hijriDay $hijriMonth',
                         style: TextStyle(
-                          color: AppTheme.textWhite60,
+                          color: AppTheme.getTextColor(context),
                           fontSize: 12,
                         ),
                       ),
@@ -169,12 +175,42 @@ class WeeklyPrayerDayCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildPrayerTimeChip(l10n.fajr, _formatTime(timings?.fajr), isToday),
-                _buildPrayerTimeChip(l10n.sunrise, _formatTime(timings?.sunrise), isToday),
-                _buildPrayerTimeChip(l10n.dhuhr, _formatTime(timings?.dhuhr), isToday),
-                _buildPrayerTimeChip(l10n.asr, _formatTime(timings?.asr), isToday),
-                _buildPrayerTimeChip(l10n.maghrib, _formatTime(timings?.maghrib), isToday),
-                _buildPrayerTimeChip(l10n.isha, _formatTime(timings?.isha), isToday),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.fajr,
+                  _formatTime(timings?.fajr),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.sunrise,
+                  _formatTime(timings?.sunrise),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.dhuhr,
+                  _formatTime(timings?.dhuhr),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.asr,
+                  _formatTime(timings?.asr),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.maghrib,
+                  _formatTime(timings?.maghrib),
+                  isToday,
+                ),
+                _buildPrayerTimeChip(
+                  context, // context eklendi
+                  l10n.isha,
+                  _formatTime(timings?.isha),
+                  isToday,
+                ),
               ],
             ),
           ],
@@ -188,16 +224,25 @@ class WeeklyPrayerDayCard extends StatelessWidget {
     return time.split(' ').first.split('(').first.trim();
   }
 
-  Widget _buildPrayerTimeChip(String label, String time, bool isHighlighted) {
+  Widget _buildPrayerTimeChip(
+    BuildContext context, // context parametresi eklendi
+    String label,
+    String time,
+    bool isHighlighted,
+  ) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
           decoration: BoxDecoration(
-            color: isHighlighted ? AppTheme.chipActiveBackground : AppTheme.chipBackground,
+            color: isHighlighted
+                ? AppTheme.chipActiveBackground
+                : AppTheme.chipBackground,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: isHighlighted ? AppTheme.chipActiveBorderColor : AppTheme.chipBorderColor,
+              color: isHighlighted
+                  ? AppTheme.chipActiveBorderColor
+                  : AppTheme.chipBorderColor,
             ),
           ),
           child: Column(
@@ -205,7 +250,7 @@ class WeeklyPrayerDayCard extends StatelessWidget {
               Text(
                 label.length > 5 ? label.substring(0, 5) : label,
                 style: TextStyle(
-                  color: AppTheme.textWhite60,
+                  color: AppTheme.getSecondaryTextColor(context),
                   fontSize: 9,
                 ),
               ),
@@ -213,7 +258,9 @@ class WeeklyPrayerDayCard extends StatelessWidget {
               Text(
                 time,
                 style: TextStyle(
-                  color: isHighlighted ? AppTheme.primaryGreen : AppTheme.textWhite,
+                  color: isHighlighted
+                      ? AppTheme.primaryGreen
+                      : AppTheme.getTextColor(context),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
