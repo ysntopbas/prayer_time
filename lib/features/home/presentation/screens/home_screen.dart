@@ -144,84 +144,89 @@ class _HomeScaffold extends StatelessWidget {
               final countryName = state.countryName ?? 'Türkiye';
 
               return SafeArea(
-                child: Stack(
-                  children: [
-                    // Background mosque silhouette
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: MosqueSilhouettePainter(context),
-                      ),
-                    ),
-                    // Main content
-                    Column(
+                child: SingleChildScrollView(
+                  child: IntrinsicHeight(
+                    child: Stack(
                       children: [
-                        // Header
-                        PrayerHeader(
-                          subAdministrativeArea: subAdministrativeArea,
-                          cityName: cityName,
-                          countryName: countryName,
-                        ),
-                        // Countdown Card
-                        BlocSelector<
-                          HomeCubit,
-                          HomeState,
-                          Map<String, dynamic>
-                        >(
-                          selector: (state) {
-                            if (state is HomeLoaded) {
-                              return {
-                                'remainingTime': state.remainingTime,
-                                'nextPrayerName': state.nextPrayerName,
-                                'nextPrayerTime': state.nextPrayerTime,
-                              };
-                            }
-                            return {
-                              'remainingTime': Duration.zero,
-                              'nextPrayerName': '',
-                              'nextPrayerTime': '',
-                            };
-                          },
-                          builder: (context, countdownData) {
-                            final translatedPrayerName =
-                                _getTranslatedPrayerName(
-                                  context,
-                                  countdownData['nextPrayerName'] as String,
-                                );
-
-                            return PrayerCountdownCard(
-                              remainingTime:
-                                  countdownData['remainingTime'] as Duration,
-                              nextPrayerName: translatedPrayerName,
-                              nextPrayerTime:
-                                  countdownData['nextPrayerTime'] as String,
-                            );
-                          },
-                        ),
-                        // Prayer Times List
-                        Expanded(
-                          child: BlocSelector<HomeCubit, HomeState, String>(
-                            selector: (state) {
-                              if (state is HomeLoaded) {
-                                return state.nextPrayerName;
-                              }
-                              return '';
-                            },
-                            builder: (context, nextPrayerName) {
-                              final translatedPrayerName =
-                                  _getTranslatedPrayerName(
-                                    context,
-                                    nextPrayerName,
-                                  );
-                              return PrayerTimesList(
-                                timings: prayerTimings,
-                                nextPrayerName: translatedPrayerName,
-                              );
-                            },
+                        // Background mosque silhouette
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: MosqueSilhouettePainter(context),
                           ),
+                        ),
+                        // Main content
+                        Column(
+                          children: [
+                            // Header
+                            PrayerHeader(
+                              subAdministrativeArea: subAdministrativeArea,
+                              cityName: cityName,
+                              countryName: countryName,
+                            ),
+                            // Countdown Card
+                            BlocSelector<
+                              HomeCubit,
+                              HomeState,
+                              Map<String, dynamic>
+                            >(
+                              selector: (state) {
+                                if (state is HomeLoaded) {
+                                  return {
+                                    'remainingTime': state.remainingTime,
+                                    'nextPrayerName': state.nextPrayerName,
+                                    'nextPrayerTime': state.nextPrayerTime,
+                                  };
+                                }
+                                return {
+                                  'remainingTime': Duration.zero,
+                                  'nextPrayerName': '',
+                                  'nextPrayerTime': '',
+                                };
+                              },
+                              builder: (context, countdownData) {
+                                final translatedPrayerName =
+                                    _getTranslatedPrayerName(
+                                      context,
+                                      countdownData['nextPrayerName'] as String,
+                                    );
+
+                                return PrayerCountdownCard(
+                                  remainingTime:
+                                      countdownData['remainingTime']
+                                          as Duration,
+                                  nextPrayerName: translatedPrayerName,
+                                  nextPrayerTime:
+                                      countdownData['nextPrayerTime'] as String,
+                                );
+                              },
+                            ),
+                            // Prayer Times List
+                            Expanded(
+                              child: BlocSelector<HomeCubit, HomeState, String>(
+                                selector: (state) {
+                                  if (state is HomeLoaded) {
+                                    return state.nextPrayerName;
+                                  }
+                                  return '';
+                                },
+                                builder: (context, nextPrayerName) {
+                                  final translatedPrayerName =
+                                      _getTranslatedPrayerName(
+                                        context,
+                                        nextPrayerName,
+                                      );
+                                  return PrayerTimesList(
+                                    timings: prayerTimings,
+                                    nextPrayerName: translatedPrayerName,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               );
             }
